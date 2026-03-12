@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recording Started</title>
+
+<style>
+body{
+background:#0e0e10;
+color:#f2f2f2;
+font-family:Arial, Helvetica, sans-serif;
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:100vh;
+margin:0;
+padding:24px;
+}
+
+.container{
+width:100%;
+max-width:780px;
+background:#151518;
+border:1px solid #2b2b30;
+padding:30px;
+}
+
+.small{
+font-size:12px;
+letter-spacing:1px;
+color:#9a9aa3;
+margin-bottom:10px;
+}
+
+h1{
+margin:0 0 14px 0;
+font-size:30px;
+font-weight:700;
+}
+
+.status{
+font-size:14px;
+color:#9a9aa3;
+margin-bottom:22px;
+min-height:20px;
+}
+
+.data-box{
+border:1px solid #2b2b30;
+background:#101013;
+padding:16px;
+margin-bottom:18px;
+}
+
+.data-line{
+font-size:14px;
+line-height:1.8;
+color:#d7d7dd;
+word-break:break-word;
+}
+
+.label{
+color:#9a9aa3;
+display:inline-block;
+min-width:140px;
+}
+
+.pending{
+color:#9a9aa3;
+font-weight:600;
+letter-spacing:0.03em;
+}
+
+.active{
+color:#ff6b6b;
+font-weight:600;
+letter-spacing:0.03em;
+}
+
+.hidden-info{
+display:none;
+}
+
+.hidden-info.show{
+display:block;
+}
+
+.panel-wrap{
+position:relative;
+border:1px solid #2b2b30;
+background:#101013;
+padding:10px;
+overflow:hidden;
+min-height:300px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.loading-screen{
+width:100%;
+max-width:520px;
+text-align:left;
+padding:24px;
+}
+
+.loading-text{
+font-size:14px;
+color:#b8b8c2;
+margin-bottom:14px;
+}
+
+.loading-bar{
+width:100%;
+height:10px;
+border:1px solid #2b2b30;
+background:#0b0b0d;
+overflow:hidden;
+}
+
+.loading-fill{
+width:0%;
+height:100%;
+background:#ff6b6b;
+transition:width 4s linear;
+}
+
+.recording-panel{
+display:none;
+width:100%;
+position:relative;
+background:#0b0b0d;
+border:1px solid #2b2b30;
+min-height:280px;
+overflow:hidden;
+}
+
+.recording-panel.show{
+display:block;
+}
+
+.rec-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 14px;
+border-bottom:1px solid #232329;
+font-size:12px;
+letter-spacing:0.04em;
+color:#b8b8c2;
+}
+
+.rec-left{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.rec-dot{
+width:10px;
+height:10px;
+background:#ff4d4d;
+border-radius:50%;
+box-shadow:0 0 12px rgba(255,77,77,0.65);
+animation:recBlink 1s ease-in-out infinite;
+}
+
+.wave-area{
+height:180px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+padding:18px;
+}
+
+.bar{
+width:10px;
+background:#ff6b6b;
+border-radius:20px;
+opacity:0.9;
+animation:wave 1.4s ease-in-out infinite;
+}
+
+.bar:nth-child(1){height:22px; animation-delay:0s;}
+.bar:nth-child(2){height:40px; animation-delay:0.1s;}
+.bar:nth-child(3){height:65px; animation-delay:0.2s;}
+.bar:nth-child(4){height:95px; animation-delay:0.3s;}
+.bar:nth-child(5){height:52px; animation-delay:0.4s;}
+.bar:nth-child(6){height:28px; animation-delay:0.5s;}
+.bar:nth-child(7){height:78px; animation-delay:0.6s;}
+.bar:nth-child(8){height:36px; animation-delay:0.7s;}
+
+.rec-bottom{
+padding:12px 14px;
+border-top:1px solid #232329;
+font-size:12px;
+color:#9a9aa3;
+display:flex;
+justify-content:space-between;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.note{
+margin-top:14px;
+font-size:12px;
+color:#9a9aa3;
+display:none;
+justify-content:space-between;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.note.show{
+display:flex;
+}
+
+.note span{
+display:inline-block;
+}
+
+.note .live{
+color:#ff6b6b;
+}
+
+.typing-cursor{
+display:inline-block;
+animation:blink 1s steps(1) infinite;
+}
+
+@keyframes blink{
+0%{opacity:1;}
+50%{opacity:0;}
+100%{opacity:1;}
+}
+
+@keyframes recBlink{
+0%{opacity:1;}
+50%{opacity:0.35;}
+100%{opacity:1;}
+}
+
+@keyframes wave{
+0%{transform:scaleY(0.7); opacity:0.55;}
+50%{transform:scaleY(1.2); opacity:1;}
+100%{transform:scaleY(0.7); opacity:0.55;}
+}
+
+@media (max-width:600px){
+.container{
+padding:20px;
+}
+
+h1{
+font-size:26px;
+}
+
+.label{
+display:block;
+min-width:auto;
+margin-bottom:2px;
+}
+
+.note.show{
+display:block;
+}
+
+.note span{
+display:block;
+margin-bottom:6px;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="small">RECORDING INTERFACE</div>
+
+<h1>Recording Started</h1>
+
+<div class="status" id="statusText"><span class="pending">Status pending...</span></div>
+
+<div class="data-box">
+  <div class="data-line"><span class="label">SESSION</span> <span class="pending" id="statusValue">PENDING</span></div>
+
+  <div id="hiddenInfo" class="hidden-info">
+    <div class="data-line"><span class="label">MICROPHONE</span> ENABLED</div>
+    <div class="data-line"><span class="label">CAMERA</span> ACTIVE</div>
+    <div class="data-line"><span class="label">INPUT LEVEL</span> DETECTED</div>
+    <div class="data-line"><span class="label">BACKGROUND LISTENING</span> ACTIVE</div>
+  </div>
+</div>
+
+<div class="panel-wrap">
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-text">Initializing capture...</div>
+    <div class="loading-bar">
+      <div class="loading-fill" id="loadingFill"></div>
+    </div>
+  </div>
+
+  <div class="recording-panel" id="recordingPanel">
+    <div class="rec-top">
+      <div class="rec-left">
+        <div class="rec-dot"></div>
+        <span>REC</span>
+      </div>
+      <span>LIVE INPUT</span>
+    </div>
+
+    <div class="wave-area">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+
+    <div class="rec-bottom">
+      <span>Source connected</span>
+      <span>Signal stable</span>
+      <span>Capture in progress</span>
+    </div>
+  </div>
+</div>
+
+<div class="note" id="noteBox">
+  <span class="live">Audio stream: live</span>
+  <span>Listening threshold: exceeded</span>
+  <span>Recording remains active.</span>
+</div>
+
+</div>
+
+<script>
+window.addEventListener("load", function(){
+  const loadingFill = document.getElementById("loadingFill");
+  const loadingScreen = document.getElementById("loadingScreen");
+  const recordingPanel = document.getElementById("recordingPanel");
+  const hiddenInfo = document.getElementById("hiddenInfo");
+  const noteBox = document.getElementById("noteBox");
+  const statusValue = document.getElementById("statusValue");
+  const statusText = document.getElementById("statusText");
+
+  const finalMessage = "We can hear you now.";
+  let i = 0;
+
+  setTimeout(function(){
+    loadingFill.style.width = "100%";
+  }, 100);
+
+  setTimeout(function(){
+    loadingScreen.style.display = "none";
+    recordingPanel.classList.add("show");
+
+    hiddenInfo.classList.add("show");
+    noteBox.classList.add("show");
+    statusValue.textContent = "ACTIVE";
+    statusValue.classList.remove("pending");
+    statusValue.classList.add("active");
+
+    setTimeout(function(){
+      statusText.innerHTML = '<span id="typedMsg"></span><span class="typing-cursor">_</span>';
+      typeMessage();
+    }, 700);
+  }, 4200);
+
+  function typeMessage(){
+    const typedMsg = document.getElementById("typedMsg");
+    if (i < finalMessage.length){
+      typedMsg.textContent += finalMessage.charAt(i);
+      i++;
+      setTimeout(typeMessage, 65);
+    }
+  }
+});
+</script>
+
+</body>
+</html>
