@@ -104,6 +104,16 @@ function typeNext() {
     return;
   }
 
+  if (currentLineIndex === 2) {
+    setTimeout(() => {
+      currentLineIndex++;
+      currentCharIndex = 0;
+      currentLineEl = null;
+      typeNext();
+    }, 3000);
+    return;
+  }
+
   if (lineText === "" && currentLineIndex === 3) {
     flickerPause(0);
     return;
@@ -129,14 +139,14 @@ function flickerPause(count) {
 }
 
 function clearAndStartFinalWarning() {
+  screen.innerHTML = "";
   setTimeout(() => {
-    screen.innerHTML = "";
     finalLineEl = document.createElement("div");
     finalLineEl.className = "line";
     screen.appendChild(finalLineEl);
     finalLineEl.appendChild(cursor);
     typeFinalWarning();
-  }, 700);
+  }, 3000);
 }
 
 function typeFinalWarning() {
@@ -168,6 +178,7 @@ function typeUrgency() {
     setTimeout(typeUrgency, 170);
   }
 }
+
 typeNext();
 </script>
 
