@@ -19,13 +19,13 @@ min-height:100vh;
 max-width:900px;
 margin:0 auto;
 font-size:19px;
-line-height:1.55;
+line-height:1.45;
 white-space:pre-wrap;
 }
 
 .line{
 display:block;
-min-height:1.55em;
+min-height:1.45em;
 }
 
 .cursor{
@@ -35,11 +35,13 @@ animation:blink 1s steps(1) infinite;
 
 .analysis-panel{
 display:none;
-margin-top:10px;
+margin-top:8px;
 border:1px solid #2a2a2a;
 padding:10px 12px;
 background:#0a0a0a;
 max-width:420px;
+white-space:normal;
+line-height:1.2;
 }
 
 .analysis-panel.show{
@@ -50,13 +52,13 @@ display:block;
 font-size:13px;
 letter-spacing:0.06em;
 color:#9d9d9d;
-margin-bottom:8px;
+margin:0 0 8px 0;
 text-transform:uppercase;
-line-height:1.2;
+line-height:1.1;
 }
 
 .metric{
-margin-bottom:6px;
+margin:0 0 8px 0;
 }
 
 .metric:last-child{
@@ -68,14 +70,15 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 gap:10px;
-margin-bottom:2px;
+margin:0 0 3px 0;
 font-size:12px;
 color:#cfcfcf;
-line-height:1.2;
+line-height:1.1;
 }
 
 .metric-value{
 color:#8e8e8e;
+flex-shrink:0;
 }
 
 .bar-wrap{
@@ -112,11 +115,11 @@ padding:24px;
 
 .screen{
 font-size:16px;
-line-height:1.45;
+line-height:1.35;
 }
 
 .line{
-min-height:1.45em;
+min-height:1.35em;
 }
 
 .analysis-panel{
