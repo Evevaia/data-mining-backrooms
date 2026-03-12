@@ -78,9 +78,51 @@ background:#101013;
 padding:10px;
 overflow:hidden;
 animation:breathe 4.2s ease-in-out infinite;
+min-height:360px;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-.map-wrap img{
+.loading-screen{
+width:100%;
+max-width:520px;
+text-align:left;
+padding:24px;
+}
+
+.loading-text{
+font-size:14px;
+color:#b8b8c2;
+margin-bottom:14px;
+}
+
+.loading-bar{
+width:100%;
+height:10px;
+border:1px solid #2b2b30;
+background:#0b0b0d;
+overflow:hidden;
+}
+
+.loading-fill{
+width:0%;
+height:100%;
+background:#6ea8ff;
+transition:width 2.2s linear;
+}
+
+.map-content{
+display:none;
+width:100%;
+position:relative;
+}
+
+.map-content.show{
+display:block;
+}
+
+.map-content img{
 display:block;
 width:100%;
 height:auto;
@@ -98,6 +140,12 @@ top:41%;
 left:48%;
 transform:translate(-50%,-50%);
 z-index:3;
+opacity:0;
+}
+
+.location-dot.show{
+opacity:1;
+transition:opacity 0.25s ease;
 }
 
 .location-dot::after{
@@ -111,15 +159,6 @@ background:rgba(26,115,232,0.22);
 border-radius:50%;
 transform:translate(-50%,-50%);
 animation:pulse 2s ease-out infinite;
-}
-
-.location-dot.hidden{
-opacity:0;
-}
-
-.location-dot.show{
-opacity:1;
-transition:opacity 0.25s ease;
 }
 
 .note{
@@ -195,6 +234,10 @@ display:block;
 display:block;
 margin-bottom:6px;
 }
+
+.map-wrap{
+min-height:260px;
+}
 }
 </style>
 </head>
@@ -217,8 +260,17 @@ margin-bottom:6px;
 </div>
 
 <div class="map-wrap">
-  <img src="Live%20Location.png" alt="Map showing AKTO Athens area">
-  <div class="location-dot hidden" id="locationDot"></div>
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-text">Loading location data...</div>
+    <div class="loading-bar">
+      <div class="loading-fill" id="loadingFill"></div>
+    </div>
+  </div>
+
+  <div class="map-content" id="mapContent">
+    <img src="Live%20Location.png" alt="Map showing AKTO Athens area">
+    <div class="location-dot" id="locationDot"></div>
+  </div>
 </div>
 
 <div class="note">
@@ -231,10 +283,23 @@ margin-bottom:6px;
 
 <script>
 window.addEventListener("load", function(){
+  const loadingFill = document.getElementById("loadingFill");
+  const loadingScreen = document.getElementById("loadingScreen");
+  const mapContent = document.getElementById("mapContent");
+  const locationDot = document.getElementById("locationDot");
+
   setTimeout(function(){
-    document.getElementById("locationDot").classList.remove("hidden");
-    document.getElementById("locationDot").classList.add("show");
-  }, 900);
+    loadingFill.style.width = "100%";
+  }, 100);
+
+  setTimeout(function(){
+    loadingScreen.style.display = "none";
+    mapContent.classList.add("show");
+
+    setTimeout(function(){
+      locationDot.classList.add("show");
+    }, 700);
+  }, 2400);
 });
 </script>
 
