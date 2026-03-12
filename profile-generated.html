@@ -48,9 +48,9 @@ animation:blink 1s steps(1) infinite;
 const screen = document.getElementById("screen");
 
 const lines = [
-  "RUNNING BEHAVIORAL ANALYSIS:",
-  "INTERPRETING USER RESPONSE:",
-  "GENERATING PROFILE:",
+  "RUNNING BEHAVIORAL ANALYSIS",
+  "INTERPRETING USER RESPONSE",
+  "GENERATING PROFILE",
   "",
   "CURIOSITY INDEX: HIGH",
   "WARNING RESISTANCE: LOW",
@@ -60,9 +60,14 @@ const lines = [
   "PROFILE STATUS: GENERATED"
 ];
 
+const finalWarning = "DON'T LOOK. GET OUT!";
+
 let currentLineIndex = 0;
 let currentCharIndex = 0;
 let currentLineEl = null;
+let mode = "main";
+let finalCharIndex = 0;
+let finalLineEl = null;
 
 const cursor = document.createElement("span");
 cursor.className = "cursor";
@@ -77,7 +82,7 @@ function startLine() {
 
 function typeNext() {
   if (currentLineIndex >= lines.length) {
-    cursor.remove();
+    setTimeout(clearAndStartFinalWarning, 1000);
     return;
   }
 
@@ -107,15 +112,35 @@ function typeNext() {
 }
 
 function flickerPause(count) {
-  if (count < 6) {
+  if (count < 10) {
     cursor.style.opacity = cursor.style.opacity === "0" ? "1" : "0";
-    setTimeout(() => flickerPause(count + 1), 140);
+    setTimeout(() => flickerPause(count + 1), 160);
   } else {
     cursor.style.opacity = "1";
     currentLineIndex++;
     currentCharIndex = 0;
     currentLineEl = null;
     setTimeout(typeNext, 260);
+  }
+}
+
+function clearAndStartFinalWarning() {
+  screen.innerHTML = "";
+  finalLineEl = document.createElement("div");
+  finalLineEl.className = "line";
+  screen.appendChild(finalLineEl);
+  finalLineEl.appendChild(cursor);
+  typeFinalWarning();
+}
+
+function typeFinalWarning() {
+  if (finalCharIndex < finalWarning.length) {
+    const textNode = document.createTextNode(finalWarning.charAt(finalCharIndex));
+    finalLineEl.insertBefore(textNode, cursor);
+    finalCharIndex++;
+    setTimeout(typeFinalWarning, 75);
+  } else {
+    cursor.remove();
   }
 }
 
