@@ -48,9 +48,9 @@ animation:blink 1s steps(1) infinite;
 const screen = document.getElementById("screen");
 
 const lines = [
-  "RUNNING BEHAVIORAL ANALYSIS",
-  "INTERPRETING USER RESPONSE",
-  "GENERATING PROFILE",
+  "RUNNING BEHAVIORAL ANALYSIS...",
+  "INTERPRETING USER RESPONSE...",
+  "GENERATING PROFILE...",
   "",
   "CURIOSITY INDEX: HIGH",
   "WARNING RESISTANCE: LOW",
@@ -86,7 +86,7 @@ function startLine() {
 
 function typeNext() {
   if (currentLineIndex >= lines.length) {
-    setTimeout(clearAndStartFinalWarning, 1000);
+    clearAndStartFinalWarning();
     return;
   }
 
@@ -104,13 +104,13 @@ function typeNext() {
     return;
   }
 
-  if (currentLineIndex === 2) {
+  if (currentLineIndex === 0 || currentLineIndex === 1 || currentLineIndex === 2) {
     setTimeout(() => {
       currentLineIndex++;
       currentCharIndex = 0;
       currentLineEl = null;
       typeNext();
-    }, 3000);
+    }, 3800);
     return;
   }
 
@@ -146,7 +146,7 @@ function clearAndStartFinalWarning() {
     screen.appendChild(finalLineEl);
     finalLineEl.appendChild(cursor);
     typeFinalWarning();
-  }, 3000);
+  }, 1800);
 }
 
 function typeFinalWarning() {
