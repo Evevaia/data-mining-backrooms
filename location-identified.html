@@ -113,6 +113,15 @@ transform:translate(-50%,-50%);
 animation:pulse 2s ease-out infinite;
 }
 
+.location-dot.hidden{
+opacity:0;
+}
+
+.location-dot.show{
+opacity:1;
+transition:opacity 0.25s ease;
+}
+
 .note{
 margin-top:14px;
 font-size:12px;
@@ -209,7 +218,7 @@ margin-bottom:6px;
 
 <div class="map-wrap">
   <img src="Live%20Location.png" alt="Map showing AKTO Athens area">
-  <div class="location-dot"></div>
+  <div class="location-dot hidden" id="locationDot"></div>
 </div>
 
 <div class="note">
@@ -219,6 +228,15 @@ margin-bottom:6px;
 </div>
 
 </div>
+
+<script>
+window.addEventListener("load", function(){
+  setTimeout(function(){
+    document.getElementById("locationDot").classList.remove("hidden");
+    document.getElementById("locationDot").classList.add("show");
+  }, 900);
+});
+</script>
 
 </body>
 </html>
