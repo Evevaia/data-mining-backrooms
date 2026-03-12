@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile Generated</title>
+
+<style>
+body{
+background:#050505;
+color:#e8e8e8;
+font-family:"Courier New", Courier, monospace;
+margin:0;
+padding:40px;
+min-height:100vh;
+}
+
+.screen{
+max-width:900px;
+margin:0 auto;
+white-space:pre-wrap;
+font-size:24px;
+line-height:1.6;
+}
+
+.cursor{
+display:inline-block;
+animation:blink 1s steps(1) infinite;
+}
+
+.hidden{
+display:none;
+}
+
+.results{
+margin-top:24px;
+opacity:0;
+transition:opacity 0.4s ease;
+}
+
+.results.show{
+opacity:1;
+}
+
+@keyframes blink{
+0%{opacity:1;}
+50%{opacity:0;}
+100%{opacity:1;}
+}
+
+.flicker1{opacity:0;}
+.flicker2{opacity:1;}
+.flicker3{opacity:0;}
+</style>
+</head>
+<body>
+
+<div class="screen">
+  <div id="typedText"></div><span id="cursor" class="cursor">_</span>
+  <div id="results" class="results">
+CURIOSITY INDEX: HIGH
+WARNING RESISTANCE: LOW
+SYMBOLIC TRUST: DETECTED
+PERSONALIZATION RESPONSE: POSITIVE
+ADAPTIVE TARGETING: ENABLED
+PROFILE STATUS: GENERATED
+  </div>
+</div>
+
+<script>
+const lines = [
+  "RUNNING BEHAVIORAL ANALYSIS",
+  "INTERPRETING USER RESPONSE",
+  "GENERATING PROFILE:"
+];
+
+const typedText = document.getElementById("typedText");
+const cursor = document.getElementById("cursor");
+const results = document.getElementById("results");
+
+let lineIndex = 0;
+let charIndex = 0;
+
+function typeLine() {
+  if (lineIndex < lines.length) {
+    if (charIndex < lines[lineIndex].length) {
+      typedText.textContent += lines[lineIndex].charAt(charIndex);
+      charIndex++;
+      setTimeout(typeLine, 55);
+    } else {
+      typedText.textContent += "\n";
+      lineIndex++;
+      charIndex = 0;
+      setTimeout(typeLine, 300);
+    }
+  } else {
+    pauseAndFlicker();
+  }
+}
+
+function pauseAndFlicker() {
+  setTimeout(() => {
+    cursor.classList.remove("cursor");
+    flickerCursor(0);
+  }, 700);
+}
+
+function flickerCursor(count) {
+  if (count < 6) {
+    cursor.style.opacity = cursor.style.opacity === "0" ? "1" : "0";
+    setTimeout(() => flickerCursor(count + 1), 120);
+  } else {
+    cursor.style.opacity = "1";
+    cursor.classList.add("cursor");
+    results.classList.add("show");
+  }
+}
+
+typeLine();
+</script>
+
+</body>
+</html>
