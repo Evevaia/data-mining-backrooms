@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Location Identified</title>
+
+<style>
+body{
+background:#0e0e10;
+color:#f2f2f2;
+font-family:Arial, Helvetica, sans-serif;
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:100vh;
+margin:0;
+padding:24px;
+}
+
+.container{
+width:100%;
+max-width:760px;
+background:#151518;
+border:1px solid #2b2b30;
+padding:30px;
+}
+
+.small{
+font-size:12px;
+letter-spacing:1px;
+color:#9a9aa3;
+margin-bottom:10px;
+}
+
+h1{
+margin:0 0 14px 0;
+font-size:30px;
+font-weight:700;
+}
+
+.status{
+font-size:14px;
+color:#9a9aa3;
+margin-bottom:22px;
+}
+
+.data-box{
+border:1px solid #2b2b30;
+background:#101013;
+padding:16px;
+margin-bottom:18px;
+}
+
+.data-line{
+font-size:14px;
+line-height:1.8;
+color:#d7d7dd;
+word-break:break-word;
+}
+
+.label{
+color:#9a9aa3;
+display:inline-block;
+min-width:120px;
+}
+
+.map-wrap{
+border:1px solid #2b2b30;
+background:#101013;
+padding:10px;
+}
+
+.map-wrap iframe{
+display:block;
+width:100%;
+height:360px;
+border:0;
+}
+
+.note{
+margin-top:14px;
+font-size:12px;
+color:#9a9aa3;
+}
+
+@media (max-width:600px){
+.container{
+padding:20px;
+}
+
+h1{
+font-size:26px;
+}
+
+.map-wrap iframe{
+height:300px;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="small">LOCATION INTERFACE</div>
+
+<h1>Location Identified</h1>
+
+<div class="status">Signal received. Position confirmed.</div>
+
+<div class="data-box">
+  <div class="data-line"><span class="label">STATUS</span> ACTIVE</div>
+  <div class="data-line"><span class="label">LATITUDE</span> 37.9951914</div>
+  <div class="data-line"><span class="label">LONGITUDE</span> 23.7329735</div>
+  <div class="data-line"><span class="label">PLACE</span> AKTO Art &amp; Design College</div>
+  <div class="data-line"><span class="label">ADDRESS</span> Evelpidon 11A, Athens 113 62</div>
+</div>
+
+<div class="map-wrap">
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3144.2258840118416!2d23.732973476312132!3d37.99519139943186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bd31cec045f1%3A0xc3c4c9c7bdb0a27e!2zzpHOms6kzp8gQXJ0ICYgRGVzaWduIENvbGxlZ2U!5e0!3m2!1sel!2sgr!4v1773305333209!5m2!1sel!2sgr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+<div class="note">Location services remain enabled.</div>
+
+</div>
+
+</body>
+</html>
