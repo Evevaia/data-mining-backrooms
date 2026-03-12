@@ -22,6 +22,7 @@ width:720px;
 background:#151518;
 border:1px solid #2b2b30;
 padding:30px;
+position:relative;
 }
 
 .small{
@@ -83,6 +84,48 @@ animation:shake 0.35s ease;
 .fade-out{
 opacity:0;
 pointer-events:none;
+}
+
+.popup{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#101013;
+border:1px solid #2b2b30;
+padding:24px 28px;
+width:320px;
+text-align:center;
+display:none;
+z-index:10;
+}
+
+.popup.show{
+display:block;
+}
+
+.popup p{
+margin:0 0 16px 0;
+color:#f2f2f2;
+font-size:16px;
+}
+
+.popup button{
+background:#f2f2f2;
+color:#111;
+border:1px solid #2b2b30;
+}
+
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,0.45);
+display:none;
+z-index:5;
+}
+
+.overlay.show{
+display:block;
 }
 
 @keyframes shake{
@@ -147,6 +190,13 @@ These Terms & Conditions may be updated, expanded, revised, or made significantl
 <button class="decline" id="declineBtn" onclick="declineTerms()">DECLINE</button>
 </div>
 
+<div class="overlay" id="overlay"></div>
+
+<div class="popup" id="popup">
+<p>Thank you. See you soon.</p>
+<button onclick="closePopup()">OK</button>
+</div>
+
 </div>
 
 <script>
@@ -154,7 +204,13 @@ function acceptTerms(){
 document.getElementById("status").innerText =
 "CONSENT STATUS: ACCEPTED";
 
-alert("Thank you. See you soon.");
+document.getElementById("overlay").classList.add("show");
+document.getElementById("popup").classList.add("show");
+}
+
+function closePopup(){
+document.getElementById("overlay").classList.remove("show");
+document.getElementById("popup").classList.remove("show");
 }
 
 function declineTerms(){
