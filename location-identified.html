@@ -41,7 +41,7 @@ font-weight:700;
 
 .status{
 font-size:14px;
-color:#9a9aa3;
+color:#b8b8c2;
 margin-bottom:22px;
 }
 
@@ -65,12 +65,19 @@ display:inline-block;
 min-width:120px;
 }
 
+.active{
+color:#6ea8ff;
+font-weight:600;
+letter-spacing:0.03em;
+}
+
 .map-wrap{
 position:relative;
 border:1px solid #2b2b30;
 background:#101013;
 padding:10px;
 overflow:hidden;
+animation:breathe 4.2s ease-in-out infinite;
 }
 
 .map-wrap img{
@@ -120,6 +127,10 @@ flex-wrap:wrap;
 display:inline-block;
 }
 
+.note .live{
+color:#6ea8ff;
+}
+
 @keyframes pulse{
 0%{
 transform:translate(-50%,-50%) scale(0.6);
@@ -128,6 +139,21 @@ opacity:0.9;
 100%{
 transform:translate(-50%,-50%) scale(1.8);
 opacity:0;
+}
+}
+
+@keyframes breathe{
+0%{
+box-shadow:0 0 0 rgba(26,115,232,0);
+border-color:#2b2b30;
+}
+50%{
+box-shadow:0 0 18px rgba(26,115,232,0.08);
+border-color:#3a4d68;
+}
+100%{
+box-shadow:0 0 0 rgba(26,115,232,0);
+border-color:#2b2b30;
 }
 }
 
@@ -174,7 +200,7 @@ margin-bottom:6px;
 <div class="status">We see you. You don’t.</div>
 
 <div class="data-box">
-  <div class="data-line"><span class="label">STATUS</span> ACTIVE</div>
+  <div class="data-line"><span class="label">STATUS</span> <span class="active">ACTIVE</span></div>
   <div class="data-line"><span class="label">LATITUDE</span> 37.9951914</div>
   <div class="data-line"><span class="label">LONGITUDE</span> 23.7329735</div>
   <div class="data-line"><span class="label">PLACE</span> AKTO Art &amp; Design College</div>
@@ -187,7 +213,7 @@ margin-bottom:6px;
 </div>
 
 <div class="note">
-  <span>Last seen: now</span>
+  <span class="live">Last seen: now</span>
   <span>Accuracy: 3m</span>
   <span>Location services remain active.</span>
 </div>
