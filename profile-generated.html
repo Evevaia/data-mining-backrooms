@@ -19,22 +19,18 @@ min-height:100vh;
 max-width:900px;
 margin:0 auto;
 font-size:24px;
-line-height:1.6;
+line-height:1.65;
 white-space:pre-wrap;
 }
 
 .line{
 display:block;
+min-height:1.65em;
 }
 
 .cursor{
-display:inline-block;
-width:auto;
+display:inline;
 animation:blink 1s steps(1) infinite;
-}
-
-.results{
-margin-top:0;
 }
 
 @keyframes blink{
@@ -64,73 +60,66 @@ const lines = [
   "PROFILE STATUS: GENERATED"
 ];
 
-let currentLine = 0;
-let currentChar = 0;
-let currentLineElement = null;
-let cursor = null;
+let currentLineIndex = 0;
+let currentCharIndex = 0;
+let currentLineEl = null;
 
-function createNewLine() {
-  currentLineElement = document.createElement("div");
-  currentLineElement.className = "line";
-  screen.appendChild(currentLineElement);
+const cursor = document.createElement("span");
+cursor.className = "cursor";
+cursor.textContent = "_";
 
-  cursor = document.createElement("span");
-  cursor.className = "cursor";
-  cursor.textContent = "_";
-  currentLineElement.appendChild(cursor);
+function startLine() {
+  currentLineEl = document.createElement("div");
+  currentLineEl.className = "line";
+  screen.appendChild(currentLineEl);
+  currentLineEl.appendChild(cursor);
 }
 
-function moveCursorAfterText() {
-  if (cursor && currentLineElement) {
-    currentLineElement.appendChild(cursor);
-  }
-}
-
-function typeNextCharacter() {
-  if (currentLine >= lines.length) {
-    if (cursor) cursor.remove();
+function typeNext() {
+  if (currentLineIndex >= lines.length) {
+    cursor.remove();
     return;
   }
 
-  const text = lines[currentLine];
-
-  if (!currentLineElement) {
-    createNewLine();
+  if (!currentLineEl) {
+    startLine();
   }
 
-  if (currentChar < text.length) {
-    const charNode = document.createTextNode(text.charAt(currentChar));
-    currentLineElement.insertBefore(charNode, cursor);
-    currentChar++;
-    moveCursorAfterText();
-    setTimeout(typeNextCharacter, 45);
-  } else {
-    currentChar = 0;
-    currentLine++;
-    currentLineElement = null;
+  const lineText = lines[currentLineIndex];
 
-    if (currentLine === 4) {
-      flickerPause(0);
-    } else {
-      setTimeout(typeNextCharacter, 250);
-    }
+  if (currentCharIndex < lineText.length) {
+    const textNode = document.createTextNode(lineText.charAt(currentCharIndex));
+    currentLineEl.insertBefore(textNode, cursor);
+    currentCharIndex++;
+    setTimeout(typeNext, 70);
+    return;
   }
+
+  if (lineText === "" && currentLineIndex === 3) {
+    flickerPause(0);
+    return;
+  }
+
+  currentLineIndex++;
+  currentCharIndex = 0;
+  currentLineEl = null;
+  setTimeout(typeNext, 260);
 }
 
 function flickerPause(count) {
   if (count < 6) {
     cursor.style.opacity = cursor.style.opacity === "0" ? "1" : "0";
-    setTimeout(function() {
-      flickerPause(count + 1);
-    }, 120);
+    setTimeout(() => flickerPause(count + 1), 140);
   } else {
     cursor.style.opacity = "1";
-    currentLineElement = null;
-    setTimeout(typeNextCharacter, 250);
+    currentLineIndex++;
+    currentCharIndex = 0;
+    currentLineEl = null;
+    setTimeout(typeNext, 260);
   }
 }
 
-typeNextCharacter();
+typeNext();
 </script>
 
 </body>
