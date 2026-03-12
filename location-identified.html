@@ -20,7 +20,7 @@ padding:24px;
 
 .container{
 width:100%;
-max-width:760px;
+max-width:780px;
 background:#151518;
 border:1px solid #2b2b30;
 padding:30px;
@@ -66,22 +66,61 @@ min-width:120px;
 }
 
 .map-wrap{
+position:relative;
 border:1px solid #2b2b30;
 background:#101013;
 padding:10px;
+overflow:hidden;
 }
 
-.map-wrap iframe{
+.map-wrap img{
 display:block;
 width:100%;
-height:360px;
-border:0;
+height:auto;
+}
+
+.location-dot{
+position:absolute;
+width:16px;
+height:16px;
+background:#1a73e8;
+border:3px solid #ffffff;
+border-radius:50%;
+box-shadow:0 0 0 2px rgba(26,115,232,0.25);
+top:54%;
+left:57%;
+transform:translate(-50%,-50%);
+z-index:3;
+}
+
+.location-dot::after{
+content:"";
+position:absolute;
+top:50%;
+left:50%;
+width:34px;
+height:34px;
+background:rgba(26,115,232,0.22);
+border-radius:50%;
+transform:translate(-50%,-50%);
+animation:pulse 2s ease-out infinite;
 }
 
 .note{
 margin-top:14px;
 font-size:12px;
 color:#9a9aa3;
+}
+
+@keyframes pulse{
+0%{
+transform:translate(-50%,-50%) scale(0.6);
+opacity:0.9;
+}
+100%{
+transform:translate(-50%,-50%) scale(1.8);
+opacity:0;
+}
 }
 
 @media (max-width:600px){
@@ -93,8 +132,16 @@ h1{
 font-size:26px;
 }
 
-.map-wrap iframe{
-height:300px;
+.label{
+display:block;
+min-width:auto;
+margin-bottom:2px;
+}
+
+.location-dot{
+width:14px;
+height:14px;
+border-width:2px;
 }
 }
 </style>
@@ -118,7 +165,8 @@ height:300px;
 </div>
 
 <div class="map-wrap">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3144.2258840118416!2d23.732973476312132!3d37.99519139943186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bd31cec045f1%3A0xc3c4c9c7bdb0a27e!2zzpHOms6kzp8gQXJ0ICYgRGVzaWduIENvbGxlZ2U!5e0!3m2!1sel!2sgr!4v1773305333209!5m2!1sel!2sgr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <img src="location.png" alt="Map showing AKTO Athens area">
+  <div class="location-dot"></div>
 </div>
 
 <div class="note">Location services remain enabled.</div>
