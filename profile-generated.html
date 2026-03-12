@@ -9,7 +9,7 @@
 body{
 background:#050505;
 color:#e8e8e8;
-font-family:"Courier New", Courier, monospace;
+font-family:"Lucida Console","Courier New",monospace;
 margin:0;
 padding:40px;
 min-height:100vh;
@@ -18,28 +18,23 @@ min-height:100vh;
 .screen{
 max-width:900px;
 margin:0 auto;
-white-space:pre-wrap;
 font-size:24px;
 line-height:1.6;
+white-space:pre-wrap;
+}
+
+.line{
+display:block;
 }
 
 .cursor{
 display:inline-block;
+width:auto;
 animation:blink 1s steps(1) infinite;
 }
 
-.hidden{
-display:none;
-}
-
 .results{
-margin-top:24px;
-opacity:0;
-transition:opacity 0.4s ease;
-}
-
-.results.show{
-opacity:1;
+margin-top:0;
 }
 
 @keyframes blink{
@@ -47,76 +42,95 @@ opacity:1;
 50%{opacity:0;}
 100%{opacity:1;}
 }
-
-.flicker1{opacity:0;}
-.flicker2{opacity:1;}
-.flicker3{opacity:0;}
 </style>
 </head>
 <body>
 
-<div class="screen">
-  <div id="typedText"></div><span id="cursor" class="cursor">_</span>
-  <div id="results" class="results">
-CURIOSITY INDEX: HIGH
-WARNING RESISTANCE: LOW
-SYMBOLIC TRUST: DETECTED
-PERSONALIZATION RESPONSE: POSITIVE
-ADAPTIVE TARGETING: ENABLED
-PROFILE STATUS: GENERATED
-  </div>
-</div>
+<div class="screen" id="screen"></div>
 
 <script>
+const screen = document.getElementById("screen");
+
 const lines = [
-  "RUNNING BEHAVIORAL ANALYSIS",
-  "INTERPRETING USER RESPONSE",
-  "GENERATING PROFILE:"
+  "RUNNING BEHAVIORAL ANALYSIS:",
+  "INTERPRETING USER RESPONSE:",
+  "GENERATING PROFILE:",
+  "",
+  "CURIOSITY INDEX: HIGH",
+  "WARNING RESISTANCE: LOW",
+  "SYMBOLIC TRUST: DETECTED",
+  "PERSONALIZATION RESPONSE: POSITIVE",
+  "ADAPTIVE TARGETING: ENABLED",
+  "PROFILE STATUS: GENERATED"
 ];
 
-const typedText = document.getElementById("typedText");
-const cursor = document.getElementById("cursor");
-const results = document.getElementById("results");
+let currentLine = 0;
+let currentChar = 0;
+let currentLineElement = null;
+let cursor = null;
 
-let lineIndex = 0;
-let charIndex = 0;
+function createNewLine() {
+  currentLineElement = document.createElement("div");
+  currentLineElement.className = "line";
+  screen.appendChild(currentLineElement);
 
-function typeLine() {
-  if (lineIndex < lines.length) {
-    if (charIndex < lines[lineIndex].length) {
-      typedText.textContent += lines[lineIndex].charAt(charIndex);
-      charIndex++;
-      setTimeout(typeLine, 55);
-    } else {
-      typedText.textContent += "\n";
-      lineIndex++;
-      charIndex = 0;
-      setTimeout(typeLine, 300);
-    }
-  } else {
-    pauseAndFlicker();
+  cursor = document.createElement("span");
+  cursor.className = "cursor";
+  cursor.textContent = "_";
+  currentLineElement.appendChild(cursor);
+}
+
+function moveCursorAfterText() {
+  if (cursor && currentLineElement) {
+    currentLineElement.appendChild(cursor);
   }
 }
 
-function pauseAndFlicker() {
-  setTimeout(() => {
-    cursor.classList.remove("cursor");
-    flickerCursor(0);
-  }, 700);
+function typeNextCharacter() {
+  if (currentLine >= lines.length) {
+    if (cursor) cursor.remove();
+    return;
+  }
+
+  const text = lines[currentLine];
+
+  if (!currentLineElement) {
+    createNewLine();
+  }
+
+  if (currentChar < text.length) {
+    const charNode = document.createTextNode(text.charAt(currentChar));
+    currentLineElement.insertBefore(charNode, cursor);
+    currentChar++;
+    moveCursorAfterText();
+    setTimeout(typeNextCharacter, 45);
+  } else {
+    currentChar = 0;
+    currentLine++;
+    currentLineElement = null;
+
+    if (currentLine === 4) {
+      flickerPause(0);
+    } else {
+      setTimeout(typeNextCharacter, 250);
+    }
+  }
 }
 
-function flickerCursor(count) {
+function flickerPause(count) {
   if (count < 6) {
     cursor.style.opacity = cursor.style.opacity === "0" ? "1" : "0";
-    setTimeout(() => flickerCursor(count + 1), 120);
+    setTimeout(function() {
+      flickerPause(count + 1);
+    }, 120);
   } else {
     cursor.style.opacity = "1";
-    cursor.classList.add("cursor");
-    results.classList.add("show");
+    currentLineElement = null;
+    setTimeout(typeNextCharacter, 250);
   }
 }
 
-typeLine();
+typeNextCharacter();
 </script>
 
 </body>
