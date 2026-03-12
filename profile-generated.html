@@ -61,13 +61,17 @@ const lines = [
 ];
 
 const finalWarning = "DON'T LOOK. GET OUT!";
+const finalUrgency = "NOW!";
 
 let currentLineIndex = 0;
 let currentCharIndex = 0;
 let currentLineEl = null;
-let mode = "main";
+
 let finalCharIndex = 0;
 let finalLineEl = null;
+
+let urgencyCharIndex = 0;
+let urgencyLineEl = null;
 
 const cursor = document.createElement("span");
 cursor.className = "cursor";
@@ -96,7 +100,7 @@ function typeNext() {
     const textNode = document.createTextNode(lineText.charAt(currentCharIndex));
     currentLineEl.insertBefore(textNode, cursor);
     currentCharIndex++;
-    setTimeout(typeNext, 70);
+    setTimeout(typeNext, 95);
     return;
   }
 
@@ -108,29 +112,31 @@ function typeNext() {
   currentLineIndex++;
   currentCharIndex = 0;
   currentLineEl = null;
-  setTimeout(typeNext, 260);
+  setTimeout(typeNext, 420);
 }
 
 function flickerPause(count) {
-  if (count < 10) {
+  if (count < 12) {
     cursor.style.opacity = cursor.style.opacity === "0" ? "1" : "0";
-    setTimeout(() => flickerPause(count + 1), 160);
+    setTimeout(() => flickerPause(count + 1), 180);
   } else {
     cursor.style.opacity = "1";
     currentLineIndex++;
     currentCharIndex = 0;
     currentLineEl = null;
-    setTimeout(typeNext, 260);
+    setTimeout(typeNext, 420);
   }
 }
 
 function clearAndStartFinalWarning() {
-  screen.innerHTML = "";
-  finalLineEl = document.createElement("div");
-  finalLineEl.className = "line";
-  screen.appendChild(finalLineEl);
-  finalLineEl.appendChild(cursor);
-  typeFinalWarning();
+  setTimeout(() => {
+    screen.innerHTML = "";
+    finalLineEl = document.createElement("div");
+    finalLineEl.className = "line";
+    screen.appendChild(finalLineEl);
+    finalLineEl.appendChild(cursor);
+    typeFinalWarning();
+  }, 700);
 }
 
 function typeFinalWarning() {
@@ -138,12 +144,30 @@ function typeFinalWarning() {
     const textNode = document.createTextNode(finalWarning.charAt(finalCharIndex));
     finalLineEl.insertBefore(textNode, cursor);
     finalCharIndex++;
-    setTimeout(typeFinalWarning, 75);
+    setTimeout(typeFinalWarning, 135);
   } else {
-    cursor.remove();
+    setTimeout(() => {
+      typeUrgencyAfterDelay();
+    }, 10000);
   }
 }
 
+function typeUrgencyAfterDelay() {
+  urgencyLineEl = document.createElement("div");
+  urgencyLineEl.className = "line";
+  screen.appendChild(urgencyLineEl);
+  urgencyLineEl.appendChild(cursor);
+  typeUrgency();
+}
+
+function typeUrgency() {
+  if (urgencyCharIndex < finalUrgency.length) {
+    const textNode = document.createTextNode(finalUrgency.charAt(urgencyCharIndex));
+    urgencyLineEl.insertBefore(textNode, cursor);
+    urgencyCharIndex++;
+    setTimeout(typeUrgency, 170);
+  }
+}
 typeNext();
 </script>
 
