@@ -35,10 +35,11 @@ animation:blink 1s steps(1) infinite;
 
 .analysis-panel{
 display:none;
-margin-top:28px;
+margin-top:20px;
 border:1px solid #2a2a2a;
-padding:18px;
+padding:14px;
 background:#0a0a0a;
+max-width:520px;
 }
 
 .analysis-panel.show{
@@ -46,26 +47,38 @@ display:block;
 }
 
 .panel-title{
-font-size:16px;
+font-size:14px;
 letter-spacing:0.08em;
 color:#9d9d9d;
-margin-bottom:16px;
+margin-bottom:12px;
 text-transform:uppercase;
 }
 
 .metric{
-margin-bottom:14px;
+margin-bottom:10px;
 }
 
-.metric-label{
-font-size:15px;
-margin-bottom:6px;
+.metric:last-child{
+margin-bottom:0;
+}
+
+.metric-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+margin-bottom:4px;
+font-size:13px;
 color:#cfcfcf;
+}
+
+.metric-value{
+color:#8e8e8e;
 }
 
 .bar-wrap{
 width:100%;
-height:12px;
+height:8px;
 border:1px solid #2c2c2c;
 background:#090909;
 overflow:hidden;
@@ -75,7 +88,7 @@ overflow:hidden;
 height:100%;
 width:0;
 background:#d8d8d8;
-transition:width 1.2s ease;
+transition:width 1s ease;
 }
 
 .bar-fill.show-1{width:84%;}
@@ -83,12 +96,6 @@ transition:width 1.2s ease;
 .bar-fill.show-3{width:76%;}
 .bar-fill.show-4{width:91%;}
 .bar-fill.show-5{width:68%;}
-
-.small-note{
-margin-top:12px;
-font-size:14px;
-color:#8e8e8e;
-}
 
 @keyframes blink{
 0%{opacity:1;}
@@ -110,12 +117,8 @@ line-height:1.65;
 min-height:1.65em;
 }
 
-.metric-label{
-font-size:13px;
-}
-
-.panel-title{
-font-size:14px;
+.analysis-panel{
+max-width:100%;
 }
 }
 </style>
@@ -131,13 +134,7 @@ const lines = [
   "RUNNING BEHAVIORAL ANALYSIS...",
   "INTERPRETING USER RESPONSE...",
   "GENERATING PROFILE...",
-  "",
-  "CURIOSITY INDEX: HIGH",
-  "WARNING RESISTANCE: LOW",
-  "SYMBOLIC TRUST: DETECTED",
-  "PERSONALIZATION RESPONSE: POSITIVE",
-  "ADAPTIVE TARGETING: ENABLED",
-  "PROFILE STATUS: GENERATED"
+  ""
 ];
 
 const finalWarning = "DON'T LOOK. GET OUT!";
@@ -225,31 +222,29 @@ function showAnalysisPanel() {
     <div class="panel-title">Predictive Personality Analysis</div>
 
     <div class="metric">
-      <div class="metric-label">CURIOSITY RESPONSE</div>
+      <div class="metric-row"><span>CURIOSITY RESPONSE</span><span class="metric-value">84%</span></div>
       <div class="bar-wrap"><div class="bar-fill" id="bar1"></div></div>
     </div>
 
     <div class="metric">
-      <div class="metric-label">WARNING COMPLIANCE</div>
+      <div class="metric-row"><span>WARNING COMPLIANCE</span><span class="metric-value">22%</span></div>
       <div class="bar-wrap"><div class="bar-fill" id="bar2"></div></div>
     </div>
 
     <div class="metric">
-      <div class="metric-label">SYMBOLIC TRUST</div>
+      <div class="metric-row"><span>SYMBOLIC TRUST</span><span class="metric-value">76%</span></div>
       <div class="bar-wrap"><div class="bar-fill" id="bar3"></div></div>
     </div>
 
     <div class="metric">
-      <div class="metric-label">TARGETING SUSCEPTIBILITY</div>
+      <div class="metric-row"><span>TARGETING SUSCEPTIBILITY</span><span class="metric-value">91%</span></div>
       <div class="bar-wrap"><div class="bar-fill" id="bar4"></div></div>
     </div>
 
     <div class="metric">
-      <div class="metric-label">PREDICTION STABILITY</div>
+      <div class="metric-row"><span>PREDICTION STABILITY</span><span class="metric-value">68%</span></div>
       <div class="bar-wrap"><div class="bar-fill" id="bar5"></div></div>
     </div>
-
-    <div class="small-note">Profile confidence score accepted.</div>
   `;
   screen.appendChild(panel);
 
@@ -260,11 +255,11 @@ function showAnalysisPanel() {
     document.getElementById("bar3").classList.add("show-3");
     document.getElementById("bar4").classList.add("show-4");
     document.getElementById("bar5").classList.add("show-5");
-  }, 250);
+  }, 200);
 
   setTimeout(() => {
     clearAndStartFinalWarning();
-  }, 2600);
+  }, 2500);
 }
 
 function clearAndStartFinalWarning() {
