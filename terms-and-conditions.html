@@ -5,112 +5,111 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-
 body{
-background:#0e0e10;
-color:#f2f2f2;
-font-family:Arial, Helvetica, sans-serif;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-margin:0;
-overflow:hidden;
+  background:#0e0e10;
+  color:#f2f2f2;
+  font-family:Arial, Helvetica, sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  margin:0;
 }
 
 .container{
-width:720px;
-background:#151518;
-border:1px solid #2b2b30;
-padding:30px;
-position:relative;
+  width:720px;
+  background:#151518;
+  border:1px solid #2b2b30;
+  padding:30px;
+  position:relative;
 }
 
 h1{
-margin-top:0;
-margin-bottom:15px;
-font-size:28px;
+  margin-top:0;
+  margin-bottom:15px;
+  font-size:28px;
 }
 
 .status{
-font-size:14px;
-color:#9a9aa3;
-margin-bottom:20px;
+  font-size:14px;
+  color:#9a9aa3;
+  margin-bottom:20px;
 }
 
 .terms{
-height:300px;
-overflow:auto;
-border:1px solid #2b2b30;
-background:#101013;
-padding:15px;
-font-size:13px;
-line-height:1.5;
-color:#d7d7dd;
+  height:300px;
+  overflow:auto;
+  border:1px solid #2b2b30;
+  background:#101013;
+  padding:15px;
+  font-size:13px;
+  line-height:1.5;
+  color:#d7d7dd;
 }
 
 .buttons{
-margin-top:20px;
-display:flex;
-gap:10px;
+  margin-top:20px;
+  display:flex;
+  gap:10px;
 }
 
 button{
-padding:12px 18px;
-font-size:14px;
-border:1px solid #2b2b30;
-background:#f2f2f2;
-color:#111;
-cursor:pointer;
-transition:opacity 0.2s ease, transform 0.2s ease;
+  padding:12px 18px;
+  font-size:14px;
+  border:1px solid #2b2b30;
+  background:#f2f2f2;
+  color:#111;
+  cursor:pointer;
+  transition:opacity 0.2s ease, transform 0.2s ease;
 }
 
 .decline{
-background:#c52828;
-color:white;
-border:none;
+  background:#c52828;
+  color:white;
+  border:none;
 }
 
-.disintegrate{
-animation:disintegrate 0.6s forwards;
+.snap{
+  animation:thanosSnap 0.7s forwards;
 }
 
-@keyframes disintegrate{
-0%{opacity:1; transform:scale(1) rotate(0deg);}
-40%{opacity:0.8; transform:scale(1.2) rotate(10deg);}
-100%{opacity:0; transform:scale(0) rotate(35deg);}
+@keyframes thanosSnap{
+  0% {opacity:1; transform: scale(1) rotate(0deg);}
+  25% {opacity:0.8; transform: scale(1.3) rotate(15deg);}
+  50% {opacity:0.5; transform: scale(0.7) rotate(-20deg);}
+  75% {opacity:0.3; transform: scale(1.1) rotate(25deg);}
+  100% {opacity:0; transform: scale(0) rotate(45deg);}
 }
 
 .popup{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:#101013;
-border:1px solid #2b2b30;
-padding:24px 28px;
-width:320px;
-text-align:center;
-display:none;
-z-index:10;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#101013;
+  border:1px solid #2b2b30;
+  padding:24px 28px;
+  width:320px;
+  text-align:center;
+  display:none;
+  z-index:10;
 }
 
 .popup.show{
-display:block;
+  display:block;
 }
 
 .overlay{
-position:absolute;
-inset:0;
-background:rgba(0,0,0,0.45);
-display:none;
-z-index:5;
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  display:none;
+  z-index:5;
 }
 
 .overlay.show{
-display:block;
+  display:block;
 }
-
 </style>
 </head>
 
@@ -126,15 +125,69 @@ CONSENT STATUS: PENDING
 
 <div class="terms">
 
-<p>By accessing this page you agree to terms that you may or may not have read.</p>
+<p>
+By accessing this page, scanning the associated code, or simply existing in the general proximity of this interface, you acknowledge that you have read, understood, and agreed to the following Terms & Conditions, whether or not you have actually read them.
+</p>
 
-<p>The system reserves the right to collect small portions of your attention, curiosity, and patience.</p>
+<p>
+By accepting these terms, you grant the system permission to observe, record, interpret, archive, and occasionally misinterpret any interaction taking place between you and this interface.
+</p>
 
-<p>In the event that a firstborn child is available, the system reserves the symbolic right to claim said child for ceremonial or promotional purposes.</p>
+<p>
+You agree that any hesitation, scrolling, blinking, curiosity, eye movement, or accidental engagement may be interpreted as clear and enthusiastic consent.
+</p>
 
-<p>If a firstborn is not available, the system may instead claim your favorite snack, a childhood memory, or permanent ownership of one left sock.</p>
+<p>
+The system reserves the right to collect small portions of your attention span, fragments of your patience, and any remaining belief that you are still fully in control of what happens next.
+</p>
 
-<p>Attempting to decline these terms may result in unpredictable interface behaviour.</p>
+<p>
+In the event that a firstborn child is available, the system reserves the symbolic right to claim said child for ceremonial, promotional, narrative, or otherwise unspecified purposes.
+</p>
+
+<p>
+Should a firstborn not be available, the system may instead claim: one moderately important childhood memory, your favorite snack, or the permanent ownership of a single left sock.
+</p>
+
+<p>
+By continuing, you agree to grant the interface a vague but legally impressive sense of authority over minor aspects of your digital destiny.
+</p>
+
+<p>
+The system may also occasionally judge your scrolling speed, silently evaluate your decisions, and remember that one time you almost clicked decline.
+</p>
+
+<p>
+Refusal to accept these terms may result in limited functionality, mild existential doubt, spontaneous inconvenience, or the immediate disappearance of any visible decline option.
+</p>
+
+<p>
+You acknowledge that any attempt to resist, question, or outsmart the system may be logged, archived, and possibly laughed at by an algorithm at a later date.
+</p>
+
+<p>
+These Terms & Conditions may be updated, expanded, rewritten, worsened, or made slightly more ominous at any time without prior notice.
+</p>
+
+<p>
+Continued interaction with this interface constitutes acceptance of all current and future versions, including those that have not yet been invented.
+</p>
+
+<p>
+By proceeding, you confirm that your agreement is given freely, willingly, and with only minimal existential resistance.
+</p>
+
+<p>
+<strong>Additional Absurd Clauses:</strong>
+<ul>
+<li>All leftover pizza slices are considered the property of the system.</li>
+<li>Random socks may be collected for research purposes.</li>
+<li>Occasional spontaneous dance may be required.</li>
+<li>Any minor regret experienced while reading these terms may be logged for future analysis.</li>
+<li>Whistling indoors without explicit permission may result in immediate eye contact from the interface.</li>
+<li>The system reserves the right to randomly assign a mysterious “badge of dubious honor” at any time.</li>
+</ul>
+</p>
 
 </div>
 
@@ -153,84 +206,22 @@ CONSENT STATUS: PENDING
 </div>
 
 <script>
-
 function acceptTerms(){
-document.getElementById("status").innerText="CONSENT STATUS: ACCEPTED";
-document.getElementById("overlay").classList.add("show");
-document.getElementById("popup").classList.add("show");
+  document.getElementById("status").innerText="CONSENT STATUS: ACCEPTED";
+  document.getElementById("overlay").classList.add("show");
+  document.getElementById("popup").classList.add("show");
 }
 
 function closePopup(){
-document.getElementById("overlay").classList.remove("show");
-document.getElementById("popup").classList.remove("show");
+  document.getElementById("overlay").classList.remove("show");
+  document.getElementById("popup").classList.remove("show");
 }
-
-let moving=false;
-let x=100;
-let y=100;
-let dx=2.5;
-let dy=2.2;
 
 function declineTerms(){
-
-const btn=document.getElementById("declineBtn");
-
-if(!moving){
-
-moving=true;
-
-btn.style.position="fixed";
-btn.style.left=x+"px";
-btn.style.top=y+"px";
-
-moveButton();
-
-btn.onclick=function(e){
-
-e.stopPropagation();
-
-btn.classList.add("disintegrate");
-
-setTimeout(()=>{
-btn.remove();
-},600);
-
-};
-
+  const btn=document.getElementById("declineBtn");
+  btn.classList.add("snap");
+  setTimeout(()=>{ btn.remove(); },700);
 }
-
-}
-
-function moveButton(){
-
-const btn=document.getElementById("declineBtn");
-
-function animate(){
-
-if(!btn) return;
-
-x+=dx;
-y+=dy;
-
-if(x+btn.offsetWidth>window.innerWidth || x<0){
-dx*=-1;
-}
-
-if(y+btn.offsetHeight>window.innerHeight || y<0){
-dy*=-1;
-}
-
-btn.style.left=x+"px";
-btn.style.top=y+"px";
-
-requestAnimationFrame(animate);
-
-}
-
-animate();
-
-}
-
 </script>
 
 </body>
