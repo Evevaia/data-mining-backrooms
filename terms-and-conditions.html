@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
 body{
 background:#0e0e10;
 color:#f2f2f2;
@@ -14,6 +15,7 @@ align-items:center;
 justify-content:center;
 height:100vh;
 margin:0;
+overflow:hidden;
 }
 
 .container{
@@ -22,13 +24,6 @@ background:#151518;
 border:1px solid #2b2b30;
 padding:30px;
 position:relative;
-}
-
-.small{
-font-size:12px;
-letter-spacing:1px;
-color:#9a9aa3;
-margin-bottom:10px;
 }
 
 h1{
@@ -76,13 +71,14 @@ color:white;
 border:none;
 }
 
-.shake{
-animation:shake 0.35s ease;
+.disintegrate{
+animation:disintegrate 0.6s forwards;
 }
 
-.fade-out{
-opacity:0;
-pointer-events:none;
+@keyframes disintegrate{
+0%{opacity:1; transform:scale(1) rotate(0deg);}
+40%{opacity:0.8; transform:scale(1.2) rotate(10deg);}
+100%{opacity:0; transform:scale(0) rotate(35deg);}
 }
 
 .popup{
@@ -103,18 +99,6 @@ z-index:10;
 display:block;
 }
 
-.popup p{
-margin:0 0 16px 0;
-color:#f2f2f2;
-font-size:16px;
-}
-
-.popup button{
-background:#f2f2f2;
-color:#111;
-border:1px solid #2b2b30;
-}
-
 .overlay{
 position:absolute;
 inset:0;
@@ -127,22 +111,12 @@ z-index:5;
 display:block;
 }
 
-@keyframes shake{
-0%{transform:translateX(0);}
-20%{transform:translateX(-4px);}
-40%{transform:translateX(4px);}
-60%{transform:translateX(-3px);}
-80%{transform:translateX(3px);}
-100%{transform:translateX(0);}
-}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-
-
 
 <h1>Terms & Conditions</h1>
 
@@ -151,37 +125,17 @@ CONSENT STATUS: PENDING
 </div>
 
 <div class="terms">
-<p>
-By accessing this interface, scanning the associated code, or continuing to interact with this page, you acknowledge that you have read, understood, and agreed to the following Terms & Conditions, whether or not you have actually read them.
-</p>
 
-<p>
-By accepting these terms, you grant the system permission to observe, record, interpret, archive, and occasionally misinterpret any interaction taking place between you and this interface.
-</p>
+<p>By accessing this page you agree to terms that you may or may not have read.</p>
 
-<p>
-You agree that any hesitation, scrolling, blinking, curiosity, or accidental engagement may be interpreted as valid and enthusiastic consent.
-</p>
+<p>The system reserves the right to collect small portions of your attention, curiosity, and patience.</p>
 
-<p>
-You further agree that the system may collect portions of your attention, your preferences, your patience, and any remaining belief that you still control the outcome.
-</p>
+<p>In the event that a firstborn child is available, the system reserves the symbolic right to claim said child for ceremonial or promotional purposes.</p>
 
-<p>
-In the event that a firstborn child is available, the system reserves the symbolic right to claim said child for ceremonial, promotional, or otherwise unspecified purposes.
-</p>
+<p>If a firstborn is not available, the system may instead claim your favorite snack, a childhood memory, or permanent ownership of one left sock.</p>
 
-<p>
-You acknowledge that refusal to accept these terms may result in limited functionality, general confusion, or the immediate disappearance of any visible decline option.
-</p>
+<p>Attempting to decline these terms may result in unpredictable interface behaviour.</p>
 
-<p>
-By continuing, you confirm that your agreement is given freely, willingly, and with only minimal resistance.
-</p>
-
-<p>
-These Terms & Conditions may be updated, expanded, revised, or made significantly worse at any time without prior notice. Continued interaction with this interface constitutes acceptance of all current and future versions.
-</p>
 </div>
 
 <div class="buttons">
@@ -199,10 +153,9 @@ These Terms & Conditions may be updated, expanded, revised, or made significantl
 </div>
 
 <script>
-function acceptTerms(){
-document.getElementById("status").innerText =
-"CONSENT STATUS: ACCEPTED";
 
+function acceptTerms(){
+document.getElementById("status").innerText="CONSENT STATUS: ACCEPTED";
 document.getElementById("overlay").classList.add("show");
 document.getElementById("popup").classList.add("show");
 }
@@ -212,18 +165,72 @@ document.getElementById("overlay").classList.remove("show");
 document.getElementById("popup").classList.remove("show");
 }
 
+let moving=false;
+let x=100;
+let y=100;
+let dx=2.5;
+let dy=2.2;
+
 function declineTerms(){
-const btn = document.getElementById("declineBtn");
-btn.classList.add("shake");
 
-setTimeout(function(){
-btn.classList.add("fade-out");
-}, 350);
+const btn=document.getElementById("declineBtn");
 
-setTimeout(function(){
-btn.style.display = "none";
-}, 550);
+if(!moving){
+
+moving=true;
+
+btn.style.position="fixed";
+btn.style.left=x+"px";
+btn.style.top=y+"px";
+
+moveButton();
+
+btn.onclick=function(e){
+
+e.stopPropagation();
+
+btn.classList.add("disintegrate");
+
+setTimeout(()=>{
+btn.remove();
+},600);
+
+};
+
 }
+
+}
+
+function moveButton(){
+
+const btn=document.getElementById("declineBtn");
+
+function animate(){
+
+if(!btn) return;
+
+x+=dx;
+y+=dy;
+
+if(x+btn.offsetWidth>window.innerWidth || x<0){
+dx*=-1;
+}
+
+if(y+btn.offsetHeight>window.innerHeight || y<0){
+dy*=-1;
+}
+
+btn.style.left=x+"px";
+btn.style.top=y+"px";
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+}
+
 </script>
 
 </body>
