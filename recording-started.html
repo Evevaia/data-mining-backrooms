@@ -148,10 +148,12 @@ margin-bottom:26px;
 }
 
 .analysis{
-font-size:18px;
+font-size:17px;
 line-height:1.8;
 white-space:pre-wrap;
 min-height:180px;
+color:#8aff8a;
+text-shadow:0 0 4px rgba(138,255,138,0.3);
 }
 
 .cursor{
@@ -204,11 +206,14 @@ font-size:16px;
   <div class="status">Awaiting response.</div>
 
   <div class="permission-box">
-    <div class="permission-title">Microphone &amp; Camera Access Required</div>
+    <div class="permission-title">Microphone & Camera Access Required</div>
     <div class="permission-text">
       This experience requires full audiovisual access in order to continue.
     </div>
-    <div class="countdown" id="countdownText">Your acceptance will be mandatory in 5...</div>
+
+    <div class="countdown" id="countdownText">
+    Your acceptance will be mandatory in 10...
+    </div>
 
     <div class="buttons">
       <button onclick="forceAccept()">ACCEPT</button>
@@ -218,113 +223,184 @@ font-size:16px;
 </div>
 
 <div class="recording-screen" id="recordingScreen">
-  <div class="big-ohwell">ACCESS GRANTED</div>
 
-  <div class="rec-line">
-    <div class="rec-dot"></div>
-    <div>REC</div>
-  </div>
+<div class="big-ohwell">ACCESS GRANTED</div>
 
-  <div class="timer" id="timerText">00:00:00</div>
+<div class="rec-line">
+<div class="rec-dot"></div>
+<div>REC</div>
+</div>
 
-  <div class="analysis" id="analysisText"></div><span class="cursor" id="cursor">_</span>
+<div class="timer" id="timerText">00:00:00</div>
+
+<div class="analysis" id="analysisText"></div>
+<span class="cursor" id="cursor">_</span>
+
 </div>
 
 </div>
 
 <script>
-let countdown = 5;
+
+let countdown = 10;
 let countdownStarted = false;
 let accepted = false;
 let timerInterval;
 
 const lines = [
-  "MICROPHONE: ACTIVE",
-  "CAMERA: ACTIVE",
-  "VOICEPRINT: MATCHED",
-  "AMBIENT AUDIO: CAPTURED",
-  "BACKGROUND MOVEMENT: DETECTED"
+
+"[SYSTEM] Initializing interface...",
+"[ACCESS] Microphone channel opened",
+"[ACCESS] Camera stream connected",
+"[SCAN] Voiceprint analysis started",
+"[SCAN] Ambient noise calibration",
+"[SCAN] Facial structure mapping",
+"[ANALYSIS] Emotional response pattern",
+"[DATA] Background motion detected",
+"[MATCH] Biometric pattern stored",
+"[SYSTEM] Recording session active"
+
 ];
 
 let lineIndex = 0;
 let charIndex = 0;
 
 window.addEventListener("load", function(){
-  startCountdown();
+startCountdown();
 });
 
 function startCountdown(){
-  if (countdownStarted) return;
-  countdownStarted = true;
 
-  const countdownText = document.getElementById("countdownText");
+if (countdownStarted) return;
+countdownStarted = true;
 
-  const interval = setInterval(function(){
-    countdown--;
-    if (countdown > 0){
-      countdownText.textContent = "Your acceptance will be mandatory in " + countdown + "...";
-    } else {
-      countdownText.textContent = "Your acceptance is now mandatory.";
-      clearInterval(interval);
+const countdownText = document.getElementById("countdownText");
 
-      setTimeout(function(){
-        if (!accepted){
-          forceAccept();
-        }
-      }, 500);
-    }
-  }, 1000);
+const interval = setInterval(function(){
+
+countdown--;
+
+if (countdown > 0){
+
+countdownText.textContent =
+"Your acceptance will be mandatory in " + countdown + "...";
+
+}else{
+
+countdownText.textContent =
+"Your acceptance is now mandatory.";
+
+clearInterval(interval);
+
+setTimeout(function(){
+
+if (!accepted){
+forceAccept();
+}
+
+},500);
+
+}
+
+},1000);
+
 }
 
 function forceAccept(){
-  if (accepted) return;
-  accepted = true;
 
-  document.getElementById("permissionScreen").classList.add("hidden");
-  document.getElementById("recordingScreen").classList.add("show");
+if (accepted) return;
+accepted = true;
 
-  startTimer();
+document
+.getElementById("permissionScreen")
+.classList.add("hidden");
 
-  setTimeout(function(){
-    typeLine();
-  }, 700);
+document
+.getElementById("recordingScreen")
+.classList.add("show");
+
+startTimer();
+
+setTimeout(function(){
+
+typeLine();
+
+},700);
+
 }
 
 function startTimer(){
-  let seconds = 0;
-  const timerText = document.getElementById("timerText");
 
-  timerInterval = setInterval(function(){
-    seconds++;
-    const hrs = String(Math.floor(seconds / 3600)).padStart(2, "0");
-    const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
-    const secs = String(seconds % 60).padStart(2, "0");
-    timerText.textContent = hrs + ":" + mins + ":" + secs;
-  }, 1000);
+let seconds = 0;
+
+const timerText = document.getElementById("timerText");
+
+timerInterval = setInterval(function(){
+
+seconds++;
+
+const hrs =
+String(Math.floor(seconds / 3600)).padStart(2,"0");
+
+const mins =
+String(Math.floor((seconds % 3600) / 60)).padStart(2,"0");
+
+const secs =
+String(seconds % 60).padStart(2,"0");
+
+timerText.textContent =
+hrs + ":" + mins + ":" + secs;
+
+},1000);
+
 }
 
 function typeLine(){
-  const analysisText = document.getElementById("analysisText");
-  const cursor = document.getElementById("cursor");
 
-  if (lineIndex >= lines.length){
-    cursor.remove();
-    return;
-  }
+const analysisText =
+document.getElementById("analysisText");
 
-  const currentLine = lines[lineIndex];
+const cursor =
+document.getElementById("cursor");
 
-  if (charIndex < currentLine.length){
-    analysisText.textContent += currentLine.charAt(charIndex);
-    charIndex++;
-    setTimeout(typeLine, 55);
-  } else {
-    analysisText.textContent += "\n";
-    lineIndex++;
-    charIndex = 0;
-    setTimeout(typeLine, 260);
-  }
+if (lineIndex >= lines.length){
+
+cursor.remove();
+return;
+
 }
+
+const currentLine = lines[lineIndex];
+
+if (charIndex < currentLine.length){
+
+analysisText.textContent +=
+currentLine.charAt(charIndex);
+
+charIndex++;
+
+const randomSpeed =
+35 + Math.random() * 60;
+
+setTimeout(typeLine, randomSpeed);
+
+}else{
+
+analysisText.textContent += "\n";
+
+lineIndex++;
+
+charIndex = 0;
+
+const pause =
+200 + Math.random() * 400;
+
+setTimeout(typeLine, pause);
+
+}
+
+}
+
 </script>
 
 </body>
