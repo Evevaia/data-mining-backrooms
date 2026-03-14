@@ -3,43 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hacked Terminal Physics</title>
+<title>Hacked Stats Drop</title>
 <style>
 body{
   background:#050505;
   color:#e8e8e8;
   font-family:"Lucida Console","Courier New",monospace;
   margin:0;
-  padding:24px;
-  min-height:100vh;
+  padding:20px;
   overflow:hidden;
 }
 .screen{
-  max-width:900px;
-  margin:0 auto;
-  font-size:18px;
-  line-height:1.45;
-  white-space:pre-wrap;
+  max-width:100%;
+  font-size:12px;
+  line-height:1.2;
+  white-space:nowrap;
   position:relative;
+  display:flex;
+  flex-wrap:nowrap;
+  overflow-x:hidden;
 }
-.line{
-  display:block;
-  min-height:1.4em;
+.line, .bar-wrap{
+  display:inline-block;
+  margin-right:6px;
   position:relative;
 }
 .bar-wrap{
-  width:100%;
-  height:8px;
+  width:40px;
+  height:6px;
   border:1px solid #2b2b30;
   background:#101013;
-  overflow:hidden;
-  margin-top:4px;
 }
 .bar-fill{
   height:100%;
   width:0;
   background:#4caf50;
-  transition:width 1s linear;
+  transition:width 0.8s linear;
 }
 .bar-fill.show-1{width:84%;}
 .bar-fill.show-2{width:22%;}
@@ -54,9 +53,7 @@ body{
 .fall{
   position:absolute;
   display:inline-block;
-  left:0;
-  top:0;
-  transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 </style>
 </head>
@@ -80,62 +77,70 @@ const lines = [
 let lineEls = [];
 let fallElements = [];
 
-function createLine(text){
-  const div = document.createElement("div");
+// helper για glitch
+const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}<>?/|\\~";
+function randomChar(){ return chars.charAt(Math.floor(Math.random()*chars.length)); }
+
+// Δημιουργία lines
+lines.forEach((text)=>{
+  const div=document.createElement("div");
   div.className="line";
-  div.textContent = text;
+  div.textContent=text;
   screen.appendChild(div);
   lineEls.push(div);
-}
+});
 
-function createBar(percent, idx){
-  const wrap = document.createElement("div");
+// Δημιουργία bars
+[1,2,3,4,5].forEach(idx=>{
+  const wrap=document.createElement("div");
   wrap.className="bar-wrap";
-  const fill = document.createElement("div");
-  fill.className="bar-fill show-" + idx;
+  const fill=document.createElement("div");
+  fill.className="bar-fill show-"+idx;
   wrap.appendChild(fill);
   screen.appendChild(wrap);
   lineEls.push(wrap);
+});
+
+// glitch effect
+function glitchEffect(iter=0){
+  if(iter>20){
+    setTimeout(()=>fallLines(),300);
+    return;
+  }
+  lineEls.forEach(el=>{
+    if(el.nodeName==="DIV" && el.childNodes.length && el.firstChild.nodeType===3){
+      let txt=el.textContent;
+      txt=txt.split("").map(c=>Math.random()<0.3?randomChar():c).join("");
+      el.textContent=txt;
+    }
+  });
+  setTimeout(()=>glitchEffect(iter+1),80);
 }
 
-// Create initial lines and bars
-lines.forEach((l)=>createLine(l));
-createBar(84,1);
-createBar(22,2);
-createBar(76,3);
-createBar(91,4);
-createBar(68,5);
-
-// After a brief pause, start falling animation
-setTimeout(()=>fallLines(),500);
-
+// fall effect (single row)
 function fallLines(){
+  const screenRect=screen.getBoundingClientRect();
+  let leftOffset=screenRect.left+10;
   lineEls.forEach(el=>{
-    const rect = el.getBoundingClientRect();
-    const clone = el.cloneNode(true);
+    const rect=el.getBoundingClientRect();
+    const clone=el.cloneNode(true);
     clone.style.position="absolute";
-    clone.style.left=rect.left + "px";
-    clone.style.top=rect.top + "px";
+    clone.style.left=leftOffset+"px";
+    clone.style.top=rect.top+"px";
     clone.style.width=rect.width+"px";
-    clone.style.transformOrigin="center top";
     clone.classList.add("fall");
     document.body.appendChild(clone);
     fallElements.push(clone);
     el.style.visibility="hidden";
+    leftOffset+=rect.width+6;
   });
-
-  // Animate fall with random rotation
+  // animation
   fallElements.forEach(el=>{
-    const maxX = Math.random()*200 - 100;
-    const maxY = window.innerHeight - el.getBoundingClientRect().top - 50;
-    const rot = (Math.random()-0.5)*60;
-    setTimeout(()=>{
-      el.style.transform=`translate(${maxX}px, ${maxY}px) rotate(${rot}deg)`;
-    },50);
+    const maxY=window.innerHeight - 40;
+    const rot=(Math.random()-0.5)*20;
+    setTimeout(()=>el.style.transform=`translateY(${maxY}px) rotate(${rot}deg)`,50);
   });
-
-  // After fall, show GET OUT message
-  setTimeout(()=>showGetOut(),2500);
+  setTimeout(showGetOut,2000);
 }
 
 function showGetOut(){
@@ -146,9 +151,9 @@ function showGetOut(){
   msg.style.left="50%";
   msg.style.transform="translateX(-50%)";
   screen.appendChild(msg);
-  const getOut = "GET OUT!";
+  const getOut="GET OUT!";
   let idx=0;
-  const getCursor = document.createElement("span");
+  const getCursor=document.createElement("span");
   getCursor.className="cursor";
   getCursor.textContent="_";
   msg.appendChild(getCursor);
@@ -159,7 +164,7 @@ function showGetOut(){
       idx++;
       setTimeout(typeChar,50+Math.random()*150);
     } else {
-      setTimeout(()=>typeNow(),1500);
+      setTimeout(typeNow,1500);
     }
   }
   typeChar();
@@ -175,7 +180,7 @@ function typeNow(){
   screen.appendChild(msg);
   const nowText="NOW!";
   let idx=0;
-  const nowCursor = document.createElement("span");
+  const nowCursor=document.createElement("span");
   nowCursor.className="cursor";
   nowCursor.textContent="_";
   msg.appendChild(nowCursor);
@@ -184,22 +189,14 @@ function typeNow(){
     if(idx<nowText.length){
       msg.insertBefore(document.createTextNode(nowText.charAt(idx)),nowCursor);
       idx++;
-      setTimeout(typeChar,50+Math.random()*150);
+      setTimeout(typeChar,80+Math.random()*120);
     }
   }
   typeChar();
 }
 
-// Optional: Add slight motion on device tilt
-if(window.DeviceOrientationEvent){
-  window.addEventListener("deviceorientation", function(event){
-    const gamma = event.gamma || 0;
-    const beta = event.beta || 0;
-    fallElements.forEach(el=>{
-      el.style.transform += ` translateX(${gamma*0.5}px) translateY(${beta*0.3}px)`;
-    });
-  });
-}
+// start
+setTimeout(glitchEffect,500);
 </script>
 
 </body>
