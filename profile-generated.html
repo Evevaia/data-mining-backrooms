@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Crash Effect</title>
+<title>User Profiling</title>
 <style>
 body{
   background:#050505;
@@ -29,12 +29,51 @@ body{
   display:inline;
   animation:blink 1s steps(1) infinite;
 }
-@keyframes blink{50%{opacity:0;}}
-@media (max-width:700px){
-  body{padding:24px;}
-  .screen{font-size:16px;line-height:1.35;}
-  .line{min-height:1.35em;}
+.analysis-panel{
+  display:block;
+  margin-top:8px;
+  border:1px solid #111;
+  padding:10px 12px;
+  background:#0a0a0a;
+  max-width:420px;
+  font-family:"Courier New", monospace;
 }
+.panel-title{
+  font-size:13px;
+  letter-spacing:0.06em;
+  color:#7efc7e;
+  margin:0 0 8px 0;
+  text-transform:uppercase;
+  line-height:1.1;
+}
+.metric-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:0 0 3px 0;
+  font-size:12px;
+  color:#8e8e8e;
+}
+.bar-wrap{
+  width:100%;
+  height:6px;
+  border:1px solid #111;
+  background:#000;
+  overflow:hidden;
+}
+.bar-fill{
+  height:100%;
+  width:0;
+  background:#7efc7e;
+  transition:width 1s linear;
+}
+.bar-fill.show-1{width:84%;}
+.bar-fill.show-2{width:22%;}
+.bar-fill.show-3{width:76%;}
+.bar-fill.show-4{width:91%;}
+.bar-fill.show-5{width:68%;}
+@keyframes blink{50%{opacity:0;}}
 </style>
 </head>
 <body>
@@ -42,34 +81,32 @@ body{
 <div class="screen" id="screen"></div>
 
 <script>
-// helper για τυχαία γράμματα/σύμβολα
-const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}<>?/|\\~";
-
-function randomChar(){ return chars.charAt(Math.floor(Math.random()*chars.length)); }
-
 const screen = document.getElementById("screen");
-const lines = [
-  "RUNNING BEHAVIORAL ANALYSIS...",
-  "INTERPRETING USER RESPONSE...",
-  "GENERATING PROFILE...",
-  ""
-];
-
-const finalWarning = "GET OUT!";
-const finalUrgency = "NOW!";
-
-let currentLineIndex = 0;
-let currentCharIndex = 0;
-let currentLineEl = null;
-let finalCharIndex = 0;
-let finalLineEl = null;
-let urgencyCharIndex = 0;
-let urgencyLineEl = null;
 const cursor = document.createElement("span");
 cursor.className="cursor"; cursor.textContent="_";
 
+const lines=[
+  "RUNNING BEHAVIORAL ANALYSIS...",
+  "INTERPRETING USER RESPONSE...",
+  "GENERATING PROFILE..."
+];
+
+const finalWarning="GET OUT!";
+const finalUrgency="NOW!";
+let currentLineIndex=0;
+let currentCharIndex=0;
+let currentLineEl=null;
+let finalCharIndex=0;
+let finalLineEl=null;
+let urgencyCharIndex=0;
+let urgencyLineEl=null;
+
+// helper για τυχαία γράμματα
+const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}<>?/|\\~";
+function randomChar(){ return chars.charAt(Math.floor(Math.random()*chars.length)); }
+
 function startLine(){
-  currentLineEl = document.createElement("div");
+  currentLineEl=document.createElement("div");
   currentLineEl.className="line";
   screen.appendChild(currentLineEl);
   currentLineEl.appendChild(cursor);
@@ -78,10 +115,9 @@ function startLine(){
 function typeNext(){
   if(currentLineIndex>=lines.length){showStats(); return;}
   if(!currentLineEl) startLine();
-  const lineText=lines[currentLineIndex];
-  if(currentCharIndex<lineText.length){
-    const textNode=document.createTextNode(lineText.charAt(currentCharIndex));
-    currentLineEl.insertBefore(textNode,cursor);
+  const text=lines[currentLineIndex];
+  if(currentCharIndex<text.length){
+    currentLineEl.insertBefore(document.createTextNode(text.charAt(currentCharIndex)),cursor);
     currentCharIndex++;
     setTimeout(typeNext,95); return;
   }
@@ -95,45 +131,57 @@ function typeNext(){
 
 function showStats(){
   const panel=document.createElement("div");
-  panel.className="line";
+  panel.className="analysis-panel";
   panel.innerHTML=`
-    [CURIOSITY] 84% 
-    [WARNING] 22%
-    [TRUST] 76%
-    [SUSCEPTIBILITY] 91%
-    [STABILITY] 68%
+    <div class="panel-title">Predictive Personality Analysis</div>
+    <div class="metric-row">CURIOSITY RESPONSE <span class="bar-fill show-1"></span></div>
+    <div class="metric-row">WARNING COMPLIANCE <span class="bar-fill show-2"></span></div>
+    <div class="metric-row">SYMBOLIC TRUST <span class="bar-fill show-3"></span></div>
+    <div class="metric-row">TARGETING SUSCEPTIBILITY <span class="bar-fill show-4"></span></div>
+    <div class="metric-row">PREDICTION STABILITY <span class="bar-fill show-5"></span></div>
   `;
   screen.appendChild(panel);
-  // μετά 1 δευτ., ξεκινάει το “hacked collapse”
-  setTimeout(dramaticCollapse,1000);
+
+  // άμεσο glitch/hack effect
+  setTimeout(dramaticHackEffect,1000);
 }
 
-function dramaticCollapse(){
-  const elems = screen.querySelectorAll(".line");
+function dramaticHackEffect(){
   let steps=0;
-  const interval = setInterval(()=>{
+  const elems=screen.querySelectorAll(".analysis-panel, .bar-fill, .metric-row");
+  const interval=setInterval(()=>{
     elems.forEach(el=>{
-      let text=el.textContent;
-      text=text.split("").map(c=>Math.random()<0.3?randomChar():c).join("");
-      el.textContent=text;
+      if(el.childNodes.length>0){
+        el.childNodes.forEach(c=>{
+          if(c.nodeType===3){ // text node
+            c.textContent=c.textContent.split("").map(ch=>Math.random()<0.4?randomChar():ch).join("");
+          }
+        });
+      }
     });
     steps++;
-    if(steps>15){
+    if(steps>25){
       clearInterval(interval);
-      startGetOut();
+      setTimeout(()=>collapseScreen(),200);
     }
-  },50);
-  // flicker background
-  let flicker=0;
-  const flick = setInterval(()=>{
-    document.body.style.background=flicker%2===0?"#000":"#050505";
-    flick++;
-    if(flick>15) clearInterval(flick);
-  },50);
+  },60);
+}
+
+function collapseScreen(){
+  document.body.style.transition="background 0.2s";
+  document.body.style.background="#000";
+  screen.style.transition="all 0.6s ease";
+  screen.style.transform="translateY(200px) rotate(5deg) scale(0.3)";
+  screen.style.opacity="0";
+  // 1.7 δευτ pause πριν GET OUT
+  setTimeout(()=>startGetOut(),1700);
 }
 
 function startGetOut(){
   screen.innerHTML="";
+  screen.style.transform="";
+  screen.style.opacity="1";
+  screen.style.background="#000";
   finalLineEl=document.createElement("div");
   finalLineEl.className="line";
   screen.appendChild(finalLineEl);
@@ -143,8 +191,7 @@ function startGetOut(){
 
 function typeFinalWarning(){
   if(finalCharIndex<finalWarning.length){
-    const textNode=document.createTextNode(finalWarning.charAt(finalCharIndex));
-    finalLineEl.insertBefore(textNode,cursor);
+    finalLineEl.insertBefore(document.createTextNode(finalWarning.charAt(finalCharIndex)),cursor);
     finalCharIndex++;
     setTimeout(typeFinalWarning,50+Math.random()*180);
   } else {
@@ -160,8 +207,7 @@ function typeFinalWarning(){
 
 function typeUrgency(){
   if(urgencyCharIndex<finalUrgency.length){
-    const textNode=document.createTextNode(finalUrgency.charAt(urgencyCharIndex));
-    urgencyLineEl.insertBefore(textNode,cursor);
+    urgencyLineEl.insertBefore(document.createTextNode(finalUrgency.charAt(urgencyCharIndex)),cursor);
     urgencyCharIndex++;
     setTimeout(typeUrgency,80+Math.random()*120);
   }
@@ -169,5 +215,6 @@ function typeUrgency(){
 
 typeNext();
 </script>
+
 </body>
 </html>
