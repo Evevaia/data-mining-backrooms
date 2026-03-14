@@ -7,93 +7,94 @@
 
 <style>
 body{
-background:#050505;
-color:#e8e8e8;
-font-family:"Lucida Console","Courier New",monospace;
-margin:0;
-padding:40px;
-min-height:100vh;
+  background:#050505;
+  color:#e8e8e8;
+  font-family:"Courier New", monospace;
+  margin:0;
+  padding:40px;
+  min-height:100vh;
+  overflow:hidden;
 }
 
 .screen{
-max-width:900px;
-margin:0 auto;
-font-size:19px;
-line-height:1.45;
-white-space:pre-wrap;
+  max-width:900px;
+  margin:0 auto;
+  font-size:19px;
+  line-height:1.45;
+  white-space:pre-wrap;
 }
 
 .line{
-display:block;
-min-height:1.45em;
+  display:block;
+  min-height:1.45em;
 }
 
 .cursor{
-display:inline;
-animation:blink 1s steps(1) infinite;
+  display:inline;
+  animation:blink 1s steps(1) infinite;
 }
 
 .analysis-panel{
-display:none;
-margin-top:8px;
-border:1px solid #2a2a2a;
-padding:10px 12px;
-background:#0a0a0a;
-max-width:420px;
-white-space:normal;
-line-height:1.2;
+  display:none;
+  margin-top:8px;
+  border:1px solid #2a2a2a;
+  padding:10px 12px;
+  background:#0a0a0a;
+  max-width:420px;
+  white-space:normal;
+  line-height:1.2;
 }
 
 .analysis-panel.show{
-display:block;
+  display:block;
 }
 
 .panel-title{
-font-size:13px;
-letter-spacing:0.06em;
-color:#9d9d9d;
-margin:0 0 8px 0;
-text-transform:uppercase;
-line-height:1.1;
+  font-size:13px;
+  letter-spacing:0.06em;
+  color:#9d9d9d;
+  margin:0 0 8px 0;
+  text-transform:uppercase;
+  line-height:1.1;
 }
 
 .metric{
-margin:0 0 8px 0;
+  margin:0 0 8px 0;
 }
 
 .metric:last-child{
-margin-bottom:0;
+  margin-bottom:0;
 }
 
 .metric-row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-margin:0 0 3px 0;
-font-size:12px;
-color:#cfcfcf;
-line-height:1.1;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:0 0 3px 0;
+  font-size:12px;
+  color:#cfcfcf;
+  line-height:1.1;
 }
 
 .metric-value{
-color:#8e8e8e;
-flex-shrink:0;
+  color:#8e8e8e;
+  flex-shrink:0;
 }
 
 .bar-wrap{
-width:100%;
-height:6px;
-border:1px solid #2c2c2c;
-background:#090909;
-overflow:hidden;
+  width:100%;
+  height:6px;
+  border:1px solid #2c2c2c;
+  background:#090909;
+  overflow:hidden;
 }
 
 .bar-fill{
-height:100%;
-width:0;
-background:#d8d8d8;
-transition:width 1s ease;
+  height:100%;
+  width:0;
+  background:#d8d8d8;
+  transition:width 1s ease;
 }
 
 .bar-fill.show-1{width:84%;}
@@ -103,28 +104,25 @@ transition:width 1s ease;
 .bar-fill.show-5{width:68%;}
 
 @keyframes blink{
-0%{opacity:1;}
-50%{opacity:0;}
-100%{opacity:1;}
+  0%{opacity:1;}
+  50%{opacity:0;}
+  100%{opacity:1;}
+}
+
+@keyframes glitch{
+  0%{transform:translateX(0);}
+  20%{transform:translateX(-4px);}
+  40%{transform:translateX(3px);}
+  60%{transform:translateX(-2px);}
+  80%{transform:translateX(2px);}
+  100%{transform:translateX(0);}
 }
 
 @media (max-width:700px){
-body{
-padding:24px;
-}
-
-.screen{
-font-size:16px;
-line-height:1.35;
-}
-
-.line{
-min-height:1.35em;
-}
-
-.analysis-panel{
-max-width:100%;
-}
+  body{padding:24px;}
+  .screen{font-size:16px;line-height:1.35;}
+  .line{min-height:1.35em;}
+  .analysis-panel{max-width:100%;}
 }
 </style>
 </head>
@@ -142,7 +140,7 @@ const lines = [
   ""
 ];
 
-const finalWarning = "DON'T LOOK. GET OUT!";
+const finalWarning = "GET OUT!";
 const finalUrgency = "NOW!";
 
 let currentLineIndex = 0;
@@ -172,9 +170,7 @@ function typeNext() {
     return;
   }
 
-  if (!currentLineEl) {
-    startLine();
-  }
+  if (!currentLineEl) startLine();
 
   const lineText = lines[currentLineIndex];
 
@@ -186,96 +182,38 @@ function typeNext() {
     return;
   }
 
-  if (currentLineIndex === 0 || currentLineIndex === 1 || currentLineIndex === 2) {
-    setTimeout(() => {
-      currentLineIndex++;
-      currentCharIndex = 0;
-      currentLineEl = null;
-      typeNext();
-    }, 2200);
-    return;
-  }
-
-  if (lineText === "" && currentLineIndex === 3) {
-    flickerPause(0);
-    return;
-  }
-
-  currentLineIndex++;
-  currentCharIndex = 0;
-  currentLineEl = null;
-  setTimeout(typeNext, 320);
-}
-
-function flickerPause(count) {
-  if (count < 12) {
-    cursor.style.opacity = cursor.style.opacity === "0" ? "1" : "0";
-    setTimeout(() => flickerPause(count + 1), 180);
-  } else {
-    cursor.style.opacity = "1";
+  // pause μετά από κάθε γραμμή
+  setTimeout(() => {
     currentLineIndex++;
     currentCharIndex = 0;
     currentLineEl = null;
-    setTimeout(typeNext, 320);
-  }
+    typeNext();
+  }, 2200);
 }
 
 function showAnalysisPanel() {
-  const panel = document.createElement("div");
-  panel.className = "analysis-panel";
-  panel.innerHTML = `
-    <div class="panel-title">Predictive Personality Analysis</div>
-
-    <div class="metric">
-      <div class="metric-row"><span>CURIOSITY RESPONSE</span><span class="metric-value">84%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar1"></div></div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-row"><span>WARNING COMPLIANCE</span><span class="metric-value">22%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar2"></div></div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-row"><span>SYMBOLIC TRUST</span><span class="metric-value">76%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar3"></div></div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-row"><span>TARGETING SUSCEPTIBILITY</span><span class="metric-value">91%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar4"></div></div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-row"><span>PREDICTION STABILITY</span><span class="metric-value">68%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar5"></div></div>
-    </div>
-  `;
-  screen.appendChild(panel);
-
-  setTimeout(() => {
-    panel.classList.add("show");
-    document.getElementById("bar1").classList.add("show-1");
-    document.getElementById("bar2").classList.add("show-2");
-    document.getElementById("bar3").classList.add("show-3");
-    document.getElementById("bar4").classList.add("show-4");
-    document.getElementById("bar5").classList.add("show-5");
-  }, 200);
-
-  setTimeout(() => {
-    clearAndStartFinalWarning();
-  }, 2500);
+  // εδώ μπορείς να κρατήσεις ή να αφαιρέσεις το panel
+  clearAndStartFinalWarning();
 }
 
 function clearAndStartFinalWarning() {
-  screen.innerHTML = "";
+  // glitch effect πριν το σβήσιμο
+  screen.style.transition = "background 0.2s";
+  screen.style.background = "#000";
+
+  for (let i=0;i<6;i++){
+    setTimeout(()=>screen.style.transform = `translateX(${(Math.random()*8-4)}px)`, i*50);
+    setTimeout(()=>screen.style.transform = `translateX(0)`, i*50+25);
+  }
+
   setTimeout(() => {
+    screen.innerHTML = "";
     finalLineEl = document.createElement("div");
     finalLineEl.className = "line";
     screen.appendChild(finalLineEl);
     finalLineEl.appendChild(cursor);
     typeFinalWarning();
-  }, 1800);
+  }, 350); // μετά το glitch, εμφανίζει GET OUT
 }
 
 function typeFinalWarning() {
@@ -283,20 +221,18 @@ function typeFinalWarning() {
     const textNode = document.createTextNode(finalWarning.charAt(finalCharIndex));
     finalLineEl.insertBefore(textNode, cursor);
     finalCharIndex++;
-    setTimeout(typeFinalWarning, 135);
+    // τυχαίο διάστημα για χειρογραφικό effect
+    setTimeout(typeFinalWarning, 70 + Math.random()*150);
   } else {
+    // delay 3 δευτ. πριν εμφανιστεί NOW!
     setTimeout(() => {
-      typeUrgencyAfterDelay();
-    }, 10000);
+      urgencyLineEl = document.createElement("div");
+      urgencyLineEl.className = "line";
+      screen.appendChild(urgencyLineEl);
+      urgencyLineEl.appendChild(cursor);
+      typeUrgency();
+    }, 3000);
   }
-}
-
-function typeUrgencyAfterDelay() {
-  urgencyLineEl = document.createElement("div");
-  urgencyLineEl.className = "line";
-  screen.appendChild(urgencyLineEl);
-  urgencyLineEl.appendChild(cursor);
-  typeUrgency();
 }
 
 function typeUrgency() {
@@ -304,7 +240,7 @@ function typeUrgency() {
     const textNode = document.createTextNode(finalUrgency.charAt(urgencyCharIndex));
     urgencyLineEl.insertBefore(textNode, cursor);
     urgencyCharIndex++;
-    setTimeout(typeUrgency, 170);
+    setTimeout(typeUrgency, 100 + Math.random()*120);
   }
 }
 
