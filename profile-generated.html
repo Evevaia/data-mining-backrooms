@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dramatic Profile</title>
+<title>System Crash Effect</title>
 <style>
 body{
   background:#050505;
@@ -29,72 +29,11 @@ body{
   display:inline;
   animation:blink 1s steps(1) infinite;
 }
-.analysis-panel{
-  display:none;
-  margin-top:8px;
-  border:1px solid #2a2a2a;
-  padding:10px 12px;
-  background:#0a0a0a;
-  max-width:420px;
-  white-space:normal;
-  line-height:1.2;
-}
-.analysis-panel.show{
-  display:block;
-}
-.panel-title{
-  font-size:13px;
-  letter-spacing:0.06em;
-  color:#9d9d9d;
-  margin:0 0 8px 0;
-  text-transform:uppercase;
-  line-height:1.1;
-}
-.metric{margin:0 0 8px 0;}
-.metric:last-child{margin-bottom:0;}
-.metric-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin:0 0 3px 0;
-  font-size:12px;
-  color:#cfcfcf;
-  line-height:1.1;
-}
-.metric-value{color:#8e8e8e;flex-shrink:0;}
-.bar-wrap{
-  width:100%;
-  height:6px;
-  border:1px solid #2c2c2c;
-  background:#090909;
-  overflow:hidden;
-}
-.bar-fill{
-  height:100%;
-  width:0;
-  background:#d8d8d8;
-  transition:width 1s ease;
-}
-.bar-fill.show-1{width:84%;}
-.bar-fill.show-2{width:22%;}
-.bar-fill.show-3{width:76%;}
-.bar-fill.show-4{width:91%;}
-.bar-fill.show-5{width:68%;}
 @keyframes blink{50%{opacity:0;}}
-@keyframes dramaticGlitch{
-  0%{transform:translate(0,0) rotate(0deg);}
-  20%{transform:translate(-10px,5px) rotate(-2deg);}
-  40%{transform:translate(8px,-8px) rotate(3deg);}
-  60%{transform:translate(-5px,10px) rotate(-4deg);}
-  80%{transform:translate(7px,-6px) rotate(2deg);}
-  100%{transform:translate(0,0) rotate(0deg);}
-}
 @media (max-width:700px){
   body{padding:24px;}
   .screen{font-size:16px;line-height:1.35;}
   .line{min-height:1.35em;}
-  .analysis-panel{max-width:100%;}
 }
 </style>
 </head>
@@ -103,8 +42,12 @@ body{
 <div class="screen" id="screen"></div>
 
 <script>
-const screen = document.getElementById("screen");
+// helper για τυχαία γράμματα/σύμβολα
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}<>?/|\\~";
 
+function randomChar(){ return chars.charAt(Math.floor(Math.random()*chars.length)); }
+
+const screen = document.getElementById("screen");
 const lines = [
   "RUNNING BEHAVIORAL ANALYSIS...",
   "INTERPRETING USER RESPONSE...",
@@ -118,124 +61,109 @@ const finalUrgency = "NOW!";
 let currentLineIndex = 0;
 let currentCharIndex = 0;
 let currentLineEl = null;
-
 let finalCharIndex = 0;
 let finalLineEl = null;
-
 let urgencyCharIndex = 0;
 let urgencyLineEl = null;
-
 const cursor = document.createElement("span");
-cursor.className = "cursor";
-cursor.textContent = "_";
+cursor.className="cursor"; cursor.textContent="_";
 
-function startLine() {
+function startLine(){
   currentLineEl = document.createElement("div");
-  currentLineEl.className = "line";
+  currentLineEl.className="line";
   screen.appendChild(currentLineEl);
   currentLineEl.appendChild(cursor);
 }
 
-function typeNext() {
-  if (currentLineIndex >= lines.length) {
-    showAnalysisPanel();
-    return;
-  }
-  if (!currentLineEl) startLine();
-  const lineText = lines[currentLineIndex];
-  if (currentCharIndex < lineText.length) {
-    const textNode = document.createTextNode(lineText.charAt(currentCharIndex));
-    currentLineEl.insertBefore(textNode, cursor);
+function typeNext(){
+  if(currentLineIndex>=lines.length){showStats(); return;}
+  if(!currentLineEl) startLine();
+  const lineText=lines[currentLineIndex];
+  if(currentCharIndex<lineText.length){
+    const textNode=document.createTextNode(lineText.charAt(currentCharIndex));
+    currentLineEl.insertBefore(textNode,cursor);
     currentCharIndex++;
-    setTimeout(typeNext, 95);
-    return;
+    setTimeout(typeNext,95); return;
   }
-  setTimeout(() => {
+  setTimeout(()=>{
     currentLineIndex++;
-    currentCharIndex = 0;
-    currentLineEl = null;
+    currentCharIndex=0;
+    currentLineEl=null;
     typeNext();
-  }, 2200);
+  },800);
 }
 
-function showAnalysisPanel() {
-  const panel = document.createElement("div");
-  panel.className = "analysis-panel";
-  panel.innerHTML = `
-    <div class="panel-title">Predictive Personality Analysis</div>
-    <div class="metric">
-      <div class="metric-row"><span>CURIOSITY RESPONSE</span><span class="metric-value">84%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar1"></div></div>
-    </div>
-    <div class="metric">
-      <div class="metric-row"><span>WARNING COMPLIANCE</span><span class="metric-value">22%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar2"></div></div>
-    </div>
-    <div class="metric">
-      <div class="metric-row"><span>SYMBOLIC TRUST</span><span class="metric-value">76%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar3"></div></div>
-    </div>
-    <div class="metric">
-      <div class="metric-row"><span>TARGETING SUSCEPTIBILITY</span><span class="metric-value">91%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar4"></div></div>
-    </div>
-    <div class="metric">
-      <div class="metric-row"><span>PREDICTION STABILITY</span><span class="metric-value">68%</span></div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar5"></div></div>
-    </div>
+function showStats(){
+  const panel=document.createElement("div");
+  panel.className="line";
+  panel.innerHTML=`
+    [CURIOSITY] 84% 
+    [WARNING] 22%
+    [TRUST] 76%
+    [SUSCEPTIBILITY] 91%
+    [STABILITY] 68%
   `;
   screen.appendChild(panel);
-  panel.classList.add("show");
-  document.getElementById("bar1").classList.add("show-1");
-  document.getElementById("bar2").classList.add("show-2");
-  document.getElementById("bar3").classList.add("show-3");
-  document.getElementById("bar4").classList.add("show-4");
-  document.getElementById("bar5").classList.add("show-5");
-
-  // dramatic effect μετά από 1 δευτερόλεπτο, πριν προλάβει να διαβαστεί
-  setTimeout(() => {
-    dramaticGlitchEffect();
-  }, 1000);
+  // μετά 1 δευτ., ξεκινάει το “hacked collapse”
+  setTimeout(dramaticCollapse,1000);
 }
 
-function dramaticGlitchEffect() {
-  screen.style.transition = "background 0.1s";
-  screen.style.background = "#000";
-  screen.style.animation = "dramaticGlitch 0.6s ease-in-out";
-
-  setTimeout(() => {
-    screen.innerHTML = "";
-    finalLineEl = document.createElement("div");
-    finalLineEl.className = "line";
-    screen.appendChild(finalLineEl);
-    finalLineEl.appendChild(cursor);
-    typeFinalWarning();
-  }, 600);
+function dramaticCollapse(){
+  const elems = screen.querySelectorAll(".line");
+  let steps=0;
+  const interval = setInterval(()=>{
+    elems.forEach(el=>{
+      let text=el.textContent;
+      text=text.split("").map(c=>Math.random()<0.3?randomChar():c).join("");
+      el.textContent=text;
+    });
+    steps++;
+    if(steps>15){
+      clearInterval(interval);
+      startGetOut();
+    }
+  },50);
+  // flicker background
+  let flicker=0;
+  const flick = setInterval(()=>{
+    document.body.style.background=flicker%2===0?"#000":"#050505";
+    flick++;
+    if(flick>15) clearInterval(flick);
+  },50);
 }
 
-function typeFinalWarning() {
-  if (finalCharIndex < finalWarning.length) {
-    const textNode = document.createTextNode(finalWarning.charAt(finalCharIndex));
-    finalLineEl.insertBefore(textNode, cursor);
+function startGetOut(){
+  screen.innerHTML="";
+  finalLineEl=document.createElement("div");
+  finalLineEl.className="line";
+  screen.appendChild(finalLineEl);
+  finalLineEl.appendChild(cursor);
+  typeFinalWarning();
+}
+
+function typeFinalWarning(){
+  if(finalCharIndex<finalWarning.length){
+    const textNode=document.createTextNode(finalWarning.charAt(finalCharIndex));
+    finalLineEl.insertBefore(textNode,cursor);
     finalCharIndex++;
-    setTimeout(typeFinalWarning, 50 + Math.random()*180);
+    setTimeout(typeFinalWarning,50+Math.random()*180);
   } else {
-    setTimeout(() => {
-      urgencyLineEl = document.createElement("div");
-      urgencyLineEl.className = "line";
+    setTimeout(()=>{
+      urgencyLineEl=document.createElement("div");
+      urgencyLineEl.className="line";
       screen.appendChild(urgencyLineEl);
       urgencyLineEl.appendChild(cursor);
       typeUrgency();
-    }, 3000);
+    },3000);
   }
 }
 
-function typeUrgency() {
-  if (urgencyCharIndex < finalUrgency.length) {
-    const textNode = document.createTextNode(finalUrgency.charAt(urgencyCharIndex));
-    urgencyLineEl.insertBefore(textNode, cursor);
+function typeUrgency(){
+  if(urgencyCharIndex<finalUrgency.length){
+    const textNode=document.createTextNode(finalUrgency.charAt(urgencyCharIndex));
+    urgencyLineEl.insertBefore(textNode,cursor);
     urgencyCharIndex++;
-    setTimeout(typeUrgency, 80 + Math.random()*120);
+    setTimeout(typeUrgency,80+Math.random()*120);
   }
 }
 
