@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hacked Stats Drop</title>
+<title>System Crash Gravity</title>
 <style>
 body{
   background:#050505;
@@ -15,7 +15,7 @@ body{
 }
 .screen{
   max-width:100%;
-  font-size:12px;
+  font-size:14px;
   line-height:1.2;
   white-space:nowrap;
   position:relative;
@@ -23,16 +23,19 @@ body{
   flex-wrap:nowrap;
   overflow-x:hidden;
 }
-.line, .bar-wrap{
+.line{
   display:inline-block;
   margin-right:6px;
   position:relative;
 }
 .bar-wrap{
+  display:inline-block;
   width:40px;
   height:6px;
   border:1px solid #2b2b30;
   background:#101013;
+  margin-right:6px;
+  vertical-align:middle;
 }
 .bar-fill{
   height:100%;
@@ -53,7 +56,8 @@ body{
 .fall{
   position:absolute;
   display:inline-block;
-  transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 2s cubic-bezier(0.22,1,0.36,1);
+  will-change: transform;
 }
 </style>
 </head>
@@ -62,66 +66,105 @@ body{
 <div class="screen" id="screen"></div>
 
 <script>
-const screen = document.getElementById("screen");
-const cursor = document.createElement("span");
-cursor.className="cursor"; cursor.textContent="_";
+const screen=document.getElementById("screen");
+const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}<>?/|\\~";
+function randomChar(){return chars.charAt(Math.floor(Math.random()*chars.length));}
 
-const lines = [
-  "MICROPHONE: ACTIVE",
-  "CAMERA: ACTIVE",
-  "VOICEPRINT: MATCHED",
-  "AMBIENT AUDIO: CAPTURED",
-  "BACKGROUND MOVEMENT: DETECTED"
+const lines=[
+  "RUNNING BEHAVIORAL ANALYSIS...",
+  "INTERPRETING USER RESPONSE...",
+  "GENERATING PROFILE..."
 ];
 
-let lineEls = [];
-let fallElements = [];
+const stats=[
+  {label:"CURIOSITY", value:"84%"},
+  {label:"WARNING", value:"22%"},
+  {label:"TRUST", value:"76%"},
+  {label:"SUSCEPTIBILITY", value:"91%"},
+  {label:"STABILITY", value:"68%"}
+];
 
-// helper για glitch
-const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}<>?/|\\~";
-function randomChar(){ return chars.charAt(Math.floor(Math.random()*chars.length)); }
+const finalWarning="GET OUT!";
+const finalUrgency="NOW!";
 
-// Δημιουργία lines
-lines.forEach((text)=>{
-  const div=document.createElement("div");
-  div.className="line";
-  div.textContent=text;
-  screen.appendChild(div);
-  lineEls.push(div);
-});
+let currentLineIndex=0;
+let currentCharIndex=0;
+let currentLineEl=null;
+const cursor=document.createElement("span"); cursor.className="cursor"; cursor.textContent="_";
 
-// Δημιουργία bars
-[1,2,3,4,5].forEach(idx=>{
-  const wrap=document.createElement("div");
-  wrap.className="bar-wrap";
-  const fill=document.createElement("div");
-  fill.className="bar-fill show-"+idx;
-  wrap.appendChild(fill);
-  screen.appendChild(wrap);
-  lineEls.push(wrap);
-});
+let fallElements=[];
 
-// glitch effect
-function glitchEffect(iter=0){
-  if(iter>20){
-    setTimeout(()=>fallLines(),300);
+// === Step 1: Display 3 lines ===
+function startLine(){
+  currentLineEl=document.createElement("div");
+  currentLineEl.className="line";
+  screen.appendChild(currentLineEl);
+  currentLineEl.appendChild(cursor);
+}
+function typeNext(){
+  if(currentLineIndex>=lines.length){showStats(); return;}
+  if(!currentLineEl) startLine();
+  const text=lines[currentLineIndex];
+  if(currentCharIndex<text.length){
+    currentLineEl.insertBefore(document.createTextNode(text.charAt(currentCharIndex)),cursor);
+    currentCharIndex++;
+    setTimeout(typeNext,95);
     return;
   }
-  lineEls.forEach(el=>{
-    if(el.nodeName==="DIV" && el.childNodes.length && el.firstChild.nodeType===3){
-      let txt=el.textContent;
-      txt=txt.split("").map(c=>Math.random()<0.3?randomChar():c).join("");
-      el.textContent=txt;
-    }
-  });
-  setTimeout(()=>glitchEffect(iter+1),80);
+  setTimeout(()=>{
+    currentLineIndex++;
+    currentCharIndex=0;
+    currentLineEl=null;
+    typeNext();
+  },800);
 }
 
-// fall effect (single row)
-function fallLines(){
+// === Step 2: Show stats with bars ===
+function showStats(){
+  stats.forEach((s,i)=>{
+    const div=document.createElement("div");
+    div.className="line";
+    div.textContent=`[${s.label}] ${s.value}`;
+    screen.appendChild(div);
+    fallElements.push(div);
+    const barWrap=document.createElement("div");
+    barWrap.className="bar-wrap";
+    const barFill=document.createElement("div");
+    barFill.className="bar-fill show-"+(i+1);
+    barWrap.appendChild(barFill);
+    screen.appendChild(barWrap);
+    fallElements.push(barWrap);
+  });
+  setTimeout(hackEffect,100); // small delay before hack
+}
+
+// === Step 3: Glitch / hack effect for 2.5s ===
+function hackEffect(){
+  let steps=0;
+  const hackInterval=setInterval(()=>{
+    fallElements.forEach(el=>{
+      if(el.firstChild && el.firstChild.nodeType===3){
+        let txt=el.textContent;
+        txt=txt.split("").map(c=>Math.random()<0.3?randomChar():c).join("");
+        el.textContent=txt;
+      } else if(el.classList.contains("bar-wrap")){
+        const fill=el.firstChild;
+        fill.style.width=(Math.random()*100)+"%";
+      }
+    });
+    steps++;
+    if(steps>50){ // ~2.5s
+      clearInterval(hackInterval);
+      startFall();
+    }
+  },50);
+}
+
+// === Step 4: Gravity fall within viewport ===
+function startFall(){
   const screenRect=screen.getBoundingClientRect();
   let leftOffset=screenRect.left+10;
-  lineEls.forEach(el=>{
+  fallElements.forEach(el=>{
     const rect=el.getBoundingClientRect();
     const clone=el.cloneNode(true);
     clone.style.position="absolute";
@@ -130,64 +173,59 @@ function fallLines(){
     clone.style.width=rect.width+"px";
     clone.classList.add("fall");
     document.body.appendChild(clone);
-    fallElements.push(clone);
     el.style.visibility="hidden";
     leftOffset+=rect.width+6;
   });
-  // animation
+  // animate fall
   fallElements.forEach(el=>{
-    const maxY=window.innerHeight - 40;
+    const maxY=window.innerHeight - 50;
     const rot=(Math.random()-0.5)*20;
     setTimeout(()=>el.style.transform=`translateY(${maxY}px) rotate(${rot}deg)`,50);
   });
-  setTimeout(showGetOut,2000);
+  // after fall, show GET OUT
+  setTimeout(showGetOut,2500);
 }
 
+// === Step 5: GET OUT / NOW typing ===
 function showGetOut(){
-  const msg = document.createElement("div");
+  const msg=document.createElement("div");
   msg.className="line";
   msg.style.position="absolute";
   msg.style.top="20px";
   msg.style.left="50%";
   msg.style.transform="translateX(-50%)";
   screen.appendChild(msg);
-  const getOut="GET OUT!";
   let idx=0;
-  const getCursor=document.createElement("span");
-  getCursor.className="cursor";
-  getCursor.textContent="_";
+  const getCursor=document.createElement("span"); getCursor.className="cursor"; getCursor.textContent="_";
   msg.appendChild(getCursor);
 
   function typeChar(){
-    if(idx<getOut.length){
-      msg.insertBefore(document.createTextNode(getOut.charAt(idx)),getCursor);
+    if(idx<finalWarning.length){
+      msg.insertBefore(document.createTextNode(finalWarning.charAt(idx)),getCursor);
       idx++;
       setTimeout(typeChar,50+Math.random()*150);
     } else {
-      setTimeout(typeNow,1500);
+      setTimeout(typeNow,3000);
     }
   }
   typeChar();
 }
 
 function typeNow(){
-  const msg = document.createElement("div");
+  const msg=document.createElement("div");
   msg.className="line";
   msg.style.position="absolute";
   msg.style.top="60px";
   msg.style.left="50%";
   msg.style.transform="translateX(-50%)";
   screen.appendChild(msg);
-  const nowText="NOW!";
   let idx=0;
-  const nowCursor=document.createElement("span");
-  nowCursor.className="cursor";
-  nowCursor.textContent="_";
+  const nowCursor=document.createElement("span"); nowCursor.className="cursor"; nowCursor.textContent="_";
   msg.appendChild(nowCursor);
 
   function typeChar(){
-    if(idx<nowText.length){
-      msg.insertBefore(document.createTextNode(nowText.charAt(idx)),nowCursor);
+    if(idx<finalUrgency.length){
+      msg.insertBefore(document.createTextNode(finalUrgency.charAt(idx)),nowCursor);
       idx++;
       setTimeout(typeChar,80+Math.random()*120);
     }
@@ -195,9 +233,19 @@ function typeNow(){
   typeChar();
 }
 
-// start
-setTimeout(glitchEffect,500);
-</script>
+// === Step 6: Motion effect on mobile tilt ===
+if(window.DeviceOrientationEvent){
+  window.addEventListener("deviceorientation", e=>{
+    const gamma=e.gamma||0;
+    const beta=e.beta||0;
+    fallElements.forEach(el=>{
+      el.style.transform += ` translateX(${gamma*0.3}px) translateY(${beta*0.3}px)`;
+    });
+  });
+}
 
+// start typing
+typeNext();
+</script>
 </body>
 </html>
