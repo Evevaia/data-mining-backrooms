@@ -101,7 +101,8 @@ min-height:320px;
 background:#050505;
 border:1px solid #2b2b30;
 padding:20px;
-font-family:"Courier New", monospace;
+font-family:"Lucida Console", "Courier New", monospace;
+font-weight:700; /* πιο έντονα γράμματα */
 }
 
 .recording-screen.show{
@@ -141,6 +142,7 @@ font-size:16px;
 line-height:1.7;
 white-space:pre-wrap;
 color:#e6e6e6;
+font-weight:700; /* πιο έντονα γράμματα */
 }
 
 .cursor{
@@ -241,19 +243,13 @@ let countdown = 10
 let accepted = false
 let timerInterval
 
+// λιγότερες γραμμές για πιο clean cinematic typing
 const lines = [
-
-"[SYSTEM] Initializing interface...",
-"[ACCESS] Microphone channel opened",
-"[ACCESS] Camera stream connected",
-"[SCAN] Voiceprint analysis started",
-"[SCAN] Ambient noise calibration",
-"[SCAN] Facial structure mapping",
-"[ANALYSIS] Emotional response pattern",
-"[DATA] Background movement detected",
-"[MATCH] Biometric pattern stored",
-"[SYSTEM] Recording session active"
-
+"[SYSTEM] Initializing...",
+"[ACCESS] Microphone & Camera OK",
+"[SCAN] Facial & Voice Analysis",
+"[MATCH] Biometric profile stored",
+"[SYSTEM] Recording Active"
 ]
 
 let lineIndex = 0
@@ -334,6 +330,7 @@ timerText.textContent = hrs + ":" + mins + ":" + secs
 
 }
 
+// fixed cursor που δεν πέφτει
 function typeLine(){
 
 const analysisText = document.getElementById("analysisText")
