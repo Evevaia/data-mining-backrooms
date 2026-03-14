@@ -144,8 +144,7 @@ color:#e6e6e6;
 }
 
 .cursor{
-display:inline;
-animation:blink 1s step-end infinite;
+animation:blink 1s steps(1) infinite;
 }
 
 @keyframes blink{
@@ -229,7 +228,7 @@ Your acceptance will be mandatory in 10...
 <div class="timer" id="timerText">00:00:00</div>
 
 <div class="analysis" id="analysisText">
-<span id="cursor" class="cursor">_</span>
+<span id="cursor" class="cursor">|</span>
 </div>
 
 </div>
@@ -349,11 +348,7 @@ const currentLine = lines[lineIndex]
 
 if(charIndex < currentLine.length){
 
-cursor.remove()
-
-analysisText.textContent += currentLine.charAt(charIndex)
-
-analysisText.appendChild(cursor)
+cursor.insertAdjacentText("beforebegin", currentLine.charAt(charIndex))
 
 charIndex++
 
@@ -363,11 +358,7 @@ setTimeout(typeLine,speed)
 
 }else{
 
-cursor.remove()
-
-analysisText.textContent += "\n"
-
-analysisText.appendChild(cursor)
+cursor.insertAdjacentText("beforebegin","\n")
 
 lineIndex++
 charIndex = 0
