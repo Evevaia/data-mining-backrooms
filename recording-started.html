@@ -6,6 +6,7 @@
 <title>Recording Started</title>
 
 <style>
+
 body{
 background:#0e0e10;
 color:#f2f2f2;
@@ -15,7 +16,7 @@ align-items:center;
 justify-content:center;
 min-height:100vh;
 margin:0;
-padding:24px;
+padding:20px;
 }
 
 .container{
@@ -23,9 +24,7 @@ width:100%;
 max-width:760px;
 background:#151518;
 border:1px solid #2b2b30;
-padding:30px;
-position:relative;
-overflow:hidden;
+padding:26px;
 }
 
 .small{
@@ -37,25 +36,23 @@ margin-bottom:10px;
 
 h1{
 margin:0 0 14px 0;
-font-size:30px;
-font-weight:700;
+font-size:28px;
 }
 
 .status{
 font-size:14px;
 color:#b8b8c2;
-margin-bottom:22px;
-min-height:20px;
+margin-bottom:20px;
 }
 
 .permission-box{
 border:1px solid #2b2b30;
 background:#101013;
-padding:22px;
+padding:20px;
 }
 
 .permission-title{
-font-size:22px;
+font-size:20px;
 font-weight:700;
 margin-bottom:10px;
 }
@@ -71,7 +68,6 @@ margin-bottom:18px;
 font-size:15px;
 color:#ff8f8f;
 margin-bottom:20px;
-min-height:20px;
 }
 
 .buttons{
@@ -87,11 +83,6 @@ border:1px solid #2b2b30;
 background:#f2f2f2;
 color:#111;
 cursor:pointer;
-transition:opacity 0.2s ease, transform 0.2s ease;
-}
-
-button:hover{
-transform:translateY(-1px);
 }
 
 .accept-green{
@@ -106,11 +97,11 @@ display:none !important;
 
 .recording-screen{
 display:none;
-min-height:360px;
+min-height:320px;
 background:#050505;
 border:1px solid #2b2b30;
-padding:24px;
-font-family:"Lucida Console","Courier New",monospace;
+padding:20px;
+font-family:"Courier New", monospace;
 }
 
 .recording-screen.show{
@@ -118,109 +109,113 @@ display:block;
 }
 
 .big-ohwell{
-font-size:42px;
+font-size:36px;
 font-weight:700;
-letter-spacing:0.02em;
-margin-bottom:24px;
+margin-bottom:20px;
 }
 
 .rec-line{
 display:flex;
 align-items:center;
 gap:10px;
-font-size:22px;
-margin-bottom:18px;
+font-size:20px;
+margin-bottom:15px;
 }
 
 .rec-dot{
-width:12px;
-height:12px;
+width:10px;
+height:10px;
 background:#ff4d4d;
 border-radius:50%;
-box-shadow:0 0 12px rgba(255,77,77,0.65);
-animation:recBlink 1s ease-in-out infinite;
+animation:recBlink 1s infinite;
 }
 
 .timer{
-font-size:18px;
+font-size:16px;
 color:#b8b8c2;
-margin-bottom:26px;
-}
-
-.analysis{
-font-size:17px;
-line-height:1.8;
-white-space:pre-wrap;
-min-height:180px;
-color:#8aff8a;
-text-shadow:0 0 4px rgba(138,255,138,0.3);
-}
-
-.cursor{
-display:inline-block;
-animation:blink 1s steps(1) infinite;
-}
-
-@keyframes blink{
-0%{opacity:1;}
-50%{opacity:0;}
-100%{opacity:1;}
-}
-
-@keyframes recBlink{
-0%{opacity:1;}
-50%{opacity:0.35;}
-100%{opacity:1;}
-}
-
-@media (max-width:600px){
-.container{
-padding:20px;
-}
-
-h1{
-font-size:26px;
-}
-
-.permission-title{
-font-size:19px;
-}
-
-.big-ohwell{
-font-size:32px;
+margin-bottom:20px;
 }
 
 .analysis{
 font-size:16px;
+line-height:1.7;
+white-space:pre-wrap;
+color:#e6e6e6;
 }
+
+.cursor{
+display:inline;
+animation:blink 1s step-end infinite;
 }
+
+@keyframes blink{
+50%{opacity:0;}
+}
+
+@keyframes recBlink{
+50%{opacity:0.3;}
+}
+
+@media (max-width:600px){
+
+.container{
+padding:18px;
+}
+
+h1{
+font-size:24px;
+}
+
+.permission-title{
+font-size:18px;
+}
+
+.big-ohwell{
+font-size:28px;
+}
+
+.analysis{
+font-size:15px;
+}
+
+}
+
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
 <div id="permissionScreen">
-  <div class="small">ACCESS INTERFACE</div>
-  <h1>Permission Request</h1>
-  <div class="status">Awaiting response.</div>
 
-  <div class="permission-box">
-    <div class="permission-title">Microphone & Camera Access Required</div>
-    <div class="permission-text">
-      This experience requires full audiovisual access in order to continue.
-    </div>
+<div class="small">ACCESS INTERFACE</div>
+<h1>Permission Request</h1>
 
-    <div class="countdown" id="countdownText">
-    Your acceptance will be mandatory in 10...
-    </div>
+<div class="status">Awaiting response.</div>
 
-    <div class="buttons">
-      <button onclick="forceAccept()">ACCEPT</button>
-      <button class="accept-green" onclick="forceAccept()">ACCEPT</button>
-    </div>
-  </div>
+<div class="permission-box">
+
+<div class="permission-title">
+Microphone & Camera Access Required
 </div>
+
+<div class="permission-text">
+This experience requires full audiovisual access in order to continue.
+</div>
+
+<div class="countdown" id="countdownText">
+Your acceptance will be mandatory in 10...
+</div>
+
+<div class="buttons">
+<button onclick="forceAccept()">ACCEPT</button>
+<button class="accept-green" onclick="forceAccept()">ACCEPT</button>
+</div>
+
+</div>
+</div>
+
 
 <div class="recording-screen" id="recordingScreen">
 
@@ -233,8 +228,9 @@ font-size:16px;
 
 <div class="timer" id="timerText">00:00:00</div>
 
-<div class="analysis" id="analysisText"></div>
-<span class="cursor" id="cursor">_</span>
+<div class="analysis" id="analysisText">
+<span id="cursor" class="cursor">_</span>
+</div>
 
 </div>
 
@@ -242,10 +238,9 @@ font-size:16px;
 
 <script>
 
-let countdown = 10;
-let countdownStarted = false;
-let accepted = false;
-let timerInterval;
+let countdown = 10
+let accepted = false
+let timerInterval
 
 const lines = [
 
@@ -256,146 +251,128 @@ const lines = [
 "[SCAN] Ambient noise calibration",
 "[SCAN] Facial structure mapping",
 "[ANALYSIS] Emotional response pattern",
-"[DATA] Background motion detected",
+"[DATA] Background movement detected",
 "[MATCH] Biometric pattern stored",
 "[SYSTEM] Recording session active"
 
-];
+]
 
-let lineIndex = 0;
-let charIndex = 0;
+let lineIndex = 0
+let charIndex = 0
 
-window.addEventListener("load", function(){
-startCountdown();
-});
+window.onload = function(){
+startCountdown()
+}
 
 function startCountdown(){
 
-if (countdownStarted) return;
-countdownStarted = true;
-
-const countdownText = document.getElementById("countdownText");
+const countdownText = document.getElementById("countdownText")
 
 const interval = setInterval(function(){
 
-countdown--;
+countdown--
 
-if (countdown > 0){
+if(countdown > 0){
 
 countdownText.textContent =
-"Your acceptance will be mandatory in " + countdown + "...";
+"Your acceptance will be mandatory in " + countdown + "..."
 
 }else{
 
 countdownText.textContent =
-"Your acceptance is now mandatory.";
+"Your acceptance is now mandatory."
 
-clearInterval(interval);
+clearInterval(interval)
 
 setTimeout(function(){
 
-if (!accepted){
-forceAccept();
+if(!accepted){
+forceAccept()
 }
 
-},500);
+},500)
 
 }
 
-},1000);
+},1000)
 
 }
 
 function forceAccept(){
 
-if (accepted) return;
-accepted = true;
+accepted = true
 
 document
 .getElementById("permissionScreen")
-.classList.add("hidden");
+.classList.add("hidden")
 
 document
 .getElementById("recordingScreen")
-.classList.add("show");
+.classList.add("show")
 
-startTimer();
+startTimer()
 
-setTimeout(function(){
-
-typeLine();
-
-},700);
+setTimeout(typeLine,700)
 
 }
 
 function startTimer(){
 
-let seconds = 0;
-
-const timerText = document.getElementById("timerText");
+let seconds = 0
+const timerText = document.getElementById("timerText")
 
 timerInterval = setInterval(function(){
 
-seconds++;
+seconds++
 
-const hrs =
-String(Math.floor(seconds / 3600)).padStart(2,"0");
+const hrs = String(Math.floor(seconds/3600)).padStart(2,"0")
+const mins = String(Math.floor((seconds%3600)/60)).padStart(2,"0")
+const secs = String(seconds%60).padStart(2,"0")
 
-const mins =
-String(Math.floor((seconds % 3600) / 60)).padStart(2,"0");
+timerText.textContent = hrs + ":" + mins + ":" + secs
 
-const secs =
-String(seconds % 60).padStart(2,"0");
-
-timerText.textContent =
-hrs + ":" + mins + ":" + secs;
-
-},1000);
+},1000)
 
 }
 
 function typeLine(){
 
-const analysisText =
-document.getElementById("analysisText");
+const analysisText = document.getElementById("analysisText")
+const cursor = document.getElementById("cursor")
 
-const cursor =
-document.getElementById("cursor");
-
-if (lineIndex >= lines.length){
-
-cursor.remove();
-return;
-
+if(lineIndex >= lines.length){
+cursor.remove()
+return
 }
 
-const currentLine = lines[lineIndex];
+const currentLine = lines[lineIndex]
 
-if (charIndex < currentLine.length){
+if(charIndex < currentLine.length){
 
-analysisText.textContent +=
-currentLine.charAt(charIndex);
+cursor.remove()
 
-charIndex++;
+analysisText.textContent += currentLine.charAt(charIndex)
 
-const randomSpeed =
-35 + Math.random() * 60;
+analysisText.appendChild(cursor)
 
-setTimeout(typeLine, randomSpeed);
+charIndex++
+
+const speed = 35 + Math.random()*60
+
+setTimeout(typeLine,speed)
 
 }else{
 
-analysisText.textContent += "\n";
+cursor.remove()
 
-lineIndex++;
+analysisText.textContent += "\n"
 
-charIndex = 0;
+analysisText.appendChild(cursor)
 
-const pause =
-200 + Math.random() * 400;
+lineIndex++
+charIndex = 0
 
-setTimeout(typeLine, pause);
+setTimeout(typeLine,250 + Math.random()*400)
 
 }
 
