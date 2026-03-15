@@ -19,22 +19,25 @@ overflow:hidden;
 .screen{
 max-width:900px;
 margin:0 auto;
-font-size:18px;
-line-height:1.45;
+font-size:20px;
+line-height:1.5;
 white-space:pre-wrap;
 position:relative;
 z-index:2;
+font-family:"Lucida Console","Courier New",monospace;
 }
 
 .line{
 display:block;
-min-height:1.45em;
+min-height:1.5em;
 position:relative;
+font-family:"Lucida Console","Courier New",monospace;
 }
 
 .cursor{
 display:inline;
 animation:blink 1s steps(1) infinite;
+font-family:"Lucida Console","Courier New",monospace;
 }
 
 .stats-wrap{
@@ -42,17 +45,24 @@ margin-top:4px;
 display:flex;
 flex-direction:column;
 gap:5px;
+font-family:"Lucida Console","Courier New",monospace;
 }
 
 .stat-row{
 display:grid;
-grid-template-columns: 230px 1fr 60px;
+grid-template-columns: 245px 1fr 60px;
 align-items:center;
 column-gap:10px;
 font-size:15px;
 line-height:1.15;
 min-height:24px;
 position:relative;
+font-family:"Lucida Console","Courier New",monospace;
+}
+
+.stat-label,
+.stat-value{
+font-family:"Lucida Console","Courier New",monospace;
 }
 
 .stat-label{
@@ -81,10 +91,10 @@ text-align:right;
 .big-warning{
 position:fixed;
 left:50%;
-top:50%;
+top:40%;
 transform:translate(-50%,-50%);
-font-size:52px;
-line-height:1;
+font-size:54px;
+line-height:1.08;
 letter-spacing:3px;
 text-align:center;
 opacity:0;
@@ -92,13 +102,8 @@ pointer-events:none;
 z-index:20;
 color:#f2f2f2;
 text-shadow:0 0 12px rgba(255,255,255,0.15);
-white-space:nowrap;
-}
-
-.big-warning.now{
-top:calc(50% + 72px);
-font-size:68px;
-letter-spacing:5px;
+white-space:pre-line;
+font-family:"Lucida Console","Courier New",monospace;
 }
 
 .big-warning.show{
@@ -144,11 +149,11 @@ body{
 padding:18px 14px;
 }
 .screen{
-font-size:13px;
-line-height:1.35;
+font-size:15px;
+line-height:1.4;
 }
 .line{
-min-height:1.35em;
+min-height:1.4em;
 }
 .stat-row{
 grid-template-columns: 1fr;
@@ -164,13 +169,10 @@ height:8px;
 text-align:left;
 }
 .big-warning{
-font-size:30px;
+top:38%;
+font-size:34px;
 letter-spacing:2px;
-}
-.big-warning.now{
-font-size:44px;
-top:calc(50% + 50px);
-letter-spacing:3px;
+line-height:1.12;
 }
 }
 </style>
@@ -180,13 +182,11 @@ letter-spacing:3px;
 <div class="screen" id="screen"></div>
 <div class="flash" id="flash"></div>
 <div class="big-warning" id="getOut"></div>
-<div class="big-warning now" id="nowMsg"></div>
 
 <script>
 const screen = document.getElementById("screen");
 const flash = document.getElementById("flash");
 const getOut = document.getElementById("getOut");
-const nowMsg = document.getElementById("nowMsg");
 
 const introLines = [
   "RUNNING BEHAVIORAL ANALYSIS...",
@@ -422,9 +422,9 @@ function explodeScreen() {
 
         document.body.appendChild(frag);
 
-        const vx = (Math.random() - 0.5) * 16;
-        const vy = -Math.random() * 9 - 2;
-        const spin = (Math.random() - 0.5) * 24;
+        const vx = (Math.random() - 0.5) * 11;
+        const vy = -Math.random() * 5 - 1.2;
+        const spin = (Math.random() - 0.5) * 14;
 
         pieces.push({
           el: frag,
@@ -446,22 +446,18 @@ function explodeScreen() {
   runPhysics(pieces);
 
   setTimeout(() => {
-    typeBigWarning(getOut, "GET OUT");
+    typeBigWarning(getOut, "GET OUT.\nNOW!");
   }, 2000);
-
-  setTimeout(() => {
-    typeBigWarning(nowMsg, "NOW");
-  }, 5000);
 }
 
 function runPhysics(pieces) {
   if (physicsRunning) return;
   physicsRunning = true;
 
-  const gravity = 1.05;
-  const bounce = 0.24;
-  const friction = 0.986;
-  const floorFriction = 0.92;
+  const gravity = 0.42;
+  const bounce = 0.18;
+  const friction = 0.992;
+  const floorFriction = 0.95;
 
   function frame() {
     const vw = window.innerWidth;
@@ -477,7 +473,7 @@ function runPhysics(pieces) {
       p.rot += p.spin;
 
       p.vx *= friction;
-      p.spin *= 0.992;
+      p.spin *= 0.994;
 
       if (p.x <= 0) {
         p.x = 0;
@@ -498,7 +494,7 @@ function runPhysics(pieces) {
         p.y = vh - p.h;
         p.vy *= -bounce;
         p.vx *= floorFriction;
-        if (Math.abs(p.vy) < 0.8) {
+        if (Math.abs(p.vy) < 0.5) {
           p.vy = 0;
         }
       }
@@ -524,15 +520,14 @@ function typeBigWarning(el, text) {
     if (i >= text.length) return;
     el.textContent += text.charAt(i);
     i++;
-    const delay = randomTypingDelay();
-    setTimeout(typeChar, delay);
+    setTimeout(typeChar, randomTypingDelay());
   }
 
   typeChar();
 }
 
 function randomTypingDelay() {
-  const delays = [55, 70, 82, 95, 110, 130, 160, 78, 88, 102];
+  const delays = [55, 68, 74, 82, 96, 110, 128, 145, 88, 102];
   return delays[Math.floor(Math.random() * delays.length)];
 }
 
