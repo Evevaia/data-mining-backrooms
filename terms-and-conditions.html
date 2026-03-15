@@ -144,8 +144,8 @@ button:active{
 
 .scan-wrap{
   margin:18px auto 16px auto;
-  width:130px;
-  height:160px;
+  width:120px;
+  height:150px;
   border:1px solid #2b2b30;
   background:
     radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%),
@@ -154,41 +154,49 @@ button:active{
   overflow:hidden;
   border-radius:14px;
   cursor:pointer;
-  transition:transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .scan-wrap:hover{
-  border-color:#4a4a50;
+  border-color:#4d4d56;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.04), 0 0 22px rgba(255,255,255,0.04);
+  transform:translateY(-1px);
 }
 
 .scan-wrap:active{
-  transform:scale(0.98);
+  transform:scale(0.985);
 }
 
-.scan-wrap.ready{
-  box-shadow:0 0 0 1px rgba(255,255,255,0.05) inset;
-}
-
-.scan-wrap.scanning{
-  border-color:#66666f;
-  box-shadow:0 0 18px rgba(255,255,255,0.08);
+.scan-wrap.disabled{
+  pointer-events:none;
   cursor:default;
+  opacity:0.9;
 }
 
-.fingerprint{
+.pinky-hand{
   position:absolute;
   inset:14px;
   display:flex;
   align-items:center;
   justify-content:center;
-  opacity:0.72;
+  opacity:0.62;
+  filter:grayscale(1) contrast(1.08);
   user-select:none;
-  filter:drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+  transition:opacity 0.2s ease, transform 0.2s ease;
 }
 
-.fingerprint svg{
-  width:82px;
-  height:108px;
+.scan-wrap:hover .pinky-hand{
+  opacity:0.78;
+  transform:scale(1.02);
+}
+
+.pinky-hand svg{
+  width:76px;
+  height:96px;
   display:block;
 }
 
@@ -224,10 +232,12 @@ button:active{
 }
 
 .tap-hint{
+  margin-top:-4px;
+  margin-bottom:8px;
   font-size:11px;
+  letter-spacing:1px;
   color:#7f7f88;
-  letter-spacing:0.7px;
-  margin-top:4px;
+  text-transform:uppercase;
 }
 
 @keyframes scanMove{
@@ -281,9 +291,9 @@ button:active{
     height:140px;
   }
 
-  .fingerprint svg{
-    width:72px;
-    height:96px;
+  .pinky-hand svg{
+    width:68px;
+    height:88px;
   }
 }
 </style>
@@ -362,55 +372,63 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 
 <div class="popup" id="scanPopup">
   <p><strong>Pinky promise?</strong></p>
-  <p style="font-size:13px; color:#9a9aa3;">Place your pinky to scan.</p>
+  <p style="font-size:13px; color:#9a9aa3;">Place your pinky to scan and confirm consent.</p>
 
-  <div class="scan-wrap ready" id="scanWrap" onclick="startPinkyScan()">
-    <div class="fingerprint" aria-hidden="true">
-      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="handGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#9a9aa3"/>
-            <stop offset="100%" stop-color="#6f6f77"/>
-          </linearGradient>
-        </defs>
+  <div class="scan-wrap" id="scanWrap" onclick="startPinkyScan()" aria-label="Scan pinky" role="button" tabindex="0">
+    <div class="pinky-hand">
+      <svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path
+          d="M78 18
+             C78 11, 83 6, 89 6
+             C95 6, 100 11, 100 18
+             L100 66
 
-        <g fill="none" stroke="url(#handGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-          <!-- raised pinky -->
-          <path d="M20 18 L20 52" />
-          <path d="M20 18 C20 11 24 8 29 8 C34 8 37 11 37 18" />
-          <path d="M37 18 L37 49" />
+             C100 70, 103 72, 106 72
+             C111 72, 114 68, 114 62
+             L114 44
+             C114 38, 118 34, 123 34
+             C128 34, 132 38, 132 44
+             L132 90
 
-          <!-- ring finger -->
-          <path d="M43 34 C43 24 48 19 55 19 C62 19 67 24 67 34" />
-          <path d="M43 34 L43 78" />
-
-          <!-- middle finger -->
-          <path d="M55 28 C55 18 61 13 69 13 C77 13 82 19 82 30" />
-          <path d="M55 28 L55 86" />
-
-          <!-- index finger folded lower -->
-          <path d="M33 46 C33 37 39 31 47 31 C54 31 59 36 59 45" />
-          <path d="M33 46 L33 86" />
-
-          <!-- thumb -->
-          <path d="M24 72 C14 78 10 87 12 96 C14 104 22 107 30 103" />
-
-          <!-- palm outer -->
-          <path d="M30 103 C36 113 47 119 60 118 C73 117 82 109 87 96" />
-
-          <!-- inner palm contours -->
-          <path d="M39 52 C39 72 37 88 34 102" />
-          <path d="M50 50 C50 73 49 91 45 108" />
-          <path d="M61 46 C61 70 61 90 57 110" />
-          <path d="M73 40 C73 64 74 84 69 103" />
-        </g>
+             C132 111, 119 126, 103 135
+             C88 143, 70 145, 56 139
+             C45 134, 34 124, 28 111
+             L18 90
+             C14 82, 17 73, 25 69
+             C33 65, 42 69, 46 77
+             L54 92
+             L54 28
+             C54 22, 58 17, 64 17
+             C69 17, 73 21, 74 27
+             L74 63
+             L78 63
+             L78 18 Z"
+          fill="none"
+          stroke="#bcbcc5"
+          stroke-width="6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M67 36 L67 97
+             M83 25 L83 86
+             M95 22 L95 74
+             M106 78 C106 97, 95 111, 77 117
+             C61 122, 45 118, 34 107"
+          fill="none"
+          stroke="#8e8e97"
+          stroke-width="2.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          opacity="0.9"
+        />
       </svg>
     </div>
-    <div class="scan-line"></div>
+    <div class="scan-line" id="scanLine"></div>
   </div>
 
-  <div class="scan-text" id="scanText">PLACE YOUR PINKY TO SCAN</div>
-  <div class="tap-hint" id="tapHint">TAP THE SCANNER</div>
+  <div class="tap-hint">tap pinky to scan</div>
+  <div class="scan-text" id="scanText">AWAITING PINKY VERIFICATION</div>
   <div class="scan-result" id="scanResult"></div>
 </div>
 
@@ -425,9 +443,9 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 let btn = document.getElementById("declineBtn");
 let dx = 2.5;
 let dy = 2.2;
+let x = btn.offsetLeft;
+let y = btn.offsetTop;
 let moving = false;
-let x = 0;
-let y = 0;
 let scanStarted = false;
 
 function acceptTerms(){
@@ -443,11 +461,10 @@ function startPinkyScan(){
   const scanWrap = document.getElementById("scanWrap");
   const scanText = document.getElementById("scanText");
   const scanResult = document.getElementById("scanResult");
-  const tapHint = document.getElementById("tapHint");
 
+  scanWrap.classList.add("disabled");
   scanText.innerText = "SCANNING PINKY...";
   scanResult.innerText = "";
-  tapHint.innerText = "";
   scanWrap.classList.add("scanning");
 
   setTimeout(() => {
@@ -467,6 +484,13 @@ function startPinkyScan(){
   }, 4300);
 }
 
+document.getElementById("scanWrap").addEventListener("keydown", function(e){
+  if(e.key === "Enter" || e.key === " "){
+    e.preventDefault();
+    startPinkyScan();
+  }
+});
+
 function closePopup(){
   document.getElementById("overlay").classList.remove("show");
   document.getElementById("popup").classList.remove("show");
@@ -475,9 +499,6 @@ function closePopup(){
 function declineTerms(){
   if(!moving){
     moving = true;
-    const rect = btn.getBoundingClientRect();
-    x = rect.left;
-    y = rect.top;
     btn.style.position = "fixed";
     btn.style.left = x + "px";
     btn.style.top = y + "px";
@@ -488,7 +509,7 @@ function declineTerms(){
 
 function moveButton(){
   function animate(){
-    if(!btn || !document.body.contains(btn)) return;
+    if(!btn) return;
     x += dx;
     y += dy;
     if(x + btn.offsetWidth > window.innerWidth || x < 0) dx *= -1;
