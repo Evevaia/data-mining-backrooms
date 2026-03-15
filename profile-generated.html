@@ -185,6 +185,7 @@ z-index:15;
 background:#e8e8e8;
 opacity:1;
 will-change:transform,left,top,opacity;
+transform-origin:center center;
 }
 
 @keyframes blink{
@@ -582,9 +583,9 @@ function explodeScreen() {
 
         document.body.appendChild(frag);
 
-        const vx = (Math.random() - 0.5) * 15;
-        const vy = -Math.random() * 8 - 2.5;
-        const spin = (Math.random() - 0.5) * 18;
+        const vx = (Math.random() - 0.5) * 11;
+        const vy = -Math.random() * 7 - 2;
+        const initialTilt = (Math.random() - 0.5) * 10;
 
         pieces.push({
           el: frag,
@@ -594,8 +595,8 @@ function explodeScreen() {
           h,
           vx,
           vy,
-          rot: 0,
-          spin
+          rot: initialTilt,
+          settled: false
         });
       }
     }
@@ -618,11 +619,10 @@ function runPhysics(pieces) {
   if (physicsRunning) return;
   physicsRunning = true;
 
-  const gravity = 0.24;
-  const bounce = 0.12;
-  const friction = 0.995;
-  const floorFriction = 0.972;
-  const airDragY = 0.996;
+  const gravity = 0.26;
+  const bounce = 0.06;
+  const friction = 0.992;
+  const floorFriction = 0.88;
 
   function frame() {
     const vw = window.innerWidth;
@@ -632,42 +632,71 @@ function runPhysics(pieces) {
       const p = pieces[i];
       if (!p.el) continue;
 
-      p.vy += gravity;
-      p.vx *= friction;
-      p.vy *= airDragY;
+      if (!p.settled) {
+        p.vy += gravity;
+        p.vx *= friction;
 
-      p.x += p.vx;
-      p.y += p.vy;
-      p.rot += p.spin;
-      p.spin *= 0.996;
+        p.x += p.vx;
+        p.y += p.vy;
 
-      if (p.x <= 0) {
-        p.x = 0;
-        p.vx *= -bounce;
-      }
+        if (Math.abs(p.vx) > 0.02) {
+          p.rot += p.vx * 0.15;
+        }
 
-      if (p.x + p.w >= vw) {
-        p.x = vw - p.w;
-        p.vx *= -bounce;
-      }
+        if (p.x <= 0) {
+          p.x = 0;
+          p.vx *= -0.25;
+        }
 
-      if (p.y <= 0) {
-        p.y = 0;
-        p.vy *= -bounce;
-      }
+        if (p.x + p.w >= vw) {
+          p.x = vw - p.w;
+          p.vx *= -0.25;
+        }
 
-      if (p.y + p.h >= vh) {
-        p.y = vh - p.h;
-        p.vy *= -bounce;
-        p.vx *= floorFriction;
-        if (Math.abs(p.vy) < 0.35) {
-          p.vy = 0;
+        if (p.y <= 0) {
+          p.y = 0;
+          p.vy *= -0.12;
+        }
+
+        let floorY = vh - p.h;
+
+        for (let j = 0; j < pieces.length; j++) {
+          if (i === j) continue;
+          const other = pieces[j];
+          if (!other.settled) continue;
+
+          const overlapX = p.x < other.x + other.w && p.x + p.w > other.x;
+          const nearTop = p.y + p.h >= other.y - 2 && p.y + p.h <= other.y + other.h * 0.6;
+
+          if (overlapX && nearTop) {
+            floorY = Math.min(floorY, other.y - p.h);
+          }
+        }
+
+        if (p.y >= floorY) {
+          p.y = floorY;
+          p.vy *= -bounce;
+          p.vx *= floorFriction;
+
+          if (Math.abs(p.vy) < 0.45) {
+            p.vy = 0;
+          }
+
+          if (Math.abs(p.vx) < 0.18 && Math.abs(p.vy) === 0) {
+            p.vx = 0;
+            p.rot *= 0.55;
+
+            if (Math.abs(p.rot) < 0.8) {
+              p.rot = 0;
+              p.settled = true;
+            }
+          }
         }
       }
 
       p.el.style.left = p.x + "px";
       p.el.style.top = p.y + "px";
-      p.el.style.transform = "rotate(" + p.rot + "deg)";
+      p.el.style.transform = `rotate(${p.rot}deg)`;
     }
 
     requestAnimationFrame(frame);
