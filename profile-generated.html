@@ -369,27 +369,28 @@ function startHackPhase() {
 
   setTimeout(() => {
     startTremblePhase();
-  }, 450);
+  }, 950);
 
   setTimeout(() => {
     clearInterval(scrambleInterval);
     clearInterval(barInterval);
     stopTremblePhase();
     explodeScreen();
-  }, 3000);
+  }, 3400);
 }
 
 function startTremblePhase() {
   const targets = Array.from(document.querySelectorAll(".particle-target"));
   const startTime = performance.now();
-  const buildDuration = 2550;
+  const buildDuration = 2450;
 
   trembleInterval = setInterval(() => {
     const elapsed = performance.now() - startTime;
     const progress = Math.min(elapsed / buildDuration, 1);
 
-    const strength = 0.8 + progress * 13;
-    const rotateStrength = 0.08 + progress * 2.8;
+    const eased = Math.pow(progress, 1.9);
+    const strength = 0.15 + eased * 12;
+    const rotateStrength = 0.02 + eased * 2.4;
 
     targets.forEach((el) => {
       const tx = (Math.random() - 0.5) * strength;
@@ -489,9 +490,8 @@ function explodeScreen() {
   }, 2800);
 
   setTimeout(() => {
-    getOut.textContent += "\n";
-    typeBigWarningAppend(getOut, "NOW!");
-  }, 7200);
+    appendWarningLine(getOut, "NOW!");
+  }, 7600);
 }
 
 function runPhysics(pieces) {
@@ -557,14 +557,22 @@ function runPhysics(pieces) {
 }
 
 function typeBigWarning(el, text) {
-  el.textContent = "";
+  el.innerHTML = "";
   el.classList.add("show");
+
+  const textNode = document.createTextNode("");
+  const warningCursor = document.createElement("span");
+  warningCursor.className = "cursor";
+  warningCursor.textContent = "_";
+
+  el.appendChild(textNode);
+  el.appendChild(warningCursor);
 
   let i = 0;
 
   function typeChar() {
     if (i >= text.length) return;
-    el.textContent += text.charAt(i);
+    textNode.textContent += text.charAt(i);
     i++;
     setTimeout(typeChar, randomTypingDelay());
   }
@@ -572,12 +580,25 @@ function typeBigWarning(el, text) {
   typeChar();
 }
 
-function typeBigWarningAppend(el, text) {
+function appendWarningLine(el, text) {
+  const currentText = el.textContent.replace(/_+$/,"");
+  el.innerHTML = "";
+
+  const textNode = document.createTextNode(currentText + "\n");
+  const secondTextNode = document.createTextNode("");
+  const warningCursor = document.createElement("span");
+  warningCursor.className = "cursor";
+  warningCursor.textContent = "_";
+
+  el.appendChild(textNode);
+  el.appendChild(secondTextNode);
+  el.appendChild(warningCursor);
+
   let i = 0;
 
   function typeChar() {
     if (i >= text.length) return;
-    el.textContent += text.charAt(i);
+    secondTextNode.textContent += text.charAt(i);
     i++;
     setTimeout(typeChar, randomTypingDelay());
   }
