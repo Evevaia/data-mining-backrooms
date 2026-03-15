@@ -134,28 +134,40 @@ z-index:11;
 mix-blend-mode:screen;
 }
 
-.crt::before,
-.crt::after{
+.crt-overlay{
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:13;
+opacity:0;
+mix-blend-mode:screen;
+}
+
+.crt-overlay.active{
+opacity:1;
+}
+
+.crt-overlay::before,
+.crt-overlay::after{
 content:"";
 position:absolute;
 inset:0;
 pointer-events:none;
 }
 
-.crt::before{
+.crt-overlay::before{
 background:
 repeating-linear-gradient(
 to bottom,
-rgba(255,255,255,0.045) 0px,
-rgba(255,255,255,0.045) 1px,
+rgba(255,255,255,0.05) 0px,
+rgba(255,255,255,0.05) 1px,
 transparent 2px,
 transparent 4px
 );
 opacity:0.9;
-mix-blend-mode:screen;
 }
 
-.crt::after{
+.crt-overlay::after{
 background:linear-gradient(
 90deg,
 rgba(255,0,80,0.08),
@@ -163,8 +175,7 @@ transparent 35%,
 transparent 65%,
 rgba(0,180,255,0.08)
 );
-opacity:0.8;
-mix-blend-mode:screen;
+opacity:0.85;
 }
 
 .fragment{
@@ -226,6 +237,7 @@ font-family:"Lucida Console";
 
 <div class="screen" id="screen"></div>
 <div class="prehack-flicker" id="preFlicker"></div>
+<div class="crt-overlay" id="crtOverlay"></div>
 <div class="flash" id="flash"></div>
 <div class="big-warning" id="getOut"></div>
 
@@ -233,6 +245,7 @@ font-family:"Lucida Console";
 const screen = document.getElementById("screen");
 const flash = document.getElementById("flash");
 const preFlicker = document.getElementById("preFlicker");
+const crtOverlay = document.getElementById("crtOverlay");
 const getOut = document.getElementById("getOut");
 
 const introLines = [
@@ -382,7 +395,7 @@ function revealStats() {
 }
 
 function runPreHackFlicker() {
-  screen.classList.add("crt");
+  crtOverlay.classList.add("active");
 
   const flickers = [
     { opacity: 0.12, duration: 90, shift: 2 },
@@ -483,7 +496,7 @@ function stopCRTBleed() {
   }
   screen.style.filter = "";
   screen.style.transform = "";
-  screen.classList.remove("crt");
+  crtOverlay.classList.remove("active");
 }
 
 function startTremblePhase() {
