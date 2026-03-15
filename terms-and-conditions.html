@@ -177,26 +177,42 @@ button:active{
 
 .fingerprint{
   position:absolute;
-  inset:18px;
+  inset:12px;
   display:flex;
   align-items:center;
   justify-content:center;
-  opacity:0.85;
+  opacity:0.9;
   user-select:none;
 }
 
 .fingerprint svg{
-  width:78px;
-  height:102px;
+  width:106px;
+  height:106px;
   display:block;
 }
 
-.fingerprint path{
+.fingerprint .ring{
   fill:none;
-  stroke:#e8e8e8;
-  stroke-width:2.2;
+  stroke:#f2f2f2;
+  stroke-width:8;
+  opacity:0.95;
+}
+
+.fingerprint .inner{
+  fill:none;
+  stroke:#f2f2f2;
+  stroke-width:7;
   stroke-linecap:round;
   stroke-linejoin:round;
+}
+
+.fingerprint .corner{
+  fill:none;
+  stroke:#f2f2f2;
+  stroke-width:6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  opacity:0.95;
 }
 
 .scan-wrap.scanning .fingerprint{
@@ -293,8 +309,8 @@ button:active{
   }
 
   .fingerprint svg{
-    width:70px;
-    height:92px;
+    width:96px;
+    height:96px;
   }
 }
 </style>
@@ -377,29 +393,19 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 
   <div class="scan-wrap ready" id="scanWrap" onclick="startPinkyScan()">
     <div class="fingerprint" aria-hidden="true">
-      <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
-        <g fill="none">
-          <path d="M60 10 A45 45 0 0 1 105 55"/>
-          <path d="M60 10 A45 45 0 0 0 15 55"/>
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <path class="corner" d="M10 28 V12 H26"/>
+        <path class="corner" d="M94 12 H110 V28"/>
+        <path class="corner" d="M10 92 V108 H26"/>
+        <path class="corner" d="M94 108 H110 V92"/>
 
-          <path d="M60 22 A36 36 0 0 1 96 60"/>
-          <path d="M60 22 A36 36 0 0 0 24 60"/>
+        <circle class="ring" cx="60" cy="60" r="42"/>
 
-          <path d="M60 34 A28 28 0 0 1 88 66"/>
-          <path d="M60 34 A28 28 0 0 0 32 66"/>
-
-          <path d="M60 46 A20 20 0 0 1 80 72"/>
-          <path d="M60 46 A20 20 0 0 0 40 72"/>
-
-          <path d="M60 60 L60 110"/>
-          <path d="M48 70 L48 112"/>
-          <path d="M72 70 L72 112"/>
-          <path d="M36 80 L36 108"/>
-          <path d="M84 80 L84 108"/>
-
-          <path d="M24 90 Q60 130 96 90"/>
-          <path d="M34 98 Q60 125 86 98"/>
-        </g>
+        <path class="inner" d="M39 78 C48 73 54 63 54 52 C54 46 58 42 63 42 C69 42 73 46 73 53 C73 68 66 81 55 92"/>
+        <path class="inner" d="M30 70 C42 66 49 57 49 47 C49 39 55 33 64 33 C74 33 80 40 80 51 C80 69 72 84 60 99"/>
+        <path class="inner" d="M27 55 C27 58 29 60 32 60 C36 60 38 57 38 53"/>
+        <path class="inner" d="M24 44 C24 35 31 28 41 28 C52 28 60 36 60 47"/>
+        <path class="inner" d="M89 61 C89 44 76 30 58 30"/>
       </svg>
     </div>
     <div class="scan-line"></div>
