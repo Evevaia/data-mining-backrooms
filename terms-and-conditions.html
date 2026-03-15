@@ -161,6 +161,7 @@ button:active{
     transform 0.2s ease,
     box-shadow 0.2s ease,
     background 0.2s ease;
+  touch-action:none;
 }
 
 .scan-wrap:hover{
@@ -169,14 +170,16 @@ button:active{
   transform:translateY(-1px);
 }
 
-.scan-wrap:active{
+.scan-wrap.holding{
   transform:scale(0.985);
+  border-color:#6a6a74;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.05), 0 0 28px rgba(255,255,255,0.06);
 }
 
 .scan-wrap.disabled{
   pointer-events:none;
   cursor:default;
-  opacity:0.9;
+  opacity:0.92;
 }
 
 .pinky-image-wrap{
@@ -186,13 +189,19 @@ button:active{
   align-items:center;
   justify-content:center;
   user-select:none;
-  transition:opacity 0.2s ease, transform 0.2s ease;
+  transition:opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
   opacity:0.82;
 }
 
 .scan-wrap:hover .pinky-image-wrap{
   opacity:1;
   transform:scale(1.02);
+}
+
+.scan-wrap.holding .pinky-image-wrap{
+  opacity:1;
+  transform:scale(0.99);
+  filter:brightness(1.08);
 }
 
 .pinky-image{
@@ -219,7 +228,24 @@ button:active{
 
 .scan-wrap.scanning .scan-line{
   opacity:1;
-  animation:scanMove 1.6s ease-in-out 2;
+  animation:scanMove 1.6s linear infinite;
+}
+
+.progress-track{
+  width:100%;
+  height:4px;
+  background:#1f1f24;
+  border:1px solid #2b2b30;
+  margin-top:10px;
+  overflow:hidden;
+  box-sizing:border-box;
+}
+
+.progress-bar{
+  width:0%;
+  height:100%;
+  background:#f2f2f2;
+  transition:width 0.06s linear;
 }
 
 .scan-text{
@@ -227,6 +253,7 @@ button:active{
   color:#9a9aa3;
   min-height:18px;
   letter-spacing:0.8px;
+  margin-top:6px;
 }
 
 .scan-result{
@@ -248,8 +275,7 @@ button:active{
 
 @keyframes scanMove{
   0%{ top:-10px; }
-  50%{ top:calc(100% - 8px); }
-  100%{ top:-10px; }
+  100%{ top:calc(100% - 8px); }
 }
 
 @media (max-width:700px){
@@ -377,17 +403,20 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 
 <div class="popup" id="scanPopup">
   <p><strong>Pinky promise?</strong></p>
-  <p style="font-size:13px; color:#9a9aa3;">Place your pinky to scan and confirm consent.</p>
+  <p style="font-size:13px; color:#9a9aa3;">Hold your pinky in place until the scan completes.</p>
 
-  <div class="scan-wrap" id="scanWrap" onclick="startPinkyScan()" aria-label="Scan pinky" role="button" tabindex="0">
+  <div class="scan-wrap" id="scanWrap" aria-label="Scan pinky" role="button" tabindex="0">
     <div class="pinky-image-wrap">
       <img src="Pinky%20Promise.png" alt="Pinky scan" class="pinky-image">
     </div>
-    <div class="scan-line" id="scanLine"></div>
+    <div class="scan-line"></div>
   </div>
 
-  <div class="tap-hint">tap pinky to scan</div>
-  <div class="scan-text" id="scanText">AWAITING PINKY VERIFICATION</div>
+  <div class="tap-hint">press and hold to scan</div>
+  <div class="progress-track">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="scan-text" id="scanText">AWAITING PINKY CONTACT</div>
   <div class="scan-result" id="scanResult"></div>
 </div>
 
@@ -405,7 +434,20 @@ let dy = 2.2;
 let x = btn.offsetLeft;
 let y = btn.offsetTop;
 let moving = false;
+
+const scanWrap = document.getElementById("scanWrap");
+const scanText = document.getElementById("scanText");
+const scanResult = document.getElementById("scanResult");
+const progressBar = document.getElementById("progressBar");
+
 let scanStarted = false;
+let scanComplete = false;
+let isHolding = false;
+let progress = 0;
+let scanInterval = null;
+const requiredHold = 3400;
+const tickRate = 30;
+const progressStep = (tickRate / requiredHold) * 100;
 
 function acceptTerms(){
   document.getElementById("status").innerText = "CONSENT STATUS: PROCESSING";
@@ -413,40 +455,93 @@ function acceptTerms(){
   document.getElementById("scanPopup").classList.add("show");
 }
 
-function startPinkyScan(){
-  if(scanStarted) return;
+function beginHoldScan(){
+  if(scanComplete || isHolding) return;
+
+  isHolding = true;
   scanStarted = true;
-
-  const scanWrap = document.getElementById("scanWrap");
-  const scanText = document.getElementById("scanText");
-  const scanResult = document.getElementById("scanResult");
-
-  scanWrap.classList.add("disabled");
-  scanText.innerText = "SCANNING PINKY...";
+  scanWrap.classList.add("holding", "scanning");
+  scanText.innerText = progress > 0 ? "RESUMING PINKY SCAN..." : "SCANNING PINKY...";
   scanResult.innerText = "";
-  scanWrap.classList.add("scanning");
 
-  setTimeout(() => {
-    scanText.innerText = "MATCHING BIOMETRIC PINKY...";
-  }, 1600);
+  clearInterval(scanInterval);
+  scanInterval = setInterval(() => {
+    if(!isHolding || scanComplete) return;
 
-  setTimeout(() => {
-    scanText.innerText = "PINKY VERIFIED";
-    scanResult.innerText = "Consent successfully recorded.";
-    scanWrap.classList.remove("scanning");
-    document.getElementById("status").innerText = "CONSENT STATUS: ACCEPTED";
-  }, 3400);
+    progress += progressStep;
+    if(progress > 100) progress = 100;
+    progressBar.style.width = progress + "%";
+
+    if(progress >= 45 && progress < 85){
+      scanText.innerText = "MATCHING BIOMETRIC PINKY...";
+    } else if(progress >= 85 && progress < 100){
+      scanText.innerText = "FINALIZING CONSENT RECORD...";
+    }
+
+    if(progress >= 100){
+      completeScan();
+    }
+  }, tickRate);
+}
+
+function stopHoldScan(){
+  if(scanComplete) return;
+  isHolding = false;
+  scanWrap.classList.remove("holding", "scanning");
+  clearInterval(scanInterval);
+
+  if(scanStarted && progress < 100){
+    scanText.innerText = "SCAN INTERRUPTED — HOLD TO CONTINUE";
+    scanResult.innerText = "";
+  }
+}
+
+function completeScan(){
+  scanComplete = true;
+  isHolding = false;
+  clearInterval(scanInterval);
+
+  scanWrap.classList.remove("holding", "scanning");
+  scanWrap.classList.add("disabled");
+  progressBar.style.width = "100%";
+  scanText.innerText = "PINKY VERIFIED";
+  scanResult.innerText = "Consent successfully recorded.";
+  document.getElementById("status").innerText = "CONSENT STATUS: ACCEPTED";
 
   setTimeout(() => {
     document.getElementById("scanPopup").classList.remove("show");
     document.getElementById("popup").classList.add("show");
-  }, 4300);
+  }, 900);
 }
 
-document.getElementById("scanWrap").addEventListener("keydown", function(e){
+scanWrap.addEventListener("mousedown", beginHoldScan);
+scanWrap.addEventListener("touchstart", function(e){
+  e.preventDefault();
+  beginHoldScan();
+}, { passive:false });
+
+scanWrap.addEventListener("mouseup", stopHoldScan);
+scanWrap.addEventListener("mouseleave", stopHoldScan);
+scanWrap.addEventListener("touchend", stopHoldScan);
+scanWrap.addEventListener("touchcancel", stopHoldScan);
+
+document.addEventListener("mouseup", stopHoldScan);
+document.addEventListener("touchend", stopHoldScan);
+document.addEventListener("touchcancel", stopHoldScan);
+
+scanWrap.addEventListener("keydown", function(e){
+  if(scanComplete) return;
+
+  if((e.key === "Enter" || e.key === " ") && !isHolding){
+    e.preventDefault();
+    beginHoldScan();
+  }
+});
+
+scanWrap.addEventListener("keyup", function(e){
   if(e.key === "Enter" || e.key === " "){
     e.preventDefault();
-    startPinkyScan();
+    stopHoldScan();
   }
 });
 
