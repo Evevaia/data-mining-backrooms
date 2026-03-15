@@ -144,8 +144,8 @@ button:active{
 
 .scan-wrap{
   margin:18px auto 16px auto;
-  width:120px;
-  height:150px;
+  width:130px;
+  height:160px;
   border:1px solid #2b2b30;
   background:
     radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%),
@@ -153,19 +153,50 @@ button:active{
   position:relative;
   overflow:hidden;
   border-radius:14px;
+  cursor:pointer;
+  transition:transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.scan-wrap:hover{
+  border-color:#4a4a50;
+}
+
+.scan-wrap:active{
+  transform:scale(0.98);
+}
+
+.scan-wrap.ready{
+  box-shadow:0 0 0 1px rgba(255,255,255,0.05) inset;
+}
+
+.scan-wrap.scanning{
+  border-color:#66666f;
+  box-shadow:0 0 18px rgba(255,255,255,0.08);
+  cursor:default;
 }
 
 .fingerprint{
   position:absolute;
-  inset:14px;
+  inset:16px;
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#7d7d86;
-  font-size:68px;
-  opacity:0.55;
-  filter:grayscale(1) contrast(1.1);
+  opacity:0.58;
   user-select:none;
+}
+
+.fingerprint svg{
+  width:78px;
+  height:102px;
+  display:block;
+}
+
+.fingerprint path{
+  fill:none;
+  stroke:#8a8a92;
+  stroke-width:3.2;
+  stroke-linecap:round;
+  opacity:0.85;
 }
 
 .scan-line{
@@ -199,8 +230,11 @@ button:active{
   letter-spacing:0.8px;
 }
 
-.hidden-btn{
-  display:none;
+.tap-hint{
+  font-size:11px;
+  color:#7f7f88;
+  letter-spacing:0.7px;
+  margin-top:4px;
 }
 
 @keyframes scanMove{
@@ -250,12 +284,13 @@ button:active{
   }
 
   .scan-wrap{
-    width:110px;
-    height:140px;
+    width:118px;
+    height:148px;
   }
 
-  .fingerprint{
-    font-size:60px;
+  .fingerprint svg{
+    width:70px;
+    height:92px;
   }
 }
 </style>
@@ -334,17 +369,39 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 
 <div class="popup" id="scanPopup">
   <p><strong>Pinky promise?</strong></p>
-  <p style="font-size:13px; color:#9a9aa3;">Scan your pinky to confirm consent.</p>
+  <p style="font-size:13px; color:#9a9aa3;">Place your pinky to scan.</p>
 
-  <div class="scan-wrap" id="scanWrap">
-    <div class="fingerprint">☝</div>
+  <div class="scan-wrap ready" id="scanWrap" onclick="startPinkyScan()">
+    <div class="fingerprint" aria-hidden="true">
+      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 12 C34 12 22 24 22 40"/>
+        <path d="M50 20 C38 20 30 29 30 41"/>
+        <path d="M50 28 C41 28 35 35 35 43"/>
+        <path d="M50 36 C44 36 40 40 40 46"/>
+        <path d="M22 40 C22 58 18 67 18 81"/>
+        <path d="M30 41 C30 58 26 68 26 84"/>
+        <path d="M35 43 C35 61 33 72 33 90"/>
+        <path d="M40 46 C40 64 40 76 40 96"/>
+        <path d="M50 12 C66 12 78 24 78 40"/>
+        <path d="M50 20 C62 20 70 29 70 41"/>
+        <path d="M50 28 C59 28 65 35 65 43"/>
+        <path d="M50 36 C56 36 60 40 60 46"/>
+        <path d="M78 40 C78 58 82 67 82 81"/>
+        <path d="M70 41 C70 58 74 68 74 84"/>
+        <path d="M65 43 C65 61 67 72 67 90"/>
+        <path d="M60 46 C60 64 60 76 60 96"/>
+        <path d="M50 50 C50 68 50 81 50 106"/>
+        <path d="M45 54 C45 72 45 84 45 102"/>
+        <path d="M55 54 C55 72 55 84 55 102"/>
+        <path d="M28 95 C35 108 43 114 50 116 C57 114 65 108 72 95"/>
+      </svg>
+    </div>
     <div class="scan-line" id="scanLine"></div>
   </div>
 
-  <div class="scan-text" id="scanText">AWAITING PINKY VERIFICATION</div>
+  <div class="scan-text" id="scanText">PLACE YOUR PINKY TO SCAN</div>
+  <div class="tap-hint" id="tapHint">TAP THE SCANNER</div>
   <div class="scan-result" id="scanResult"></div>
-
-  <button id="scanBtn" onclick="startPinkyScan()">SCAN PINKY</button>
 </div>
 
 <div class="popup" id="popup">
@@ -356,12 +413,12 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 
 <script>
 let btn = document.getElementById("declineBtn");
-let container = document.querySelector(".container");
 let dx = 2.5;
 let dy = 2.2;
-let x = btn.offsetLeft;
-let y = btn.offsetTop;
 let moving = false;
+let x = 0;
+let y = 0;
+let scanStarted = false;
 
 function acceptTerms(){
   document.getElementById("status").innerText = "CONSENT STATUS: PROCESSING";
@@ -370,17 +427,17 @@ function acceptTerms(){
 }
 
 function startPinkyScan(){
+  if(scanStarted) return;
+  scanStarted = true;
+
   const scanWrap = document.getElementById("scanWrap");
   const scanText = document.getElementById("scanText");
   const scanResult = document.getElementById("scanResult");
-  const scanBtn = document.getElementById("scanBtn");
-
-  scanBtn.disabled = true;
-  scanBtn.style.opacity = "0.5";
-  scanBtn.style.cursor = "default";
+  const tapHint = document.getElementById("tapHint");
 
   scanText.innerText = "SCANNING PINKY...";
   scanResult.innerText = "";
+  tapHint.innerText = "";
   scanWrap.classList.add("scanning");
 
   setTimeout(() => {
@@ -408,6 +465,9 @@ function closePopup(){
 function declineTerms(){
   if(!moving){
     moving = true;
+    const rect = btn.getBoundingClientRect();
+    x = rect.left;
+    y = rect.top;
     btn.style.position = "fixed";
     btn.style.left = x + "px";
     btn.style.top = y + "px";
@@ -418,7 +478,7 @@ function declineTerms(){
 
 function moveButton(){
   function animate(){
-    if(!btn) return;
+    if(!btn || !document.body.contains(btn)) return;
     x += dx;
     y += dy;
     if(x + btn.offsetWidth > window.innerWidth || x < 0) dx *= -1;
