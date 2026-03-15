@@ -131,6 +131,40 @@ background:rgba(255,255,255,0.07);
 opacity:0;
 pointer-events:none;
 z-index:11;
+mix-blend-mode:screen;
+}
+
+.crt::before,
+.crt::after{
+content:"";
+position:absolute;
+inset:0;
+pointer-events:none;
+}
+
+.crt::before{
+background:
+repeating-linear-gradient(
+to bottom,
+rgba(255,255,255,0.045) 0px,
+rgba(255,255,255,0.045) 1px,
+transparent 2px,
+transparent 4px
+);
+opacity:0.9;
+mix-blend-mode:screen;
+}
+
+.crt::after{
+background:linear-gradient(
+90deg,
+rgba(255,0,80,0.08),
+transparent 35%,
+transparent 65%,
+rgba(0,180,255,0.08)
+);
+opacity:0.8;
+mix-blend-mode:screen;
 }
 
 .fragment{
@@ -225,6 +259,7 @@ let scrambleInterval = null;
 let barInterval = null;
 let physicsRunning = false;
 let trembleInterval = null;
+let crtInterval = null;
 
 const cursor = document.createElement("span");
 cursor.className = "cursor";
@@ -347,14 +382,17 @@ function revealStats() {
 }
 
 function runPreHackFlicker() {
+  screen.classList.add("crt");
+
   const flickers = [
-    { opacity: 0.10, duration: 70 },
-    { opacity: 0.00, duration: 55 },
-    { opacity: 0.06, duration: 80 },
-    { opacity: 0.00, duration: 45 },
-    { opacity: 0.12, duration: 95 },
-    { opacity: 0.03, duration: 70 },
-    { opacity: 0.00, duration: 60 }
+    { opacity: 0.12, duration: 90, shift: 2 },
+    { opacity: 0.00, duration: 55, shift: 0 },
+    { opacity: 0.08, duration: 75, shift: 1 },
+    { opacity: 0.00, duration: 50, shift: 0 },
+    { opacity: 0.16, duration: 110, shift: 3 },
+    { opacity: 0.05, duration: 80, shift: 1 },
+    { opacity: 0.00, duration: 65, shift: 0 },
+    { opacity: 0.11, duration: 90, shift: 2 }
   ];
 
   let i = 0;
@@ -364,15 +402,15 @@ function runPreHackFlicker() {
       preFlicker.style.opacity = "0";
       screen.style.opacity = "1";
       screen.style.transform = "";
-      setTimeout(startHackPhase, 120);
+      setTimeout(startHackPhase, 100);
       return;
     }
 
     const step = flickers[i];
     preFlicker.style.opacity = step.opacity;
-    screen.style.opacity = step.opacity > 0 ? "0.92" : "1";
+    screen.style.opacity = step.opacity > 0 ? "0.88" : "1";
     screen.style.transform = step.opacity > 0
-      ? `translate(${(Math.random()-0.5)*2}px, ${(Math.random()-0.5)*2}px)`
+      ? `translate(${(Math.random()-0.5)*step.shift}px, ${(Math.random()-0.5)*step.shift}px) skewX(${(Math.random()-0.5)*1.2}deg)`
       : "";
     i++;
     setTimeout(nextFlicker, step.duration);
@@ -387,31 +425,33 @@ function startHackPhase() {
   const fills = Array.from(document.querySelectorAll(".stat-fill"));
   const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&@!?/\\\\[]{}<>*";
 
+  startCRTBleed();
+
   scrambleInterval = setInterval(() => {
     labels.forEach((el) => {
       const base = el.parentElement.dataset.baseLabel + ":";
-      el.textContent = scrambleText(base, charset, 0.7);
+      el.textContent = scrambleText(base, charset, 0.72);
     });
 
     values.forEach((el) => {
       const mode = el.dataset.mode;
       if (mode === "percent") {
         const n = Math.floor(Math.random() * 100);
-        el.textContent = scrambleText(String(n) + "%", charset, 0.52);
+        el.textContent = scrambleText(String(n) + "%", charset, 0.55);
       } else {
-        el.textContent = scrambleText("GENERATED", charset, 0.62);
+        el.textContent = scrambleText("GENERATED", charset, 0.64);
       }
     });
-  }, 65);
+  }, 60);
 
   barInterval = setInterval(() => {
     fills.forEach((fill) => {
       const base = Number(fill.dataset.baseWidth || 50);
-      let jitter = base + Math.floor((Math.random() - 0.5) * 76);
+      let jitter = base + Math.floor((Math.random() - 0.5) * 82);
       jitter = Math.max(2, Math.min(100, jitter));
       fill.style.width = jitter + "%";
     });
-  }, 75);
+  }, 70);
 
   setTimeout(() => {
     startTremblePhase();
@@ -420,9 +460,30 @@ function startHackPhase() {
   setTimeout(() => {
     clearInterval(scrambleInterval);
     clearInterval(barInterval);
+    stopCRTBleed();
     stopTremblePhase();
     explodeScreen();
   }, 3400);
+}
+
+function startCRTBleed() {
+  crtInterval = setInterval(() => {
+    const x = (Math.random() - 0.5) * 3.2;
+    const y = (Math.random() - 0.5) * 2.2;
+    const skew = (Math.random() - 0.5) * 1.3;
+    screen.style.filter = `contrast(${1 + Math.random() * 0.15}) brightness(${0.92 + Math.random() * 0.12})`;
+    screen.style.transform = `translate(${x}px, ${y}px) skewX(${skew}deg)`;
+  }, 85);
+}
+
+function stopCRTBleed() {
+  if (crtInterval) {
+    clearInterval(crtInterval);
+    crtInterval = null;
+  }
+  screen.style.filter = "";
+  screen.style.transform = "";
+  screen.classList.remove("crt");
 }
 
 function startTremblePhase() {
