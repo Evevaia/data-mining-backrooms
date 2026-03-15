@@ -148,7 +148,7 @@ button:active{
   height:160px;
   border:1px solid #2b2b30;
   background:
-    radial-gradient(circle at center, rgba(255,255,255,0.025), transparent 70%),
+    radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%),
     #0c0c0f;
   position:relative;
   overflow:hidden;
@@ -166,7 +166,7 @@ button:active{
 }
 
 .scan-wrap.ready{
-  box-shadow:0 0 0 1px rgba(255,255,255,0.04) inset;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.05) inset;
 }
 
 .scan-wrap.scanning{
@@ -177,55 +177,36 @@ button:active{
 
 .fingerprint{
   position:absolute;
-  inset:12px;
+  inset:14px;
   display:flex;
   align-items:center;
   justify-content:center;
-  opacity:0.9;
+  color:#7d7d86;
+  opacity:0.58;
   user-select:none;
 }
 
 .fingerprint svg{
-  width:106px;
-  height:106px;
+  width:82px;
+  height:108px;
   display:block;
 }
 
-.fingerprint .ring{
+.fingerprint path{
   fill:none;
-  stroke:#f2f2f2;
-  stroke-width:8;
-  opacity:0.95;
-}
-
-.fingerprint .inner{
-  fill:none;
-  stroke:#f2f2f2;
-  stroke-width:7;
+  stroke:#8a8a92;
+  stroke-width:3.2;
   stroke-linecap:round;
   stroke-linejoin:round;
-}
-
-.fingerprint .corner{
-  fill:none;
-  stroke:#f2f2f2;
-  stroke-width:6;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  opacity:0.95;
-}
-
-.scan-wrap.scanning .fingerprint{
-  opacity:1;
 }
 
 .scan-line{
   position:absolute;
-  left:10px;
-  right:10px;
-  height:2px;
+  left:8px;
+  right:8px;
+  height:3px;
   background:linear-gradient(90deg, transparent, #f2f2f2, transparent);
-  box-shadow:0 0 10px rgba(255,255,255,0.32);
+  box-shadow:0 0 10px rgba(255,255,255,0.35);
   top:-10px;
   opacity:0;
 }
@@ -304,12 +285,12 @@ button:active{
   }
 
   .scan-wrap{
-    width:118px;
-    height:148px;
+    width:110px;
+    height:140px;
   }
 
   .fingerprint svg{
-    width:96px;
+    width:72px;
     height:96px;
   }
 }
@@ -393,19 +374,27 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 
   <div class="scan-wrap ready" id="scanWrap" onclick="startPinkyScan()">
     <div class="fingerprint" aria-hidden="true">
-      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-        <path class="corner" d="M10 28 V12 H26"/>
-        <path class="corner" d="M94 12 H110 V28"/>
-        <path class="corner" d="M10 92 V108 H26"/>
-        <path class="corner" d="M94 108 H110 V92"/>
+      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+        <!-- raised pinky on the left -->
+        <path d="M18 16 L18 48" />
+        <path d="M18 16 C18 10 22 7 27 7 C32 7 35 10 35 16" />
+        <path d="M35 16 L35 47" />
 
-        <circle class="ring" cx="60" cy="60" r="42"/>
+        <!-- folded fingers / hand body -->
+        <path d="M42 38 C42 27 49 21 58 21 C67 21 73 27 73 37" />
+        <path d="M36 48 C36 37 43 31 51 31 C59 31 64 37 64 47" />
+        <path d="M30 58 C30 48 36 42 44 42 C52 42 57 48 57 58" />
 
-        <path class="inner" d="M39 78 C48 73 54 63 54 52 C54 46 58 42 63 42 C69 42 73 46 73 53 C73 68 66 81 55 92"/>
-        <path class="inner" d="M30 70 C42 66 49 57 49 47 C49 39 55 33 64 33 C74 33 80 40 80 51 C80 69 72 84 60 99"/>
-        <path class="inner" d="M27 55 C27 58 29 60 32 60 C36 60 38 57 38 53"/>
-        <path class="inner" d="M24 44 C24 35 31 28 41 28 C52 28 60 36 60 47"/>
-        <path class="inner" d="M89 61 C89 44 76 30 58 30"/>
+        <!-- palm curves -->
+        <path d="M19 48 C19 72 14 83 14 98" />
+        <path d="M35 47 C35 72 31 86 30 106" />
+        <path d="M42 38 C42 66 40 83 39 112" />
+        <path d="M57 58 C57 79 54 95 48 118" />
+        <path d="M64 47 C64 68 62 87 56 112" />
+        <path d="M73 37 C73 58 72 80 67 104" />
+
+        <!-- thumb / side -->
+        <path d="M18 70 C11 77 8 85 9 93 C10 101 16 105 24 102" />
       </svg>
     </div>
     <div class="scan-line"></div>
