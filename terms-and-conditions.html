@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Pinky Consent Protocol</title>
+
 <style>
 body{
   background:#0e0e10;
@@ -177,27 +179,31 @@ button:active{
   opacity:0.9;
 }
 
-.pinky-hand{
+.pinky-image-wrap{
   position:absolute;
   inset:14px;
   display:flex;
   align-items:center;
   justify-content:center;
-  opacity:0.62;
-  filter:grayscale(1) contrast(1.08);
   user-select:none;
   transition:opacity 0.2s ease, transform 0.2s ease;
+  opacity:0.82;
 }
 
-.scan-wrap:hover .pinky-hand{
-  opacity:0.78;
+.scan-wrap:hover .pinky-image-wrap{
+  opacity:1;
   transform:scale(1.02);
 }
 
-.pinky-hand svg{
-  width:76px;
-  height:96px;
+.pinky-image{
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
   display:block;
+  object-fit:contain;
+  filter:grayscale(1) contrast(1.08) brightness(1.02);
+  pointer-events:none;
 }
 
 .scan-line{
@@ -291,9 +297,8 @@ button:active{
     height:140px;
   }
 
-  .pinky-hand svg{
-    width:68px;
-    height:88px;
+  .pinky-image-wrap{
+    inset:12px;
   }
 }
 </style>
@@ -375,54 +380,8 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
   <p style="font-size:13px; color:#9a9aa3;">Place your pinky to scan and confirm consent.</p>
 
   <div class="scan-wrap" id="scanWrap" onclick="startPinkyScan()" aria-label="Scan pinky" role="button" tabindex="0">
-    <div class="pinky-hand">
-      <svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path
-          d="M78 18
-             C78 11, 83 6, 89 6
-             C95 6, 100 11, 100 18
-             L100 66
-
-             C100 70, 103 72, 106 72
-             C111 72, 114 68, 114 62
-             L114 44
-             C114 38, 118 34, 123 34
-             C128 34, 132 38, 132 44
-             L132 90
-
-             C132 111, 119 126, 103 135
-             C88 143, 70 145, 56 139
-             C45 134, 34 124, 28 111
-             L18 90
-             C14 82, 17 73, 25 69
-             C33 65, 42 69, 46 77
-             L54 92
-             L54 28
-             C54 22, 58 17, 64 17
-             C69 17, 73 21, 74 27
-             L74 63
-             L78 63
-             L78 18 Z"
-          fill="none"
-          stroke="#bcbcc5"
-          stroke-width="6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M67 36 L67 97
-             M83 25 L83 86
-             M95 22 L95 74
-             M106 78 C106 97, 95 111, 77 117
-             C61 122, 45 118, 34 107"
-          fill="none"
-          stroke="#8e8e97"
-          stroke-width="2.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          opacity="0.9"
-        />
-      </svg>
+    <div class="pinky-image-wrap">
+      <img src="Pinky%20Promise.png" alt="Pinky scan" class="pinky-image">
     </div>
     <div class="scan-line" id="scanLine"></div>
   </div>
