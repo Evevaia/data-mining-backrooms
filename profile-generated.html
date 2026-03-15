@@ -3,249 +3,522 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Crash Gravity</title>
+<title>Profile Generated</title>
+
 <style>
 body{
-  background:#050505;
-  color:#e8e8e8;
-  font-family:"Lucida Console","Courier New",monospace;
-  margin:0;
-  padding:20px;
-  overflow:hidden;
+background:#050505;
+color:#e8e8e8;
+font-family:"Lucida Console","Courier New",monospace;
+margin:0;
+padding:40px;
+min-height:100vh;
+overflow:hidden;
+}
+
+.screen{
+max-width:900px;
+margin:0 auto;
+font-size:24px;
+line-height:1.65;
+white-space:pre-wrap;
+position:relative;
+z-index:2;
+}
+
+.line{
+display:block;
+min-height:1.65em;
+position:relative;
+}
+
+.cursor{
+display:inline;
+animation:blink 1s steps(1) infinite;
+}
+
+.stats-wrap{
+margin-top:6px;
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.stat-row{
+display:grid;
+grid-template-columns: 320px 1fr 70px;
+align-items:center;
+column-gap:14px;
+font-size:20px;
+line-height:1.2;
+min-height:32px;
+position:relative;
+}
+
+.stat-label{
+white-space:nowrap;
+}
+
+.stat-bar{
+height:12px;
+border:1px solid #2a2a2a;
+background:#0f0f0f;
+position:relative;
+overflow:hidden;
+}
+
+.stat-fill{
+height:100%;
+width:0%;
+background:#e8e8e8;
+transition:width 0.28s ease;
+}
+
+.stat-value{
+text-align:right;
+}
+
+.big-warning{
+position:fixed;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+font-size:56px;
+line-height:1;
+letter-spacing:3px;
+text-align:center;
+opacity:0;
+pointer-events:none;
+z-index:20;
+color:#f2f2f2;
+text-shadow:0 0 12px rgba(255,255,255,0.15);
+}
+
+.big-warning.show{
+animation:warningIn 220ms ease forwards;
+}
+
+.big-warning.now{
+top:calc(50% + 72px);
+font-size:74px;
+letter-spacing:5px;
+}
+
+.fragment{
+position:fixed;
+pointer-events:none;
+z-index:15;
+background:#e8e8e8;
+opacity:1;
+will-change:transform,left,top,opacity;
+}
+
+.flash{
+position:fixed;
+inset:0;
+background:rgba(255,255,255,0.09);
+opacity:0;
+pointer-events:none;
+z-index:12;
+}
+
+.flash.show{
+animation:flashBang 340ms ease-out forwards;
+}
+
+@keyframes blink{
+0%{opacity:1;}
+50%{opacity:0;}
+100%{opacity:1;}
+}
+
+@keyframes warningIn{
+0%{opacity:0; transform:translate(-50%,-50%) scale(0.9);}
+100%{opacity:1; transform:translate(-50%,-50%) scale(1);}
+}
+
+@keyframes flashBang{
+0%{opacity:0;}
+20%{opacity:1;}
+100%{opacity:0;}
+}
+
+@media (max-width:900px){
+body{
+padding:20px;
 }
 .screen{
-  max-width:100%;
-  font-size:14px;
-  line-height:1.2;
-  white-space:nowrap;
-  position:relative;
-  display:flex;
-  flex-wrap:nowrap;
-  overflow-x:hidden;
+font-size:16px;
+line-height:1.45;
 }
 .line{
-  display:inline-block;
-  margin-right:6px;
-  position:relative;
+min-height:1.45em;
 }
-.bar-wrap{
-  display:inline-block;
-  width:40px;
-  height:6px;
-  border:1px solid #2b2b30;
-  background:#101013;
-  margin-right:6px;
-  vertical-align:middle;
+.stat-row{
+grid-template-columns: 1fr;
+row-gap:4px;
+min-height:auto;
+font-size:14px;
+margin-bottom:4px;
 }
-.bar-fill{
-  height:100%;
-  width:0;
-  background:#4caf50;
-  transition:width 0.8s linear;
+.stat-bar{
+height:10px;
 }
-.bar-fill.show-1{width:84%;}
-.bar-fill.show-2{width:22%;}
-.bar-fill.show-3{width:76%;}
-.bar-fill.show-4{width:91%;}
-.bar-fill.show-5{width:68%;}
-.cursor{
-  display:inline-block;
-  animation:blink 1s steps(1) infinite;
+.stat-value{
+text-align:left;
 }
-@keyframes blink{50%{opacity:0;}}
-.fall{
-  position:absolute;
-  display:inline-block;
-  transition: transform 2s cubic-bezier(0.22,1,0.36,1);
-  will-change: transform;
+.big-warning{
+font-size:38px;
+}
+.big-warning.now{
+font-size:52px;
+top:calc(50% + 58px);
+}
 }
 </style>
 </head>
 <body>
 
 <div class="screen" id="screen"></div>
+<div class="flash" id="flash"></div>
+<div class="big-warning" id="getOut">GET OUT</div>
+<div class="big-warning now" id="nowMsg">NOW</div>
 
 <script>
-const screen=document.getElementById("screen");
-const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}<>?/|\\~";
-function randomChar(){return chars.charAt(Math.floor(Math.random()*chars.length));}
+const screen = document.getElementById("screen");
+const flash = document.getElementById("flash");
+const getOut = document.getElementById("getOut");
+const nowMsg = document.getElementById("nowMsg");
 
-const lines=[
+const introLines = [
   "RUNNING BEHAVIORAL ANALYSIS...",
   "INTERPRETING USER RESPONSE...",
-  "GENERATING PROFILE..."
+  "GENERATING PROFILE...",
+  ""
 ];
 
-const stats=[
-  {label:"CURIOSITY", value:"84%"},
-  {label:"WARNING", value:"22%"},
-  {label:"TRUST", value:"76%"},
-  {label:"SUSCEPTIBILITY", value:"91%"},
-  {label:"STABILITY", value:"68%"}
+const stats = [
+  { label: "CURIOSITY INDEX", value: 92 },
+  { label: "WARNING RESISTANCE", value: 14 },
+  { label: "SYMBOLIC TRUST", value: 81 },
+  { label: "PERSONALIZATION RESPONSE", value: 88 },
+  { label: "ADAPTIVE TARGETING", value: 97 },
+  { label: "PROFILE STATUS", value: 100, textValue: "GENERATED" }
 ];
 
-const finalWarning="GET OUT!";
-const finalUrgency="NOW!";
+let currentLineIndex = 0;
+let currentCharIndex = 0;
+let currentLineEl = null;
+let statsWrap = null;
+let scrambleInterval = null;
+let barInterval = null;
+let physicsRunning = false;
 
-let currentLineIndex=0;
-let currentCharIndex=0;
-let currentLineEl=null;
-const cursor=document.createElement("span"); cursor.className="cursor"; cursor.textContent="_";
+const cursor = document.createElement("span");
+cursor.className = "cursor";
+cursor.textContent = "_";
 
-let fallElements=[];
-
-// === Step 1: Display 3 lines ===
-function startLine(){
-  currentLineEl=document.createElement("div");
-  currentLineEl.className="line";
+function startLine() {
+  currentLineEl = document.createElement("div");
+  currentLineEl.className = "line particle-target";
   screen.appendChild(currentLineEl);
   currentLineEl.appendChild(cursor);
 }
-function typeNext(){
-  if(currentLineIndex>=lines.length){showStats(); return;}
-  if(!currentLineEl) startLine();
-  const text=lines[currentLineIndex];
-  if(currentCharIndex<text.length){
-    currentLineEl.insertBefore(document.createTextNode(text.charAt(currentCharIndex)),cursor);
-    currentCharIndex++;
-    setTimeout(typeNext,95);
+
+function typeNext() {
+  if (currentLineIndex >= introLines.length) {
+    revealStats();
     return;
   }
-  setTimeout(()=>{
+
+  if (!currentLineEl) {
+    startLine();
+  }
+
+  const lineText = introLines[currentLineIndex];
+
+  if (currentCharIndex < lineText.length) {
+    const textNode = document.createTextNode(lineText.charAt(currentCharIndex));
+    currentLineEl.insertBefore(textNode, cursor);
+    currentCharIndex++;
+    setTimeout(typeNext, 90);
+    return;
+  }
+
+  if (currentLineIndex === 0 || currentLineIndex === 1 || currentLineIndex === 2) {
+    setTimeout(() => {
+      currentLineIndex++;
+      currentCharIndex = 0;
+      currentLineEl = null;
+      typeNext();
+    }, 2200);
+    return;
+  }
+
+  if (lineText === "" && currentLineIndex === 3) {
+    flickerPause(0);
+    return;
+  }
+
+  currentLineIndex++;
+  currentCharIndex = 0;
+  currentLineEl = null;
+  setTimeout(typeNext, 320);
+}
+
+function flickerPause(count) {
+  if (count < 12) {
+    cursor.style.opacity = cursor.style.opacity === "0" ? "1" : "0";
+    setTimeout(() => flickerPause(count + 1), 120);
+  } else {
+    cursor.style.opacity = "1";
     currentLineIndex++;
-    currentCharIndex=0;
-    currentLineEl=null;
-    typeNext();
-  },800);
+    currentCharIndex = 0;
+    currentLineEl = null;
+    setTimeout(typeNext, 220);
+  }
 }
 
-// === Step 2: Show stats with bars ===
-function showStats(){
-  stats.forEach((s,i)=>{
-    const div=document.createElement("div");
-    div.className="line";
-    div.textContent=`[${s.label}] ${s.value}`;
-    screen.appendChild(div);
-    fallElements.push(div);
-    const barWrap=document.createElement("div");
-    barWrap.className="bar-wrap";
-    const barFill=document.createElement("div");
-    barFill.className="bar-fill show-"+(i+1);
-    barWrap.appendChild(barFill);
-    screen.appendChild(barWrap);
-    fallElements.push(barWrap);
-  });
-  setTimeout(hackEffect,100); // small delay before hack
+function revealStats() {
+  if (cursor.parentNode) {
+    cursor.parentNode.removeChild(cursor);
+  }
+
+  statsWrap = document.createElement("div");
+  statsWrap.className = "stats-wrap particle-target";
+  screen.appendChild(statsWrap);
+
+  let i = 0;
+  function addNextStat() {
+    if (i >= stats.length) {
+      setTimeout(startHackPhase, 220);
+      return;
+    }
+
+    const stat = stats[i];
+    const row = document.createElement("div");
+    row.className = "stat-row particle-target";
+    row.dataset.baseLabel = stat.label;
+    row.dataset.baseValue = String(stat.value);
+
+    const label = document.createElement("div");
+    label.className = "stat-label";
+    label.textContent = stat.label + ":";
+
+    const bar = document.createElement("div");
+    bar.className = "stat-bar";
+
+    const fill = document.createElement("div");
+    fill.className = "stat-fill";
+    fill.dataset.baseWidth = String(stat.value);
+    bar.appendChild(fill);
+
+    const value = document.createElement("div");
+    value.className = "stat-value";
+    value.textContent = stat.textValue ? stat.textValue : stat.value + "%";
+    value.dataset.mode = stat.textValue ? "text" : "percent";
+    value.dataset.baseText = stat.textValue ? stat.textValue : stat.value + "%";
+
+    row.appendChild(label);
+    row.appendChild(bar);
+    row.appendChild(value);
+    statsWrap.appendChild(row);
+
+    requestAnimationFrame(() => {
+      fill.style.width = stat.value + "%";
+    });
+
+    i++;
+    setTimeout(addNextStat, 140);
+  }
+
+  addNextStat();
 }
 
-// === Step 3: Glitch / hack effect for 2.5s ===
-function hackEffect(){
-  let steps=0;
-  const hackInterval=setInterval(()=>{
-    fallElements.forEach(el=>{
-      if(el.firstChild && el.firstChild.nodeType===3){
-        let txt=el.textContent;
-        txt=txt.split("").map(c=>Math.random()<0.3?randomChar():c).join("");
-        el.textContent=txt;
-      } else if(el.classList.contains("bar-wrap")){
-        const fill=el.firstChild;
-        fill.style.width=(Math.random()*100)+"%";
+function startHackPhase() {
+  const labels = Array.from(document.querySelectorAll(".stat-label"));
+  const values = Array.from(document.querySelectorAll(".stat-value"));
+  const fills = Array.from(document.querySelectorAll(".stat-fill"));
+  const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&@!?/\\\\[]{}<>*";
+
+  scrambleInterval = setInterval(() => {
+    labels.forEach((el) => {
+      const base = el.parentElement.dataset.baseLabel + ":";
+      el.textContent = scrambleText(base, charset, 0.62);
+    });
+
+    values.forEach((el) => {
+      const mode = el.dataset.mode;
+      if (mode === "percent") {
+        const n = Math.floor(Math.random() * 100);
+        el.textContent = scrambleText(String(n) + "%", charset, 0.45);
+      } else {
+        el.textContent = scrambleText("GENERATED", charset, 0.55);
       }
     });
-    steps++;
-    if(steps>50){ // ~2.5s
-      clearInterval(hackInterval);
-      startFall();
-    }
-  },50);
-}
+  }, 70);
 
-// === Step 4: Gravity fall within viewport ===
-function startFall(){
-  const screenRect=screen.getBoundingClientRect();
-  let leftOffset=screenRect.left+10;
-  fallElements.forEach(el=>{
-    const rect=el.getBoundingClientRect();
-    const clone=el.cloneNode(true);
-    clone.style.position="absolute";
-    clone.style.left=leftOffset+"px";
-    clone.style.top=rect.top+"px";
-    clone.style.width=rect.width+"px";
-    clone.classList.add("fall");
-    document.body.appendChild(clone);
-    el.style.visibility="hidden";
-    leftOffset+=rect.width+6;
-  });
-  // animate fall
-  fallElements.forEach(el=>{
-    const maxY=window.innerHeight - 50;
-    const rot=(Math.random()-0.5)*20;
-    setTimeout(()=>el.style.transform=`translateY(${maxY}px) rotate(${rot}deg)`,50);
-  });
-  // after fall, show GET OUT
-  setTimeout(showGetOut,2500);
-}
-
-// === Step 5: GET OUT / NOW typing ===
-function showGetOut(){
-  const msg=document.createElement("div");
-  msg.className="line";
-  msg.style.position="absolute";
-  msg.style.top="20px";
-  msg.style.left="50%";
-  msg.style.transform="translateX(-50%)";
-  screen.appendChild(msg);
-  let idx=0;
-  const getCursor=document.createElement("span"); getCursor.className="cursor"; getCursor.textContent="_";
-  msg.appendChild(getCursor);
-
-  function typeChar(){
-    if(idx<finalWarning.length){
-      msg.insertBefore(document.createTextNode(finalWarning.charAt(idx)),getCursor);
-      idx++;
-      setTimeout(typeChar,50+Math.random()*150);
-    } else {
-      setTimeout(typeNow,3000);
-    }
-  }
-  typeChar();
-}
-
-function typeNow(){
-  const msg=document.createElement("div");
-  msg.className="line";
-  msg.style.position="absolute";
-  msg.style.top="60px";
-  msg.style.left="50%";
-  msg.style.transform="translateX(-50%)";
-  screen.appendChild(msg);
-  let idx=0;
-  const nowCursor=document.createElement("span"); nowCursor.className="cursor"; nowCursor.textContent="_";
-  msg.appendChild(nowCursor);
-
-  function typeChar(){
-    if(idx<finalUrgency.length){
-      msg.insertBefore(document.createTextNode(finalUrgency.charAt(idx)),nowCursor);
-      idx++;
-      setTimeout(typeChar,80+Math.random()*120);
-    }
-  }
-  typeChar();
-}
-
-// === Step 6: Motion effect on mobile tilt ===
-if(window.DeviceOrientationEvent){
-  window.addEventListener("deviceorientation", e=>{
-    const gamma=e.gamma||0;
-    const beta=e.beta||0;
-    fallElements.forEach(el=>{
-      el.style.transform += ` translateX(${gamma*0.3}px) translateY(${beta*0.3}px)`;
+  barInterval = setInterval(() => {
+    fills.forEach((fill) => {
+      const base = Number(fill.dataset.baseWidth || 50);
+      let jitter = base + Math.floor((Math.random() - 0.5) * 60);
+      jitter = Math.max(3, Math.min(100, jitter));
+      fill.style.width = jitter + "%";
     });
-  });
+  }, 85);
+
+  setTimeout(() => {
+    clearInterval(scrambleInterval);
+    clearInterval(barInterval);
+    explodeScreen();
+  }, 2000);
 }
 
-// start typing
+function scrambleText(text, chars, intensity) {
+  let out = "";
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === " ") {
+      out += " ";
+      continue;
+    }
+    if (Math.random() < intensity) {
+      out += chars[Math.floor(Math.random() * chars.length)];
+    } else {
+      out += text[i];
+    }
+  }
+  return out;
+}
+
+function explodeScreen() {
+  flash.classList.add("show");
+
+  const targets = Array.from(document.querySelectorAll(".particle-target")).filter(el => {
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  });
+
+  const pieces = [];
+
+  targets.forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    const cols = Math.max(6, Math.min(18, Math.floor(rect.width / 34)));
+    const rows = Math.max(2, Math.min(8, Math.floor(rect.height / 16)));
+    const pieceW = rect.width / cols;
+    const pieceH = rect.height / rows;
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const frag = document.createElement("div");
+        frag.className = "fragment";
+
+        const w = Math.max(2, pieceW - 1);
+        const h = Math.max(2, pieceH - 1);
+        const x = rect.left + col * pieceW;
+        const y = rect.top + row * pieceH;
+
+        frag.style.left = x + "px";
+        frag.style.top = y + "px";
+        frag.style.width = w + "px";
+        frag.style.height = h + "px";
+
+        document.body.appendChild(frag);
+
+        const vx = (Math.random() - 0.5) * 16;
+        const vy = -Math.random() * 9 - 2;
+        const spin = (Math.random() - 0.5) * 24;
+
+        pieces.push({
+          el: frag,
+          x,
+          y,
+          w,
+          h,
+          vx,
+          vy,
+          rot: 0,
+          spin,
+          settled: false
+        });
+      }
+    }
+
+    el.style.visibility = "hidden";
+  });
+
+  runPhysics(pieces);
+
+  setTimeout(() => {
+    getOut.classList.add("show");
+  }, 2000);
+
+  setTimeout(() => {
+    nowMsg.classList.add("show");
+  }, 5000);
+}
+
+function runPhysics(pieces) {
+  if (physicsRunning) return;
+  physicsRunning = true;
+
+  const gravity = 1.05;
+  const bounce = 0.24;
+  const friction = 0.986;
+  const floorFriction = 0.92;
+
+  function frame() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    for (let i = 0; i < pieces.length; i++) {
+      const p = pieces[i];
+      if (!p.el) continue;
+
+      p.vy += gravity;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.spin;
+
+      p.vx *= friction;
+      p.spin *= 0.992;
+
+      if (p.x <= 0) {
+        p.x = 0;
+        p.vx *= -bounce;
+      }
+
+      if (p.x + p.w >= vw) {
+        p.x = vw - p.w;
+        p.vx *= -bounce;
+      }
+
+      if (p.y <= 0) {
+        p.y = 0;
+        p.vy *= -bounce;
+      }
+
+      if (p.y + p.h >= vh) {
+        p.y = vh - p.h;
+        p.vy *= -bounce;
+        p.vx *= floorFriction;
+        if (Math.abs(p.vy) < 0.8) {
+          p.vy = 0;
+        }
+      }
+
+      p.el.style.left = p.x + "px";
+      p.el.style.top = p.y + "px";
+      p.el.style.transform = "rotate(" + p.rot + "deg)";
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}
+
 typeNext();
 </script>
+
 </body>
 </html>
