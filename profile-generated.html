@@ -124,6 +124,15 @@ z-index:12;
 animation:flashBang 620ms ease-out forwards;
 }
 
+.prehack-flicker{
+position:fixed;
+inset:0;
+background:rgba(255,255,255,0.07);
+opacity:0;
+pointer-events:none;
+z-index:11;
+}
+
 .fragment{
 position:fixed;
 pointer-events:none;
@@ -182,12 +191,14 @@ font-family:"Lucida Console";
 <body>
 
 <div class="screen" id="screen"></div>
+<div class="prehack-flicker" id="preFlicker"></div>
 <div class="flash" id="flash"></div>
 <div class="big-warning" id="getOut"></div>
 
 <script>
 const screen = document.getElementById("screen");
 const flash = document.getElementById("flash");
+const preFlicker = document.getElementById("preFlicker");
 const getOut = document.getElementById("getOut");
 
 const introLines = [
@@ -292,7 +303,7 @@ function revealStats() {
   let i = 0;
   function addNextStat() {
     if (i >= stats.length) {
-      setTimeout(startHackPhase, 220);
+      setTimeout(runPreHackFlicker, 220);
       return;
     }
 
@@ -333,6 +344,41 @@ function revealStats() {
   }
 
   addNextStat();
+}
+
+function runPreHackFlicker() {
+  const flickers = [
+    { opacity: 0.10, duration: 70 },
+    { opacity: 0.00, duration: 55 },
+    { opacity: 0.06, duration: 80 },
+    { opacity: 0.00, duration: 45 },
+    { opacity: 0.12, duration: 95 },
+    { opacity: 0.03, duration: 70 },
+    { opacity: 0.00, duration: 60 }
+  ];
+
+  let i = 0;
+
+  function nextFlicker() {
+    if (i >= flickers.length) {
+      preFlicker.style.opacity = "0";
+      screen.style.opacity = "1";
+      screen.style.transform = "";
+      setTimeout(startHackPhase, 120);
+      return;
+    }
+
+    const step = flickers[i];
+    preFlicker.style.opacity = step.opacity;
+    screen.style.opacity = step.opacity > 0 ? "0.92" : "1";
+    screen.style.transform = step.opacity > 0
+      ? `translate(${(Math.random()-0.5)*2}px, ${(Math.random()-0.5)*2}px)`
+      : "";
+    i++;
+    setTimeout(nextFlicker, step.duration);
+  }
+
+  nextFlicker();
 }
 
 function startHackPhase() {
@@ -584,13 +630,13 @@ function appendWarningLine(el, text) {
   const currentText = el.textContent.replace(/_+$/,"");
   el.innerHTML = "";
 
-  const textNode = document.createTextNode(currentText + "\n");
+  const firstTextNode = document.createTextNode(currentText + "\n");
   const secondTextNode = document.createTextNode("");
   const warningCursor = document.createElement("span");
   warningCursor.className = "cursor";
   warningCursor.textContent = "_";
 
-  el.appendChild(textNode);
+  el.appendChild(firstTextNode);
   el.appendChild(secondTextNode);
   el.appendChild(warningCursor);
 
