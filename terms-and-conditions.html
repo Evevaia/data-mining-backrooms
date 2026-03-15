@@ -19,10 +19,12 @@ body{
 
 .container{
   width:720px;
+  max-width:calc(100vw - 32px);
   background:#151518;
   border:1px solid #2b2b30;
   padding:30px;
   position:relative;
+  box-sizing:border-box;
 }
 
 h1{
@@ -46,12 +48,29 @@ h1{
   font-size:13px;
   line-height:1.5;
   color:#d7d7dd;
+  box-sizing:border-box;
+  scrollbar-width:thin;
+  scrollbar-color:#4a4a50 #101013;
+}
+
+.terms::-webkit-scrollbar{
+  width:5px;
+}
+
+.terms::-webkit-scrollbar-track{
+  background:#101013;
+}
+
+.terms::-webkit-scrollbar-thumb{
+  background:#4a4a50;
+  border-radius:10px;
 }
 
 .buttons{
   margin-top:20px;
   display:flex;
   gap:10px;
+  flex-wrap:wrap;
 }
 
 button{
@@ -61,7 +80,11 @@ button{
   background:#f2f2f2;
   color:#111;
   cursor:pointer;
-  transition:opacity 0.2s ease, transform 0.2s ease;
+  transition:opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+button:active{
+  transform:scale(0.98);
 }
 
 .decline{
@@ -91,14 +114,20 @@ button{
   background:#101013;
   border:1px solid #2b2b30;
   padding:24px 28px;
-  width:320px;
+  width:340px;
+  max-width:calc(100vw - 48px);
   text-align:center;
   display:none;
   z-index:10;
+  box-sizing:border-box;
 }
 
 .popup.show{
   display:block;
+}
+
+.popup p{
+  margin:0 0 14px 0;
 }
 
 .overlay{
@@ -111,6 +140,123 @@ button{
 
 .overlay.show{
   display:block;
+}
+
+.scan-wrap{
+  margin:18px auto 16px auto;
+  width:120px;
+  height:150px;
+  border:1px solid #2b2b30;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%),
+    #0c0c0f;
+  position:relative;
+  overflow:hidden;
+  border-radius:14px;
+}
+
+.fingerprint{
+  position:absolute;
+  inset:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#7d7d86;
+  font-size:68px;
+  opacity:0.55;
+  filter:grayscale(1) contrast(1.1);
+  user-select:none;
+}
+
+.scan-line{
+  position:absolute;
+  left:8px;
+  right:8px;
+  height:3px;
+  background:linear-gradient(90deg, transparent, #f2f2f2, transparent);
+  box-shadow:0 0 10px rgba(255,255,255,0.35);
+  top:-10px;
+  opacity:0;
+}
+
+.scan-wrap.scanning .scan-line{
+  opacity:1;
+  animation:scanMove 1.6s ease-in-out 2;
+}
+
+.scan-text{
+  font-size:12px;
+  color:#9a9aa3;
+  min-height:18px;
+  letter-spacing:0.8px;
+}
+
+.scan-result{
+  margin-top:10px;
+  font-size:13px;
+  color:#d7d7dd;
+  min-height:18px;
+  letter-spacing:0.8px;
+}
+
+.hidden-btn{
+  display:none;
+}
+
+@keyframes scanMove{
+  0%{ top:-10px; }
+  50%{ top:calc(100% - 8px); }
+  100%{ top:-10px; }
+}
+
+@media (max-width:700px){
+  body{
+    align-items:flex-start;
+    padding:16px 0;
+    height:auto;
+    min-height:100vh;
+  }
+
+  .container{
+    width:calc(100vw - 24px);
+    padding:18px;
+  }
+
+  h1{
+    font-size:24px;
+    margin-bottom:12px;
+  }
+
+  .status{
+    font-size:13px;
+    margin-bottom:14px;
+  }
+
+  .terms{
+    height:260px;
+    font-size:12px;
+    line-height:1.45;
+    padding:12px;
+  }
+
+  button{
+    font-size:13px;
+    padding:11px 14px;
+  }
+
+  .popup{
+    width:310px;
+    padding:20px 18px;
+  }
+
+  .scan-wrap{
+    width:110px;
+    height:140px;
+  }
+
+  .fingerprint{
+    font-size:60px;
+  }
 }
 </style>
 </head>
@@ -186,9 +332,26 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 
 <div class="overlay" id="overlay"></div>
 
+<div class="popup" id="scanPopup">
+  <p><strong>Pinky promise?</strong></p>
+  <p style="font-size:13px; color:#9a9aa3;">Scan your pinky to confirm consent.</p>
+
+  <div class="scan-wrap" id="scanWrap">
+    <div class="fingerprint">☝</div>
+    <div class="scan-line" id="scanLine"></div>
+  </div>
+
+  <div class="scan-text" id="scanText">AWAITING PINKY VERIFICATION</div>
+  <div class="scan-result" id="scanResult"></div>
+
+  <button id="scanBtn" onclick="startPinkyScan()">SCAN PINKY</button>
+</div>
+
 <div class="popup" id="popup">
 <p>Thank you. See you soon.</p>
 <button onclick="closePopup()">OK</button>
+</div>
+
 </div>
 
 <script>
@@ -201,9 +364,40 @@ let y = btn.offsetTop;
 let moving = false;
 
 function acceptTerms(){
-  document.getElementById("status").innerText="CONSENT STATUS: ACCEPTED";
+  document.getElementById("status").innerText = "CONSENT STATUS: PROCESSING";
   document.getElementById("overlay").classList.add("show");
-  document.getElementById("popup").classList.add("show");
+  document.getElementById("scanPopup").classList.add("show");
+}
+
+function startPinkyScan(){
+  const scanWrap = document.getElementById("scanWrap");
+  const scanText = document.getElementById("scanText");
+  const scanResult = document.getElementById("scanResult");
+  const scanBtn = document.getElementById("scanBtn");
+
+  scanBtn.disabled = true;
+  scanBtn.style.opacity = "0.5";
+  scanBtn.style.cursor = "default";
+
+  scanText.innerText = "SCANNING PINKY...";
+  scanResult.innerText = "";
+  scanWrap.classList.add("scanning");
+
+  setTimeout(() => {
+    scanText.innerText = "MATCHING BIOMETRIC PINKY...";
+  }, 1600);
+
+  setTimeout(() => {
+    scanText.innerText = "PINKY VERIFIED";
+    scanResult.innerText = "Consent successfully recorded.";
+    scanWrap.classList.remove("scanning");
+    document.getElementById("status").innerText = "CONSENT STATUS: ACCEPTED";
+  }, 3400);
+
+  setTimeout(() => {
+    document.getElementById("scanPopup").classList.remove("show");
+    document.getElementById("popup").classList.add("show");
+  }, 4300);
 }
 
 function closePopup(){
@@ -214,9 +408,9 @@ function closePopup(){
 function declineTerms(){
   if(!moving){
     moving = true;
-    btn.style.position="fixed";
-    btn.style.left=x+"px";
-    btn.style.top=y+"px";
+    btn.style.position = "fixed";
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
     moveButton();
     btn.onclick = snapPieces;
   }
@@ -225,12 +419,12 @@ function declineTerms(){
 function moveButton(){
   function animate(){
     if(!btn) return;
-    x+=dx;
-    y+=dy;
-    if(x+btn.offsetWidth>window.innerWidth || x<0) dx*=-1;
-    if(y+btn.offsetHeight>window.innerHeight || y<0) dy*=-1;
-    btn.style.left=x+"px";
-    btn.style.top=y+"px";
+    x += dx;
+    y += dy;
+    if(x + btn.offsetWidth > window.innerWidth || x < 0) dx *= -1;
+    if(y + btn.offsetHeight > window.innerHeight || y < 0) dy *= -1;
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
     requestAnimationFrame(animate);
   }
   animate();
@@ -238,34 +432,34 @@ function moveButton(){
 
 function snapPieces(){
   let rect = btn.getBoundingClientRect();
-  let pieces = [];
-  for(let i=0;i<20;i++){
+  for(let i = 0; i < 20; i++){
     let p = document.createElement("div");
-    p.className="snap-piece";
-    p.style.left = (rect.left + Math.random()*btn.offsetWidth) + "px";
-    p.style.top = (rect.top + Math.random()*btn.offsetHeight) + "px";
-    p.style.width = (5+Math.random()*15)+"px";
-    p.style.height = (5+Math.random()*15)+"px";
+    p.className = "snap-piece";
+    p.style.left = (rect.left + Math.random() * btn.offsetWidth) + "px";
+    p.style.top = (rect.top + Math.random() * btn.offsetHeight) + "px";
+    p.style.width = (5 + Math.random() * 15) + "px";
+    p.style.height = (5 + Math.random() * 15) + "px";
     document.body.appendChild(p);
-    pieces.push(p);
-    let angle = Math.random()*2*Math.PI;
-    let speed = 2+Math.random()*4;
-    let vx = Math.cos(angle)*speed;
-    let vy = Math.sin(angle)*speed;
-    (function(p,vx,vy){
-      let op=1;
+
+    let angle = Math.random() * 2 * Math.PI;
+    let speed = 2 + Math.random() * 4;
+    let vx = Math.cos(angle) * speed;
+    let vy = Math.sin(angle) * speed;
+
+    (function(piece, vx, vy){
+      let op = 1;
       function move(){
-        if(!p) return;
-        p.style.left = (parseFloat(p.style.left)+vx)+"px";
-        p.style.top = (parseFloat(p.style.top)+vy)+"px";
+        if(!piece) return;
+        piece.style.left = (parseFloat(piece.style.left) + vx) + "px";
+        piece.style.top = (parseFloat(piece.style.top) + vy) + "px";
         op -= 0.02;
-        p.style.opacity = op;
-        p.style.transform = `scale(${op}) rotate(${op*360}deg)`;
-        if(op>0) requestAnimationFrame(move);
-        else p.remove();
+        piece.style.opacity = op;
+        piece.style.transform = `scale(${op}) rotate(${op * 360}deg)`;
+        if(op > 0) requestAnimationFrame(move);
+        else piece.remove();
       }
       move();
-    })(p,vx,vy);
+    })(p, vx, vy);
   }
   btn.remove();
 }
