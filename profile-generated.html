@@ -493,8 +493,13 @@ function explodeScreen() {
   runPhysics(pieces);
 
   setTimeout(() => {
-    typeBigWarning(getOut, "GET OUT.\nNOW!");
+    typeBigWarning(getOut, "GET OUT.");
   }, 2000);
+
+  setTimeout(() => {
+    getOut.textContent += "\n";
+    typeBigWarningAppend(getOut, "NOW!");
+  }, 5000);
 }
 
 function runPhysics(pieces) {
@@ -563,6 +568,19 @@ function typeBigWarning(el, text) {
   el.textContent = "";
   el.classList.add("show");
 
+  let i = 0;
+
+  function typeChar() {
+    if (i >= text.length) return;
+    el.textContent += text.charAt(i);
+    i++;
+    setTimeout(typeChar, randomTypingDelay());
+  }
+
+  typeChar();
+}
+
+function typeBigWarningAppend(el, text) {
   let i = 0;
 
   function typeChar() {
