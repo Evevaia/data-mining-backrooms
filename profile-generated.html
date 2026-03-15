@@ -133,10 +133,6 @@ opacity:1;
 will-change:transform,left,top,opacity;
 }
 
-.tremble{
-animation:screenTremble 0.08s linear infinite;
-}
-
 @keyframes blink{
 0%{opacity:1;}
 50%{opacity:0;}
@@ -147,15 +143,6 @@ animation:screenTremble 0.08s linear infinite;
 0%{opacity:0;}
 18%{opacity:1;}
 100%{opacity:0;}
-}
-
-@keyframes screenTremble{
-0%{transform:translate(0px,0px) rotate(0deg);}
-20%{transform:translate(-2px,1px) rotate(-0.3deg);}
-40%{transform:translate(3px,-2px) rotate(0.35deg);}
-60%{transform:translate(-3px,2px) rotate(-0.35deg);}
-80%{transform:translate(2px,-1px) rotate(0.25deg);}
-100%{transform:translate(0px,0px) rotate(0deg);}
 }
 
 @media (max-width:900px){
@@ -331,7 +318,6 @@ function revealStats() {
     value.className = "stat-value";
     value.textContent = stat.textValue ? stat.textValue : stat.value + "%";
     value.dataset.mode = stat.textValue ? "text" : "percent";
-    value.dataset.baseText = stat.textValue ? stat.textValue : stat.value + "%";
 
     row.appendChild(label);
     row.appendChild(bar);
@@ -383,7 +369,7 @@ function startHackPhase() {
 
   setTimeout(() => {
     startTremblePhase();
-  }, 2200);
+  }, 450);
 
   setTimeout(() => {
     clearInterval(scrambleInterval);
@@ -394,21 +380,27 @@ function startHackPhase() {
 }
 
 function startTremblePhase() {
-  screen.classList.add("tremble");
-
   const targets = Array.from(document.querySelectorAll(".particle-target"));
+  const startTime = performance.now();
+  const buildDuration = 2550;
+
   trembleInterval = setInterval(() => {
+    const elapsed = performance.now() - startTime;
+    const progress = Math.min(elapsed / buildDuration, 1);
+
+    const strength = 0.8 + progress * 13;
+    const rotateStrength = 0.08 + progress * 2.8;
+
     targets.forEach((el) => {
-      const tx = (Math.random() - 0.5) * 10;
-      const ty = (Math.random() - 0.5) * 10;
-      const rot = (Math.random() - 0.5) * 2.2;
+      const tx = (Math.random() - 0.5) * strength;
+      const ty = (Math.random() - 0.5) * strength;
+      const rot = (Math.random() - 0.5) * rotateStrength;
       el.style.transform = `translate(${tx}px, ${ty}px) rotate(${rot}deg)`;
     });
   }, 45);
 }
 
 function stopTremblePhase() {
-  screen.classList.remove("tremble");
   if (trembleInterval) {
     clearInterval(trembleInterval);
     trembleInterval = null;
