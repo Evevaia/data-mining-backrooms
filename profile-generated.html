@@ -11,7 +11,7 @@ background:#050505;
 color:#e8e8e8;
 font-family:"Lucida Console","Courier New",monospace;
 margin:0;
-padding:40px;
+padding:28px 18px;
 min-height:100vh;
 overflow:hidden;
 }
@@ -19,8 +19,8 @@ overflow:hidden;
 .screen{
 max-width:900px;
 margin:0 auto;
-font-size:24px;
-line-height:1.65;
+font-size:18px;
+line-height:1.45;
 white-space:pre-wrap;
 position:relative;
 z-index:2;
@@ -28,7 +28,7 @@ z-index:2;
 
 .line{
 display:block;
-min-height:1.65em;
+min-height:1.45em;
 position:relative;
 }
 
@@ -38,20 +38,20 @@ animation:blink 1s steps(1) infinite;
 }
 
 .stats-wrap{
-margin-top:6px;
+margin-top:4px;
 display:flex;
 flex-direction:column;
-gap:6px;
+gap:5px;
 }
 
 .stat-row{
 display:grid;
-grid-template-columns: 320px 1fr 70px;
+grid-template-columns: 230px 1fr 60px;
 align-items:center;
-column-gap:14px;
-font-size:20px;
-line-height:1.2;
-min-height:32px;
+column-gap:10px;
+font-size:15px;
+line-height:1.15;
+min-height:24px;
 position:relative;
 }
 
@@ -60,7 +60,7 @@ white-space:nowrap;
 }
 
 .stat-bar{
-height:12px;
+height:9px;
 border:1px solid #2a2a2a;
 background:#0f0f0f;
 position:relative;
@@ -83,7 +83,7 @@ position:fixed;
 left:50%;
 top:50%;
 transform:translate(-50%,-50%);
-font-size:56px;
+font-size:52px;
 line-height:1;
 letter-spacing:3px;
 text-align:center;
@@ -92,25 +92,17 @@ pointer-events:none;
 z-index:20;
 color:#f2f2f2;
 text-shadow:0 0 12px rgba(255,255,255,0.15);
-}
-
-.big-warning.show{
-animation:warningIn 220ms ease forwards;
+white-space:nowrap;
 }
 
 .big-warning.now{
 top:calc(50% + 72px);
-font-size:74px;
+font-size:68px;
 letter-spacing:5px;
 }
 
-.fragment{
-position:fixed;
-pointer-events:none;
-z-index:15;
-background:#e8e8e8;
+.big-warning.show{
 opacity:1;
-will-change:transform,left,top,opacity;
 }
 
 .flash{
@@ -126,15 +118,19 @@ z-index:12;
 animation:flashBang 340ms ease-out forwards;
 }
 
+.fragment{
+position:fixed;
+pointer-events:none;
+z-index:15;
+background:#e8e8e8;
+opacity:1;
+will-change:transform,left,top,opacity;
+}
+
 @keyframes blink{
 0%{opacity:1;}
 50%{opacity:0;}
 100%{opacity:1;}
-}
-
-@keyframes warningIn{
-0%{opacity:0; transform:translate(-50%,-50%) scale(0.9);}
-100%{opacity:1; transform:translate(-50%,-50%) scale(1);}
 }
 
 @keyframes flashBang{
@@ -145,34 +141,36 @@ animation:flashBang 340ms ease-out forwards;
 
 @media (max-width:900px){
 body{
-padding:20px;
+padding:18px 14px;
 }
 .screen{
-font-size:16px;
-line-height:1.45;
+font-size:13px;
+line-height:1.35;
 }
 .line{
-min-height:1.45em;
+min-height:1.35em;
 }
 .stat-row{
 grid-template-columns: 1fr;
-row-gap:4px;
+row-gap:3px;
 min-height:auto;
-font-size:14px;
-margin-bottom:4px;
+font-size:12px;
+margin-bottom:3px;
 }
 .stat-bar{
-height:10px;
+height:8px;
 }
 .stat-value{
 text-align:left;
 }
 .big-warning{
-font-size:38px;
+font-size:30px;
+letter-spacing:2px;
 }
 .big-warning.now{
-font-size:52px;
-top:calc(50% + 58px);
+font-size:44px;
+top:calc(50% + 50px);
+letter-spacing:3px;
 }
 }
 </style>
@@ -181,8 +179,8 @@ top:calc(50% + 58px);
 
 <div class="screen" id="screen"></div>
 <div class="flash" id="flash"></div>
-<div class="big-warning" id="getOut">GET OUT</div>
-<div class="big-warning now" id="nowMsg">NOW</div>
+<div class="big-warning" id="getOut"></div>
+<div class="big-warning now" id="nowMsg"></div>
 
 <script>
 const screen = document.getElementById("screen");
@@ -241,7 +239,7 @@ function typeNext() {
     const textNode = document.createTextNode(lineText.charAt(currentCharIndex));
     currentLineEl.insertBefore(textNode, cursor);
     currentCharIndex++;
-    setTimeout(typeNext, 90);
+    setTimeout(typeNext, 78);
     return;
   }
 
@@ -263,7 +261,7 @@ function typeNext() {
   currentLineIndex++;
   currentCharIndex = 0;
   currentLineEl = null;
-  setTimeout(typeNext, 320);
+  setTimeout(typeNext, 220);
 }
 
 function flickerPause(count) {
@@ -329,7 +327,7 @@ function revealStats() {
     });
 
     i++;
-    setTimeout(addNextStat, 140);
+    setTimeout(addNextStat, 120);
   }
 
   addNextStat();
@@ -437,8 +435,7 @@ function explodeScreen() {
           vx,
           vy,
           rot: 0,
-          spin,
-          settled: false
+          spin
         });
       }
     }
@@ -449,11 +446,11 @@ function explodeScreen() {
   runPhysics(pieces);
 
   setTimeout(() => {
-    getOut.classList.add("show");
+    typeBigWarning(getOut, "GET OUT");
   }, 2000);
 
   setTimeout(() => {
-    nowMsg.classList.add("show");
+    typeBigWarning(nowMsg, "NOW");
   }, 5000);
 }
 
@@ -515,6 +512,28 @@ function runPhysics(pieces) {
   }
 
   requestAnimationFrame(frame);
+}
+
+function typeBigWarning(el, text) {
+  el.textContent = "";
+  el.classList.add("show");
+
+  let i = 0;
+
+  function typeChar() {
+    if (i >= text.length) return;
+    el.textContent += text.charAt(i);
+    i++;
+    const delay = randomTypingDelay();
+    setTimeout(typeChar, delay);
+  }
+
+  typeChar();
+}
+
+function randomTypingDelay() {
+  const delays = [55, 70, 82, 95, 110, 130, 160, 78, 88, 102];
+  return delays[Math.floor(Math.random() * delays.length)];
 }
 
 typeNext();
