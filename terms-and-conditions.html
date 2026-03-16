@@ -123,14 +123,13 @@ button:active{
 }
 
 .snap-piece{
-  position:absolute;
+  position:fixed;
   background:#c52828;
-  width:20px;
-  height:20px;
-  border-radius:4px;
+  border-radius:3px;
   pointer-events:none;
   opacity:1;
-  transform:scale(1);
+  transform:scale(1) rotate(0deg);
+  z-index:9999;
 }
 
 .popup{
@@ -478,11 +477,13 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 let btn = document.getElementById("declineBtn");
 let dx = 2.5;
 let dy = 2.2;
-let x = btn.offsetLeft;
-let y = btn.offsetTop;
+let x = 0;
+let y = 0;
 let moving = false;
 let termsAccepted = false;
 let acceptanceStarted = false;
+let declineDestroyed = false;
+let moveFrame = null;
 
 const scanWrap = document.getElementById("scanWrap");
 const scanText = document.getElementById("scanText");
@@ -605,7 +606,7 @@ function closePopup(){
 }
 
 function declineTerms(){
-  if(termsAccepted || acceptanceStarted) return;
+  if(termsAccepted || acceptanceStarted || declineDestroyed || !btn) return;
 
   if(!moving){
     moving = true;
@@ -618,66 +619,99 @@ function declineTerms(){
     btn.style.left = x + "px";
     btn.style.top = y + "px";
     btn.style.margin = "0";
+    btn.style.zIndex = "1000";
 
     moveButton();
-    btn.onclick = snapPieces;
+    return;
   }
+
+  snapPieces();
 }
 
 function moveButton(){
+  cancelAnimationFrame(moveFrame);
+
   function animate(){
-    if(!btn || termsAccepted || acceptanceStarted || !moving) return;
+    if(!btn || termsAccepted || acceptanceStarted || !moving || declineDestroyed) return;
 
     x += dx;
     y += dy;
 
-    if(x + btn.offsetWidth > window.innerWidth || x < 0) dx *= -1;
-    if(y + btn.offsetHeight > window.innerHeight || y < 0) dy *= -1;
+    if(x + btn.offsetWidth >= window.innerWidth || x <= 0) dx *= -1;
+    if(y + btn.offsetHeight >= window.innerHeight || y <= 0) dy *= -1;
 
     btn.style.left = x + "px";
     btn.style.top = y + "px";
 
-    requestAnimationFrame(animate);
+    moveFrame = requestAnimationFrame(animate);
   }
+
   animate();
 }
 
 function snapPieces(){
-  if(termsAccepted || acceptanceStarted || !btn) return;
+  if(termsAccepted || acceptanceStarted || declineDestroyed || !btn) return;
 
-  let rect = btn.getBoundingClientRect();
-  for(let i = 0; i < 20; i++){
-    let p = document.createElement("div");
-    p.className = "snap-piece";
-    p.style.left = (rect.left + Math.random() * btn.offsetWidth) + "px";
-    p.style.top = (rect.top + Math.random() * btn.offsetHeight) + "px";
-    p.style.width = (5 + Math.random() * 15) + "px";
-    p.style.height = (5 + Math.random() * 15) + "px";
-    document.body.appendChild(p);
+  declineDestroyed = true;
+  moving = false;
+  cancelAnimationFrame(moveFrame);
 
-    let angle = Math.random() * 2 * Math.PI;
-    let speed = 2 + Math.random() * 4;
-    let vx = Math.cos(angle) * speed;
-    let vy = Math.sin(angle) * speed;
+  const rect = btn.getBoundingClientRect();
+  const piecesX = 5;
+  const piecesY = 4;
+  const pieceWidth = rect.width / piecesX;
+  const pieceHeight = rect.height / piecesY;
 
-    (function(piece, vx, vy){
-      let op = 1;
-      function move(){
-        if(!piece) return;
-        piece.style.left = (parseFloat(piece.style.left) + vx) + "px";
-        piece.style.top = (parseFloat(piece.style.top) + vy) + "px";
-        op -= 0.02;
-        piece.style.opacity = op;
-        piece.style.transform = `scale(${op}) rotate(${op * 360}deg)`;
-        if(op > 0) requestAnimationFrame(move);
-        else piece.remove();
-      }
-      move();
-    })(p, vx, vy);
+  for(let row = 0; row < piecesY; row++){
+    for(let col = 0; col < piecesX; col++){
+      const p = document.createElement("div");
+      p.className = "snap-piece";
+      p.style.width = pieceWidth + "px";
+      p.style.height = pieceHeight + "px";
+      p.style.left = (rect.left + col * pieceWidth) + "px";
+      p.style.top = (rect.top + row * pieceHeight) + "px";
+      document.body.appendChild(p);
+
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 5;
+      const vx = Math.cos(angle) * speed;
+      const vy = Math.sin(angle) * speed - (Math.random() * 1.5);
+      const rotateSpeed = -12 + Math.random() * 24;
+
+      animatePiece(p, vx, vy, rotateSpeed);
+    }
   }
 
   btn.remove();
-  moving = false;
+}
+
+function animatePiece(piece, vx, vy, rotateSpeed){
+  let opacity = 1;
+  let rotation = 0;
+  let gravity = 0.18;
+  let currentX = parseFloat(piece.style.left);
+  let currentY = parseFloat(piece.style.top);
+
+  function move(){
+    currentX += vx;
+    currentY += vy;
+    vy += gravity;
+    rotation += rotateSpeed;
+    opacity -= 0.025;
+
+    piece.style.left = currentX + "px";
+    piece.style.top = currentY + "px";
+    piece.style.opacity = opacity;
+    piece.style.transform = `scale(${Math.max(opacity, 0)}) rotate(${rotation}deg)`;
+
+    if(opacity > 0){
+      requestAnimationFrame(move);
+    }else{
+      piece.remove();
+    }
+  }
+
+  move();
 }
 </script>
 
