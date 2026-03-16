@@ -101,7 +101,7 @@ button:active{
   z-index:2;
 }
 
-.buttons.accepted button{
+.buttons.hidden-actions button{
   display:none;
 }
 
@@ -308,14 +308,18 @@ button:active{
 @media (max-width:700px){
   body{
     align-items:flex-start;
-    padding:16px 0;
+    padding:12px 0;
     height:auto;
     min-height:100vh;
+    overflow:auto;
   }
 
   .container{
     width:calc(100vw - 24px);
+    min-height:calc(100vh - 24px);
     padding:18px;
+    display:flex;
+    flex-direction:column;
   }
 
   h1{
@@ -329,7 +333,9 @@ button:active{
   }
 
   .terms{
-    height:260px;
+    flex:1;
+    height:auto;
+    min-height:calc(100vh - 190px);
     font-size:12px;
     line-height:1.45;
     padding:12px;
@@ -357,6 +363,12 @@ button:active{
   .accepted-state{
     font-size:12px;
     padding:12px 14px;
+  }
+}
+
+@media (max-width:420px){
+  .terms{
+    min-height:calc(100vh - 175px);
   }
 }
 </style>
@@ -470,6 +482,7 @@ let x = btn.offsetLeft;
 let y = btn.offsetTop;
 let moving = false;
 let termsAccepted = false;
+let acceptanceStarted = false;
 
 const scanWrap = document.getElementById("scanWrap");
 const scanText = document.getElementById("scanText");
@@ -487,8 +500,11 @@ const tickRate = 30;
 const progressStep = (tickRate / requiredHold) * 100;
 
 function acceptTerms(){
-  if(termsAccepted) return;
+  if(termsAccepted || acceptanceStarted) return;
+
+  acceptanceStarted = true;
   statusText.innerText = "CONSENT IN PROGRESS";
+  buttonsRow.classList.add("hidden-actions");
   document.getElementById("overlay").classList.add("show");
   document.getElementById("scanPopup").classList.add("show");
 }
@@ -589,7 +605,7 @@ function closePopup(){
 }
 
 function declineTerms(){
-  if(termsAccepted) return;
+  if(termsAccepted || acceptanceStarted) return;
 
   if(!moving){
     moving = true;
@@ -603,7 +619,7 @@ function declineTerms(){
 
 function moveButton(){
   function animate(){
-    if(!btn || termsAccepted) return;
+    if(!btn || termsAccepted || acceptanceStarted) return;
     x += dx;
     y += dy;
     if(x + btn.offsetWidth > window.innerWidth || x < 0) dx *= -1;
@@ -616,7 +632,7 @@ function moveButton(){
 }
 
 function snapPieces(){
-  if(termsAccepted || !btn) return;
+  if(termsAccepted || acceptanceStarted || !btn) return;
 
   let rect = btn.getBoundingClientRect();
   for(let i = 0; i < 20; i++){
