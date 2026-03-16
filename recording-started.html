@@ -116,7 +116,7 @@ button{
   align-items:flex-start;
   gap:18px;
   flex-wrap:wrap;
-  margin-bottom:26px;
+  margin-bottom:30px;
 }
 
 .big-ohwell{
@@ -137,10 +137,11 @@ button{
   display:flex;
   align-items:center;
   gap:12px;
-  font-size:22px;
+  font-size:30px;
   font-weight:700;
-  letter-spacing:1.2px;
+  letter-spacing:1.4px;
   color:#f2f2f2;
+  line-height:1;
 }
 
 .rec-dot{
@@ -153,17 +154,18 @@ button{
 }
 
 .timer{
-  font-size:24px;
-  font-weight:700;
+  font-size:17px;
+  font-weight:400;
   color:#b8b8c2;
-  letter-spacing:1px;
+  letter-spacing:0.8px;
+  line-height:1;
 }
 
 .analysis-shell{
   border:1px solid #2b2b30;
   background:#101013;
   padding:16px;
-  min-height:210px;
+  min-height:230px;
   box-sizing:border-box;
 }
 
@@ -172,20 +174,30 @@ button{
   letter-spacing:1px;
   text-transform:uppercase;
   color:#8e8e97;
-  margin-bottom:14px;
+  margin-bottom:18px;
 }
 
 .analysis{
   font-size:15px;
   line-height:1.75;
   color:#d7d7dd;
-  white-space:pre-wrap;
-  min-height:150px;
+  min-height:160px;
+}
+
+.analysis-line{
+  white-space:nowrap;
+  overflow:hidden;
+  margin-bottom:16px;
+  min-height:26px;
+}
+
+.analysis-line:last-child{
+  margin-bottom:0;
 }
 
 .cursor{
   display:inline-block;
-  margin-left:2px;
+  margin-left:4px;
   animation:blink 1s steps(1) infinite;
   color:#6ea8ff;
 }
@@ -216,15 +228,20 @@ button{
   }
 
   .rec-line{
-    font-size:18px;
+    font-size:24px;
   }
 
   .timer{
-    font-size:20px;
+    font-size:15px;
   }
 
   .analysis{
     font-size:14px;
+  }
+
+  .analysis-line{
+    min-height:24px;
+    margin-bottom:14px;
   }
 
   .recording-top{
@@ -289,7 +306,13 @@ button{
     <div class="analysis-shell">
       <div class="analysis-title">Live Processing Notes</div>
 
-      <div class="analysis" id="analysisText"><span id="cursor" class="cursor">|</span></div>
+      <div class="analysis" id="analysisText">
+        <div class="analysis-line" id="line0"></div>
+        <div class="analysis-line" id="line1"></div>
+        <div class="analysis-line" id="line2"></div>
+        <div class="analysis-line" id="line3"></div>
+        <div class="analysis-line" id="line4"></div>
+      </div>
     </div>
 
   </div>
@@ -309,8 +332,8 @@ const lines = [
   "General composure: holding, somehow."
 ];
 
-let lineIndex = 0;
-let charIndex = 0;
+let currentLineIndex = 0;
+let currentCharIndex = 0;
 
 window.onload = function(){
   startCountdown();
@@ -343,17 +366,14 @@ function startCountdown(){
 function forceAccept(){
   accepted = true;
 
-  document
-    .getElementById("permissionScreen")
-    .classList.add("hidden");
-
-  document
-    .getElementById("recordingScreen")
-    .classList.add("show");
+  document.getElementById("permissionScreen").classList.add("hidden");
+  document.getElementById("recordingScreen").classList.add("show");
 
   startTimer();
 
-  setTimeout(typeLine, 700);
+  setTimeout(function(){
+    typeLine(currentLineIndex);
+  }, 700);
 }
 
 function startTimer(){
@@ -371,31 +391,34 @@ function startTimer(){
   }, 1000);
 }
 
-function typeLine(){
-  const analysisText = document.getElementById("analysisText");
-  const cursor = document.getElementById("cursor");
+function typeLine(lineIndex){
+  if(lineIndex >= lines.length) return;
 
-  if(lineIndex >= lines.length){
-    cursor.remove();
-    return;
+  const lineEl = document.getElementById("line" + lineIndex);
+  const text = lines[lineIndex];
+
+  lineEl.innerHTML = "";
+
+  function typeChar(){
+    if(currentCharIndex < text.length){
+      lineEl.textContent = text.slice(0, currentCharIndex + 1);
+      lineEl.innerHTML = lineEl.textContent + '<span class="cursor">|</span>';
+      currentCharIndex++;
+
+      const speed = 75 + Math.random() * 55;
+      setTimeout(typeChar, speed);
+    }else{
+      lineEl.textContent = text;
+      currentCharIndex = 0;
+      currentLineIndex++;
+
+      setTimeout(function(){
+        typeLine(currentLineIndex);
+      }, 550);
+    }
   }
 
-  const currentLine = lines[lineIndex];
-
-  if(charIndex < currentLine.length){
-    cursor.insertAdjacentText("beforebegin", currentLine.charAt(charIndex));
-    charIndex++;
-
-    const speed = 32 + Math.random() * 40;
-    setTimeout(typeLine, speed);
-  }else{
-    cursor.insertAdjacentText("beforebegin", "\n");
-
-    lineIndex++;
-    charIndex = 0;
-
-    setTimeout(typeLine, 350 + Math.random() * 250);
-  }
+  typeChar();
 }
 </script>
 
