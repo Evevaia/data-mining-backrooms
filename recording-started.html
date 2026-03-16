@@ -114,16 +114,16 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:14px;
+  gap:18px;
   flex-wrap:wrap;
-  margin-bottom:22px;
+  margin-bottom:26px;
 }
 
 .big-ohwell{
   font-size:32px;
   font-weight:700;
   margin:0;
-  letter-spacing:0.4px;
+  letter-spacing:0.3px;
 }
 
 .rec-side{
@@ -136,29 +136,35 @@ button{
 .rec-line{
   display:flex;
   align-items:center;
-  gap:10px;
-  font-size:15px;
-  letter-spacing:1px;
+  gap:12px;
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:1.2px;
   color:#f2f2f2;
 }
 
 .rec-dot{
-  width:10px;
-  height:10px;
+  width:14px;
+  height:14px;
   background:#ff4d4d;
   border-radius:50%;
   animation:recBlink 1s infinite;
+  flex-shrink:0;
 }
 
 .timer{
-  font-size:14px;
+  font-size:24px;
+  font-weight:700;
   color:#b8b8c2;
+  letter-spacing:1px;
 }
 
 .analysis-shell{
   border:1px solid #2b2b30;
   background:#101013;
   padding:16px;
+  min-height:210px;
+  box-sizing:border-box;
 }
 
 .analysis-title{
@@ -170,35 +176,22 @@ button{
 }
 
 .analysis{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.analysis-line{
-  opacity:0;
-  transform:translateY(6px);
-  transition:opacity 0.35s ease, transform 0.35s ease;
   font-size:15px;
-  line-height:1.55;
+  line-height:1.75;
   color:#d7d7dd;
-  padding:10px 12px;
-  border:1px solid #232328;
-  background:#0b0b0d;
+  white-space:pre-wrap;
+  min-height:150px;
 }
 
-.analysis-line.show{
-  opacity:1;
-  transform:translateY(0);
+.cursor{
+  display:inline-block;
+  margin-left:2px;
+  animation:blink 1s steps(1) infinite;
+  color:#6ea8ff;
 }
 
-.analysis-line.final{
-  color:#9a9aa3;
-  font-style:italic;
-  border:none;
-  background:transparent;
-  padding:12px 2px 0 2px;
-  margin-top:8px;
+@keyframes blink{
+  50%{opacity:0;}
 }
 
 @keyframes recBlink{
@@ -222,7 +215,15 @@ button{
     font-size:26px;
   }
 
-  .analysis-line{
+  .rec-line{
+    font-size:18px;
+  }
+
+  .timer{
+    font-size:20px;
+  }
+
+  .analysis{
     font-size:14px;
   }
 
@@ -288,14 +289,7 @@ button{
     <div class="analysis-shell">
       <div class="analysis-title">Live Processing Notes</div>
 
-      <div class="analysis" id="analysisText">
-        <div class="analysis-line" id="a1">Nice room tone.</div>
-        <div class="analysis-line" id="a2">Face detected. Confidence: unnecessary.</div>
-        <div class="analysis-line" id="a3">Voice pattern saved for later judgment.</div>
-        <div class="analysis-line" id="a4">Lighting conditions: emotionally revealing.</div>
-        <div class="analysis-line" id="a5">General composure: holding, somehow.</div>
-        <div class="analysis-line final" id="a6">You really made this easy for us.</div>
-      </div>
+      <div class="analysis" id="analysisText"><span id="cursor" class="cursor">|</span></div>
     </div>
 
   </div>
@@ -306,6 +300,17 @@ button{
 let countdown = 10;
 let accepted = false;
 let timerInterval;
+
+const lines = [
+  "Nice room tone.",
+  "Face detected. Confidence: unnecessary.",
+  "Voice pattern saved for later judgment.",
+  "Lighting conditions: emotionally revealing.",
+  "General composure: holding, somehow."
+];
+
+let lineIndex = 0;
+let charIndex = 0;
 
 window.onload = function(){
   startCountdown();
@@ -347,7 +352,8 @@ function forceAccept(){
     .classList.add("show");
 
   startTimer();
-  startAnalysisReveal();
+
+  setTimeout(typeLine, 700);
 }
 
 function startTimer(){
@@ -365,14 +371,31 @@ function startTimer(){
   }, 1000);
 }
 
-function startAnalysisReveal(){
-  const ids = ["a1","a2","a3","a4","a5","a6"];
+function typeLine(){
+  const analysisText = document.getElementById("analysisText");
+  const cursor = document.getElementById("cursor");
 
-  ids.forEach(function(id, index){
-    setTimeout(function(){
-      document.getElementById(id).classList.add("show");
-    }, 700 + index * 650);
-  });
+  if(lineIndex >= lines.length){
+    cursor.remove();
+    return;
+  }
+
+  const currentLine = lines[lineIndex];
+
+  if(charIndex < currentLine.length){
+    cursor.insertAdjacentText("beforebegin", currentLine.charAt(charIndex));
+    charIndex++;
+
+    const speed = 32 + Math.random() * 40;
+    setTimeout(typeLine, speed);
+  }else{
+    cursor.insertAdjacentText("beforebegin", "\n");
+
+    lineIndex++;
+    charIndex = 0;
+
+    setTimeout(typeLine, 350 + Math.random() * 250);
+  }
 }
 </script>
 
