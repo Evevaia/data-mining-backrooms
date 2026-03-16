@@ -199,7 +199,7 @@ button{
   display:inline-block;
   margin-left:3px;
   animation:blink 1s steps(1) infinite;
-  color:#6ea8ff;
+  color:inherit;
   vertical-align:baseline;
 }
 
@@ -401,7 +401,7 @@ function typeLine(lineIndex){
   function typeChar(){
     if(charIndex < text.length){
       const visibleText = text.slice(0, charIndex + 1);
-      lineEl.innerHTML = visibleText + '<span class="cursor">|</span>';
+      lineEl.innerHTML = visibleText + '<span class="cursor">_</span>';
       charIndex++;
 
       const speed = 95 + Math.random() * 65;
