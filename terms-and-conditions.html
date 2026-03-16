@@ -609,9 +609,16 @@ function declineTerms(){
 
   if(!moving){
     moving = true;
+
+    const rect = btn.getBoundingClientRect();
+    x = rect.left;
+    y = rect.top;
+
     btn.style.position = "fixed";
     btn.style.left = x + "px";
     btn.style.top = y + "px";
+    btn.style.margin = "0";
+
     moveButton();
     btn.onclick = snapPieces;
   }
@@ -619,13 +626,17 @@ function declineTerms(){
 
 function moveButton(){
   function animate(){
-    if(!btn || termsAccepted || acceptanceStarted) return;
+    if(!btn || termsAccepted || acceptanceStarted || !moving) return;
+
     x += dx;
     y += dy;
+
     if(x + btn.offsetWidth > window.innerWidth || x < 0) dx *= -1;
     if(y + btn.offsetHeight > window.innerHeight || y < 0) dy *= -1;
+
     btn.style.left = x + "px";
     btn.style.top = y + "px";
+
     requestAnimationFrame(animate);
   }
   animate();
@@ -664,7 +675,9 @@ function snapPieces(){
       move();
     })(p, vx, vy);
   }
+
   btn.remove();
+  moving = false;
 }
 </script>
 
