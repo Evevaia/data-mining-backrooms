@@ -39,6 +39,8 @@ h1{
   font-size:14px;
   color:#9a9aa3;
   margin-bottom:20px;
+  letter-spacing:0.6px;
+  text-transform:uppercase;
 }
 
 .terms{
@@ -322,7 +324,7 @@ button:active{
   }
 
   .status{
-    font-size:13px;
+    font-size:12px;
     margin-bottom:14px;
   }
 
@@ -367,7 +369,7 @@ button:active{
 <h1>Terms & Conditions</h1>
 
 <div class="status" id="status">
-CONSENT STATUS: PENDING
+CONSENT REQUIRED
 </div>
 
 <div class="terms">
@@ -473,6 +475,7 @@ const scanWrap = document.getElementById("scanWrap");
 const scanText = document.getElementById("scanText");
 const progressBar = document.getElementById("progressBar");
 const buttonsRow = document.getElementById("buttonsRow");
+const statusText = document.getElementById("status");
 
 let scanStarted = false;
 let scanComplete = false;
@@ -485,7 +488,7 @@ const progressStep = (tickRate / requiredHold) * 100;
 
 function acceptTerms(){
   if(termsAccepted) return;
-  document.getElementById("status").innerText = "CONSENT STATUS: PROCESSING";
+  statusText.innerText = "CONSENT IN PROGRESS";
   document.getElementById("overlay").classList.add("show");
   document.getElementById("scanPopup").classList.add("show");
 }
@@ -540,7 +543,7 @@ function completeScan(){
   progressBar.style.width = "100%";
   scanText.innerText = "VERIFIED";
 
-  document.getElementById("status").innerText = "CONSENT STATUS: ACCEPTED";
+  statusText.innerText = "CONSENT RECORDED";
   buttonsRow.classList.add("accepted");
 
   setTimeout(() => {
