@@ -16,6 +16,7 @@ justify-content:center;
 min-height:100vh;
 margin:0;
 padding:24px;
+box-sizing:border-box;
 }
 
 .container{
@@ -41,7 +42,7 @@ min-height:20px;
 }
 
 .data-box,
-.conclusions-box{
+.mining-box{
 border:1px solid #2b2b30;
 background:#101013;
 padding:16px;
@@ -49,7 +50,8 @@ margin-bottom:18px;
 box-sizing:border-box;
 }
 
-.data-line{
+.data-line,
+.mining-line{
 font-size:14px;
 line-height:1.8;
 color:#d7d7dd;
@@ -59,7 +61,7 @@ word-break:break-word;
 .label{
 color:#9a9aa3;
 display:inline-block;
-min-width:140px;
+min-width:150px;
 vertical-align:top;
 }
 
@@ -87,14 +89,14 @@ display:block;
 position:relative;
 border:1px solid #2b2b30;
 background:#101013;
-padding:10px;
 overflow:hidden;
 animation:breathe 4.2s ease-in-out infinite;
-min-height:360px;
+height:360px;
 display:flex;
 align-items:center;
 justify-content:center;
 margin-bottom:18px;
+box-sizing:border-box;
 }
 
 .loading-screen{
@@ -102,6 +104,7 @@ width:100%;
 max-width:520px;
 text-align:left;
 padding:24px;
+box-sizing:border-box;
 }
 
 .loading-text{
@@ -117,6 +120,7 @@ height:10px;
 border:1px solid #2b2b30;
 background:#0b0b0d;
 overflow:hidden;
+box-sizing:border-box;
 }
 
 .loading-fill{
@@ -129,6 +133,7 @@ transition:width 4.2s linear;
 .map-content{
 display:none;
 width:100%;
+height:100%;
 position:relative;
 }
 
@@ -138,11 +143,10 @@ display:block;
 
 .map-content img{
 display:block;
-width:108%;
-max-width:none;
-height:auto;
-margin-left:-4%;
-margin-top:-1%;
+width:100%;
+height:100%;
+object-fit:cover;
+object-position:center center;
 }
 
 .location-dot{
@@ -186,26 +190,32 @@ color:#8e8e97;
 margin:0 0 10px 0;
 }
 
-.conclusions-box{
+.mining-box{
 display:none;
 }
 
-.conclusions-box.show{
+.mining-box.show{
 display:block;
 }
 
-.conclusion-line{
-font-size:14px;
-line-height:1.8;
-color:#d7d7dd;
+.mining-line{
 opacity:0;
 transform:translateY(6px);
 transition:opacity 0.35s ease, transform 0.35s ease;
 }
 
-.conclusion-line.show{
+.mining-line.show{
 opacity:1;
 transform:translateY(0);
+}
+
+.value-live{
+color:#f2f2f2;
+}
+
+.value-highlight{
+color:#6ea8ff;
+font-weight:600;
 }
 
 .final-line{
@@ -314,13 +324,7 @@ margin-bottom:6px;
 }
 
 .map-wrap{
-min-height:300px;
-}
-
-.map-content img{
-width:126%;
-margin-left:-13%;
-margin-top:-3%;
+height:300px;
 }
 }
 </style>
@@ -358,16 +362,30 @@ margin-top:-3%;
   </div>
 </div>
 
-<div class="conclusions-box" id="conclusionsBox">
-  <div class="box-title">Nearby locations detected</div>
+<div class="mining-box" id="miningBox">
+  <div class="box-title">Data extraction summary</div>
 
-  <div class="conclusion-line" id="c1">10 coffee shops within comfortable walking distance.</div>
-  <div class="conclusion-line" id="c2">4 brunch spots located, which feels on brand.</div>
-  <div class="conclusion-line" id="c3">2 bookstores identified for balance and plausible depth.</div>
-  <div class="conclusion-line" id="c4">Friends’ addresses: likely recoverable.</div>
-  <div class="conclusion-line" id="c5">Routine pattern: increasingly obvious.</div>
+  <div class="mining-line" id="m1">
+    <span class="label">LOCATION DATA</span>
+    <span class="value-live">collected</span>
+  </div>
 
-  <div class="final-line" id="finalLine">You are what you visit, I guess.</div>
+  <div class="mining-line" id="m2">
+    <span class="label">POTENTIAL BUYERS</span>
+    <span class="value-highlight" id="buyersValue">0</span>
+  </div>
+
+  <div class="mining-line" id="m3">
+    <span class="label">INTEREST CLUSTERS</span>
+    <span class="value-live" id="interestValue">processing</span>
+  </div>
+
+  <div class="mining-line" id="m4">
+    <span class="label">PROFILE VALUE</span>
+    <span class="value-live" id="profileValue">estimating</span>
+  </div>
+
+  <div class="final-line" id="finalLine">Apparently, your whereabouts remain marketable.</div>
 </div>
 
 <div class="note" id="noteBox">
@@ -387,16 +405,36 @@ window.addEventListener("load", function(){
   const locationDot = document.getElementById("locationDot");
   const hiddenInfo = document.getElementById("hiddenInfo");
   const noteBox = document.getElementById("noteBox");
-  const conclusionsBox = document.getElementById("conclusionsBox");
+  const miningBox = document.getElementById("miningBox");
   const statusValue = document.getElementById("statusValue");
   const statusText = document.getElementById("statusText");
+  const buyersValue = document.getElementById("buyersValue");
+  const interestValue = document.getElementById("interestValue");
+  const profileValue = document.getElementById("profileValue");
 
   const loadingMessages = [
     "Loading location data...",
-    "Cross-referencing nearby activity...",
-    "Reviewing suspiciously familiar routes...",
-    "Gathering unnecessary context..."
+    "Cross-referencing movement patterns...",
+    "Packaging behavioral indicators...",
+    "Preparing commercially useful conclusions..."
   ];
+
+  const buyerCount = Math.floor(Math.random() * 73) + 28;
+  const interestOptions = [
+    "7 categories matched",
+    "9 categories matched",
+    "11 categories matched",
+    "12 categories matched"
+  ];
+  const profileOptions = [
+    "moderately profitable",
+    "commercially promising",
+    "surprisingly tradable",
+    "above average"
+  ];
+
+  const chosenInterest = interestOptions[Math.floor(Math.random() * interestOptions.length)];
+  const chosenProfile = profileOptions[Math.floor(Math.random() * profileOptions.length)];
 
   setTimeout(function(){
     loadingFill.style.width = "100%";
@@ -420,38 +458,56 @@ window.addEventListener("load", function(){
 
     setTimeout(function(){
       locationDot.classList.add("show");
-    }, 500);
+    }, 450);
 
     setTimeout(function(){
-      conclusionsBox.classList.add("show");
+      miningBox.classList.add("show");
     }, 850);
 
     setTimeout(function(){
-      document.getElementById("c1").classList.add("show");
+      document.getElementById("m1").classList.add("show");
     }, 1050);
 
     setTimeout(function(){
-      document.getElementById("c2").classList.add("show");
+      document.getElementById("m2").classList.add("show");
+      animateNumber(buyersValue, buyerCount, 900);
     }, 1280);
 
     setTimeout(function(){
-      document.getElementById("c3").classList.add("show");
+      document.getElementById("m3").classList.add("show");
+      interestValue.textContent = chosenInterest;
     }, 1510);
 
     setTimeout(function(){
-      document.getElementById("c4").classList.add("show");
+      document.getElementById("m4").classList.add("show");
+      profileValue.textContent = chosenProfile;
     }, 1740);
 
     setTimeout(function(){
-      document.getElementById("c5").classList.add("show");
-    }, 1970);
-
-    setTimeout(function(){
       document.getElementById("finalLine").classList.add("show");
-      statusText.innerHTML = 'Behavioral markers identified<span class="typing-cursor">_</span>';
-    }, 2250);
+      statusText.innerHTML = 'Commercial relevance identified<span class="typing-cursor">_</span>';
+    }, 2050);
 
   }, 4400);
+
+  function animateNumber(el, target, duration){
+    const start = 0;
+    const startTime = performance.now();
+
+    function update(now){
+      const progress = Math.min((now - startTime) / duration, 1);
+      const value = Math.floor(start + (target - start) * progress);
+      el.textContent = value;
+
+      if(progress < 1){
+        requestAnimationFrame(update);
+      }else{
+        el.textContent = target;
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
 });
 </script>
 
