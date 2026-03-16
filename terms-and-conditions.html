@@ -73,6 +73,8 @@ h1{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
+  align-items:center;
+  min-height:46px;
 }
 
 button{
@@ -95,6 +97,27 @@ button:active{
   border:none;
   position:relative;
   z-index:2;
+}
+
+.buttons.accepted button{
+  display:none;
+}
+
+.accepted-state{
+  display:none;
+  width:100%;
+  border:1px solid #2b2b30;
+  background:#101013;
+  color:#d7d7dd;
+  padding:13px 16px;
+  font-size:13px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  box-sizing:border-box;
+}
+
+.buttons.accepted .accepted-state{
+  display:block;
 }
 
 .snap-piece{
@@ -328,6 +351,11 @@ button:active{
   .pinky-image-wrap{
     inset:12px;
   }
+
+  .accepted-state{
+    font-size:12px;
+    padding:12px 14px;
+  }
 }
 </style>
 </head>
@@ -396,9 +424,10 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 </p>
 </div>
 
-<div class="buttons">
-<button onclick="acceptTerms()">ACCEPT</button>
-<button class="decline" id="declineBtn" onclick="declineTerms()">DECLINE</button>
+<div class="buttons" id="buttonsRow">
+  <button id="acceptBtn" onclick="acceptTerms()">ACCEPT</button>
+  <button class="decline" id="declineBtn" onclick="declineTerms()">DECLINE</button>
+  <div class="accepted-state" id="acceptedState">TERMS ACCEPTED</div>
 </div>
 
 <div class="overlay" id="overlay"></div>
@@ -425,8 +454,8 @@ By proceeding, you confirm that your agreement is given freely, willingly, and w
 </div>
 
 <div class="popup" id="popup">
-<p>Thank you. See you soon.</p>
-<button onclick="closePopup()">OK</button>
+  <p>Thank you. See you soon.</p>
+  <button onclick="closePopup()">OK</button>
 </div>
 
 </div>
@@ -438,10 +467,12 @@ let dy = 2.2;
 let x = btn.offsetLeft;
 let y = btn.offsetTop;
 let moving = false;
+let termsAccepted = false;
 
 const scanWrap = document.getElementById("scanWrap");
 const scanText = document.getElementById("scanText");
 const progressBar = document.getElementById("progressBar");
+const buttonsRow = document.getElementById("buttonsRow");
 
 let scanStarted = false;
 let scanComplete = false;
@@ -453,13 +484,14 @@ const tickRate = 30;
 const progressStep = (tickRate / requiredHold) * 100;
 
 function acceptTerms(){
+  if(termsAccepted) return;
   document.getElementById("status").innerText = "CONSENT STATUS: PROCESSING";
   document.getElementById("overlay").classList.add("show");
   document.getElementById("scanPopup").classList.add("show");
 }
 
 function beginHoldScan(){
-  if(scanComplete || isHolding) return;
+  if(scanComplete || isHolding || termsAccepted) return;
 
   isHolding = true;
   scanStarted = true;
@@ -500,13 +532,16 @@ function stopHoldScan(){
 function completeScan(){
   scanComplete = true;
   isHolding = false;
+  termsAccepted = true;
   clearInterval(scanInterval);
 
   scanWrap.classList.remove("holding", "scanning");
   scanWrap.classList.add("disabled");
   progressBar.style.width = "100%";
   scanText.innerText = "VERIFIED";
+
   document.getElementById("status").innerText = "CONSENT STATUS: ACCEPTED";
+  buttonsRow.classList.add("accepted");
 
   setTimeout(() => {
     document.getElementById("scanPopup").classList.remove("show");
@@ -530,7 +565,7 @@ document.addEventListener("touchend", stopHoldScan);
 document.addEventListener("touchcancel", stopHoldScan);
 
 scanWrap.addEventListener("keydown", function(e){
-  if(scanComplete) return;
+  if(scanComplete || termsAccepted) return;
 
   if((e.key === "Enter" || e.key === " ") && !isHolding){
     e.preventDefault();
@@ -551,6 +586,8 @@ function closePopup(){
 }
 
 function declineTerms(){
+  if(termsAccepted) return;
+
   if(!moving){
     moving = true;
     btn.style.position = "fixed";
@@ -563,7 +600,7 @@ function declineTerms(){
 
 function moveButton(){
   function animate(){
-    if(!btn) return;
+    if(!btn || termsAccepted) return;
     x += dx;
     y += dy;
     if(x + btn.offsetWidth > window.innerWidth || x < 0) dx *= -1;
@@ -576,6 +613,8 @@ function moveButton(){
 }
 
 function snapPieces(){
+  if(termsAccepted || !btn) return;
+
   let rect = btn.getBoundingClientRect();
   for(let i = 0; i < 20; i++){
     let p = document.createElement("div");
