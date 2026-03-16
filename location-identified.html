@@ -7,325 +7,332 @@
 
 <style>
 body{
-background:#0e0e10;
-color:#f2f2f2;
-font-family:Arial, Helvetica, sans-serif;
-display:flex;
-align-items:center;
-justify-content:center;
-min-height:100vh;
-margin:0;
-padding:24px;
-box-sizing:border-box;
+  background:#0e0e10;
+  color:#f2f2f2;
+  font-family:Arial, Helvetica, sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  margin:0;
+  padding:24px;
+  box-sizing:border-box;
 }
 
 .container{
-width:100%;
-max-width:780px;
-background:#151518;
-border:1px solid #2b2b30;
-padding:30px;
-box-sizing:border-box;
+  width:100%;
+  max-width:780px;
+  background:#151518;
+  border:1px solid #2b2b30;
+  padding:30px;
+  box-sizing:border-box;
 }
 
 h1{
-margin:0 0 14px 0;
-font-size:30px;
-font-weight:700;
+  margin:0 0 14px 0;
+  font-size:30px;
+  font-weight:700;
 }
 
 .status{
-font-size:14px;
-color:#9a9aa3;
-margin-bottom:22px;
-min-height:20px;
+  font-size:14px;
+  color:#9a9aa3;
+  margin-bottom:22px;
+  min-height:20px;
 }
 
 .data-box,
 .mining-box{
-border:1px solid #2b2b30;
-background:#101013;
-padding:16px;
-margin-bottom:18px;
-box-sizing:border-box;
+  border:1px solid #2b2b30;
+  background:#101013;
+  padding:16px;
+  margin-bottom:18px;
+  box-sizing:border-box;
 }
 
 .data-line,
 .mining-line{
-font-size:14px;
-line-height:1.8;
-color:#d7d7dd;
-word-break:break-word;
+  font-size:14px;
+  line-height:1.8;
+  color:#d7d7dd;
+  word-break:break-word;
 }
 
 .label{
-color:#9a9aa3;
-display:inline-block;
-min-width:150px;
-vertical-align:top;
+  color:#9a9aa3;
+  display:inline-block;
+  min-width:150px;
+  vertical-align:top;
 }
 
 .pending{
-color:#9a9aa3;
-font-weight:600;
-letter-spacing:0.03em;
+  color:#9a9aa3;
+  font-weight:600;
+  letter-spacing:0.03em;
 }
 
 .active{
-color:#6ea8ff;
-font-weight:600;
-letter-spacing:0.03em;
+  color:#6ea8ff;
+  font-weight:600;
+  letter-spacing:0.03em;
+}
+
+.reveal-line{
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity 0.35s ease, transform 0.35s ease;
+}
+
+.reveal-line.show{
+  opacity:1;
+  transform:translateY(0);
 }
 
 .hidden-info{
-display:none;
-}
-
-.hidden-info.show{
-display:block;
+  display:block;
 }
 
 .map-wrap{
-position:relative;
-border:1px solid #2b2b30;
-background:#101013;
-overflow:hidden;
-animation:breathe 4.2s ease-in-out infinite;
-height:360px;
-display:flex;
-align-items:center;
-justify-content:center;
-margin-bottom:18px;
-box-sizing:border-box;
+  position:relative;
+  border:1px solid #2b2b30;
+  background:#101013;
+  overflow:hidden;
+  animation:breathe 4.2s ease-in-out infinite;
+  height:360px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:18px;
+  box-sizing:border-box;
 }
 
 .loading-screen{
-width:100%;
-max-width:520px;
-text-align:left;
-padding:24px;
-box-sizing:border-box;
+  width:100%;
+  max-width:520px;
+  text-align:left;
+  padding:24px;
+  box-sizing:border-box;
 }
 
 .loading-text{
-font-size:14px;
-color:#b8b8c2;
-margin-bottom:14px;
-min-height:18px;
+  font-size:14px;
+  color:#b8b8c2;
+  margin-bottom:14px;
+  min-height:18px;
 }
 
 .loading-bar{
-width:100%;
-height:10px;
-border:1px solid #2b2b30;
-background:#0b0b0d;
-overflow:hidden;
-box-sizing:border-box;
+  width:100%;
+  height:10px;
+  border:1px solid #2b2b30;
+  background:#0b0b0d;
+  overflow:hidden;
+  box-sizing:border-box;
 }
 
 .loading-fill{
-width:0%;
-height:100%;
-background:#6ea8ff;
-transition:width 4.2s linear;
+  width:0%;
+  height:100%;
+  background:#6ea8ff;
+  transition:width 7.2s linear;
 }
 
 .map-content{
-display:none;
-width:100%;
-height:100%;
-position:relative;
+  display:none;
+  width:100%;
+  height:100%;
+  position:relative;
 }
 
 .map-content.show{
-display:block;
+  display:block;
 }
 
 .map-content img{
-display:block;
-width:100%;
-height:100%;
-object-fit:cover;
-object-position:center center;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
 }
 
 .location-dot{
-position:absolute;
-width:16px;
-height:16px;
-background:#1a73e8;
-border:3px solid #ffffff;
-border-radius:50%;
-box-shadow:0 0 0 2px rgba(26,115,232,0.25);
-top:44%;
-left:49%;
-transform:translate(-50%,-50%);
-z-index:3;
-opacity:0;
+  position:absolute;
+  width:16px;
+  height:16px;
+  background:#1a73e8;
+  border:3px solid #ffffff;
+  border-radius:50%;
+  box-shadow:0 0 0 2px rgba(26,115,232,0.25);
+  top:44%;
+  left:49%;
+  transform:translate(-50%,-50%);
+  z-index:3;
+  opacity:0;
 }
 
 .location-dot.show{
-opacity:1;
-transition:opacity 0.25s ease;
+  opacity:1;
+  transition:opacity 0.3s ease;
 }
 
 .location-dot::after{
-content:"";
-position:absolute;
-top:50%;
-left:50%;
-width:34px;
-height:34px;
-background:rgba(26,115,232,0.22);
-border-radius:50%;
-transform:translate(-50%,-50%);
-animation:pulse 2s ease-out infinite;
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:34px;
+  height:34px;
+  background:rgba(26,115,232,0.22);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  animation:pulse 2s ease-out infinite;
 }
 
 .box-title{
-font-size:11px;
-letter-spacing:1px;
-text-transform:uppercase;
-color:#8e8e97;
-margin:0 0 10px 0;
+  font-size:11px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:#8e8e97;
+  margin:0 0 10px 0;
 }
 
 .mining-box{
-display:none;
+  display:none;
 }
 
 .mining-box.show{
-display:block;
+  display:block;
 }
 
 .mining-line{
-opacity:0;
-transform:translateY(6px);
-transition:opacity 0.35s ease, transform 0.35s ease;
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity 0.35s ease, transform 0.35s ease;
 }
 
 .mining-line.show{
-opacity:1;
-transform:translateY(0);
+  opacity:1;
+  transform:translateY(0);
 }
 
 .value-live{
-color:#f2f2f2;
+  color:#f2f2f2;
 }
 
 .value-highlight{
-color:#6ea8ff;
-font-weight:600;
+  color:#6ea8ff;
+  font-weight:600;
 }
 
 .final-line{
-margin-top:10px;
-padding-top:12px;
-border-top:1px solid #232328;
-font-size:14px;
-color:#f2f2f2;
-opacity:0;
-transform:translateY(6px);
-transition:opacity 0.35s ease, transform 0.35s ease;
+  margin-top:10px;
+  padding-top:12px;
+  border-top:1px solid #232328;
+  font-size:14px;
+  color:#f2f2f2;
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity 0.35s ease, transform 0.35s ease;
 }
 
 .final-line.show{
-opacity:1;
-transform:translateY(0);
+  opacity:1;
+  transform:translateY(0);
 }
 
 .note{
-margin-top:14px;
-font-size:12px;
-color:#9a9aa3;
-display:none;
-justify-content:space-between;
-gap:12px;
-flex-wrap:wrap;
+  margin-top:14px;
+  font-size:12px;
+  color:#9a9aa3;
+  display:none;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
 .note.show{
-display:flex;
+  display:flex;
 }
 
 .note span{
-display:inline-block;
+  display:inline-block;
 }
 
 .note .live{
-color:#6ea8ff;
+  color:#6ea8ff;
 }
 
 .typing-cursor{
-display:inline-block;
-animation:blink 1s steps(1) infinite;
+  display:inline-block;
+  animation:blink 1s steps(1) infinite;
 }
 
 @keyframes blink{
-0%{opacity:1;}
-50%{opacity:0;}
-100%{opacity:1;}
+  0%{opacity:1;}
+  50%{opacity:0;}
+  100%{opacity:1;}
 }
 
 @keyframes pulse{
-0%{
-transform:translate(-50%,-50%) scale(0.6);
-opacity:0.9;
-}
-100%{
-transform:translate(-50%,-50%) scale(1.8);
-opacity:0;
-}
+  0%{
+    transform:translate(-50%,-50%) scale(0.6);
+    opacity:0.9;
+  }
+  100%{
+    transform:translate(-50%,-50%) scale(1.8);
+    opacity:0;
+  }
 }
 
 @keyframes breathe{
-0%{
-box-shadow:0 0 0 rgba(26,115,232,0);
-border-color:#2b2b30;
-}
-50%{
-box-shadow:0 0 18px rgba(26,115,232,0.08);
-border-color:#3a4d68;
-}
-100%{
-box-shadow:0 0 0 rgba(26,115,232,0);
-border-color:#2b2b30;
-}
+  0%{
+    box-shadow:0 0 0 rgba(26,115,232,0);
+    border-color:#2b2b30;
+  }
+  50%{
+    box-shadow:0 0 18px rgba(26,115,232,0.08);
+    border-color:#3a4d68;
+  }
+  100%{
+    box-shadow:0 0 0 rgba(26,115,232,0);
+    border-color:#2b2b30;
+  }
 }
 
 @media (max-width:600px){
-.container{
-padding:20px;
-}
+  .container{
+    padding:20px;
+  }
 
-h1{
-font-size:26px;
-}
+  h1{
+    font-size:26px;
+  }
 
-.label{
-display:block;
-min-width:auto;
-margin-bottom:2px;
-}
+  .label{
+    display:block;
+    min-width:auto;
+    margin-bottom:2px;
+  }
 
-.location-dot{
-width:14px;
-height:14px;
-border-width:2px;
-}
+  .location-dot{
+    width:14px;
+    height:14px;
+    border-width:2px;
+  }
 
-.note.show{
-display:block;
-}
+  .note.show{
+    display:block;
+  }
 
-.note span{
-display:block;
-margin-bottom:6px;
-}
+  .note span{
+    display:block;
+    margin-bottom:6px;
+  }
 
-.map-wrap{
-height:300px;
-}
+  .map-wrap{
+    height:300px;
+  }
 }
 </style>
 </head>
@@ -335,22 +342,25 @@ height:300px;
 
 <h1>Location Identified</h1>
 
-<div class="status" id="statusText"><span class="pending">Status pending...</span></div>
+<div class="status" id="statusText"><span class="pending">Status Pending...</span></div>
 
 <div class="data-box">
-  <div class="data-line"><span class="label">STATUS</span> <span class="pending" id="statusValue">PENDING</span></div>
+  <div class="data-line reveal-line show" id="lineStatus">
+    <span class="label">Status</span>
+    <span class="pending" id="statusValue">Pending</span>
+  </div>
 
   <div id="hiddenInfo" class="hidden-info">
-    <div class="data-line"><span class="label">LATITUDE</span> 37.9951914</div>
-    <div class="data-line"><span class="label">LONGITUDE</span> 23.7329735</div>
-    <div class="data-line"><span class="label">PLACE</span> AKTO Art &amp; Design College</div>
-    <div class="data-line"><span class="label">ADDRESS</span> Evelpidon 11A, Athens 113 62</div>
+    <div class="data-line reveal-line" id="lineLat"><span class="label">Latitude</span> 37.9951914</div>
+    <div class="data-line reveal-line" id="lineLng"><span class="label">Longitude</span> 23.7329735</div>
+    <div class="data-line reveal-line" id="linePlace"><span class="label">Place</span> AKTO Art &amp; Design College</div>
+    <div class="data-line reveal-line" id="lineAddress"><span class="label">Address</span> Evelpidon 11A, Athens 113 62</div>
   </div>
 </div>
 
 <div class="map-wrap">
   <div class="loading-screen" id="loadingScreen">
-    <div class="loading-text" id="loadingText">Loading location data...</div>
+    <div class="loading-text" id="loadingText">Loading Location Data...</div>
     <div class="loading-bar">
       <div class="loading-fill" id="loadingFill"></div>
     </div>
@@ -363,35 +373,35 @@ height:300px;
 </div>
 
 <div class="mining-box" id="miningBox">
-  <div class="box-title">Data extraction summary</div>
+  <div class="box-title">Data Extraction Summary</div>
 
   <div class="mining-line" id="m1">
-    <span class="label">LOCATION DATA</span>
-    <span class="value-live">collected</span>
+    <span class="label">Location Data</span>
+    <span class="value-live">Collected</span>
   </div>
 
   <div class="mining-line" id="m2">
-    <span class="label">POTENTIAL BUYERS</span>
+    <span class="label">Potential Buyers</span>
     <span class="value-highlight" id="buyersValue">0</span>
   </div>
 
   <div class="mining-line" id="m3">
-    <span class="label">INTEREST CLUSTERS</span>
-    <span class="value-live" id="interestValue">processing</span>
+    <span class="label">Interest Clusters</span>
+    <span class="value-live" id="interestValue">Processing</span>
   </div>
 
   <div class="mining-line" id="m4">
-    <span class="label">PROFILE VALUE</span>
-    <span class="value-live" id="profileValue">estimating</span>
+    <span class="label">Profile Value</span>
+    <span class="value-live" id="profileValue">Estimating</span>
   </div>
 
   <div class="final-line" id="finalLine">Apparently, your whereabouts remain marketable.</div>
 </div>
 
 <div class="note" id="noteBox">
-  <span class="live">Last seen: now</span>
+  <span class="live">Last Seen: Now</span>
   <span>Accuracy: 3m</span>
-  <span>Location services remain active.</span>
+  <span>Location Services Remain Active.</span>
 </div>
 
 </div>
@@ -403,7 +413,6 @@ window.addEventListener("load", function(){
   const loadingText = document.getElementById("loadingText");
   const mapContent = document.getElementById("mapContent");
   const locationDot = document.getElementById("locationDot");
-  const hiddenInfo = document.getElementById("hiddenInfo");
   const noteBox = document.getElementById("noteBox");
   const miningBox = document.getElementById("miningBox");
   const statusValue = document.getElementById("statusValue");
@@ -412,25 +421,30 @@ window.addEventListener("load", function(){
   const interestValue = document.getElementById("interestValue");
   const profileValue = document.getElementById("profileValue");
 
+  const lineLat = document.getElementById("lineLat");
+  const lineLng = document.getElementById("lineLng");
+  const linePlace = document.getElementById("linePlace");
+  const lineAddress = document.getElementById("lineAddress");
+
   const loadingMessages = [
-    "Loading location data...",
-    "Cross-referencing movement patterns...",
-    "Packaging behavioral indicators...",
-    "Preparing commercially useful conclusions..."
+    "Loading Location Data...",
+    "Cross-Referencing Movement Patterns...",
+    "Packaging Behavioral Indicators...",
+    "Preparing Commercially Useful Conclusions..."
   ];
 
   const buyerCount = Math.floor(Math.random() * 73) + 28;
   const interestOptions = [
-    "7 categories matched",
-    "9 categories matched",
-    "11 categories matched",
-    "12 categories matched"
+    "7 Categories Matched",
+    "9 Categories Matched",
+    "11 Categories Matched",
+    "12 Categories Matched"
   ];
   const profileOptions = [
-    "moderately profitable",
-    "commercially promising",
-    "surprisingly tradable",
-    "above average"
+    "Moderately Profitable",
+    "Commercially Promising",
+    "Surprisingly Tradable",
+    "Above Average"
   ];
 
   const chosenInterest = interestOptions[Math.floor(Math.random() * interestOptions.length)];
@@ -438,57 +452,80 @@ window.addEventListener("load", function(){
 
   setTimeout(function(){
     loadingFill.style.width = "100%";
-  }, 100);
+  }, 120);
 
   loadingMessages.forEach(function(message, index){
     setTimeout(function(){
       loadingText.textContent = message;
-    }, index * 1000);
+    }, index * 1800);
   });
 
   setTimeout(function(){
     loadingScreen.style.display = "none";
     mapContent.classList.add("show");
 
-    hiddenInfo.classList.add("show");
-    noteBox.classList.add("show");
-    statusValue.textContent = "ACTIVE";
+    statusValue.textContent = "Resolving";
     statusValue.classList.remove("pending");
     statusValue.classList.add("active");
+    statusText.innerHTML = 'Location Data Resolved<span class="typing-cursor">_</span>';
+
+    setTimeout(function(){
+      lineLat.classList.add("show");
+    }, 250);
+
+    setTimeout(function(){
+      lineLng.classList.add("show");
+    }, 550);
+
+    setTimeout(function(){
+      linePlace.classList.add("show");
+    }, 900);
+
+    setTimeout(function(){
+      lineAddress.classList.add("show");
+    }, 1250);
+
+    setTimeout(function(){
+      statusValue.textContent = "Active";
+    }, 1500);
 
     setTimeout(function(){
       locationDot.classList.add("show");
-    }, 450);
+    }, 1750);
+
+    setTimeout(function(){
+      noteBox.classList.add("show");
+    }, 2050);
 
     setTimeout(function(){
       miningBox.classList.add("show");
-    }, 850);
+    }, 2450);
 
     setTimeout(function(){
       document.getElementById("m1").classList.add("show");
-    }, 1050);
+    }, 2700);
 
     setTimeout(function(){
       document.getElementById("m2").classList.add("show");
-      animateNumber(buyersValue, buyerCount, 900);
-    }, 1280);
+      animateNumber(buyersValue, buyerCount, 1100);
+    }, 3050);
 
     setTimeout(function(){
       document.getElementById("m3").classList.add("show");
       interestValue.textContent = chosenInterest;
-    }, 1510);
+    }, 3450);
 
     setTimeout(function(){
       document.getElementById("m4").classList.add("show");
       profileValue.textContent = chosenProfile;
-    }, 1740);
+    }, 3850);
 
     setTimeout(function(){
       document.getElementById("finalLine").classList.add("show");
-      statusText.innerHTML = 'Commercial relevance identified<span class="typing-cursor">_</span>';
-    }, 2050);
+      statusText.innerHTML = 'Commercial Relevance Identified<span class="typing-cursor">_</span>';
+    }, 4350);
 
-  }, 4400);
+  }, 7400);
 
   function animateNumber(el, target, duration){
     const start = 0;
