@@ -7,267 +7,543 @@
 
 <style>
 body{
-background:#0e0e10;
-color:#f2f2f2;
-font-family:Arial, Helvetica, sans-serif;
-display:flex;
-align-items:center;
-justify-content:center;
-min-height:100vh;
-margin:0;
-padding:24px;
+  background:#0e0e10;
+  color:#f2f2f2;
+  font-family:Arial, Helvetica, sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  margin:0;
+  padding:24px;
 }
 
 .container{
-width:100%;
-max-width:780px;
-background:#151518;
-border:1px solid #2b2b30;
-padding:30px;
+  width:100%;
+  max-width:780px;
+  background:#151518;
+  border:1px solid #2b2b30;
+  padding:30px;
+  position:relative;
+  overflow:hidden;
+}
+
+.container::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,0.015), rgba(255,255,255,0.015)),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 3px,
+      rgba(255,255,255,0.01) 4px
+    );
+  mix-blend-mode:screen;
+  opacity:0.35;
 }
 
 .small{
-font-size:12px;
-letter-spacing:1px;
-color:#9a9aa3;
-margin-bottom:10px;
+  font-size:12px;
+  letter-spacing:1px;
+  color:#9a9aa3;
+  margin-bottom:10px;
 }
 
 h1{
-margin:0 0 14px 0;
-font-size:30px;
-font-weight:700;
+  margin:0 0 14px 0;
+  font-size:30px;
+  font-weight:700;
 }
 
 .status{
-font-size:14px;
-color:#9a9aa3;
-margin-bottom:22px;
-min-height:20px;
+  font-size:14px;
+  color:#9a9aa3;
+  margin-bottom:22px;
+  min-height:20px;
 }
 
 .data-box{
-border:1px solid #2b2b30;
-background:#101013;
-padding:16px;
-margin-bottom:18px;
+  border:1px solid #2b2b30;
+  background:#101013;
+  padding:16px;
+  margin-bottom:18px;
+  position:relative;
+  overflow:hidden;
+}
+
+.data-box::after{
+  content:"";
+  position:absolute;
+  left:-30%;
+  top:0;
+  width:30%;
+  height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  animation:dataSweep 5s linear infinite;
 }
 
 .data-line{
-font-size:14px;
-line-height:1.8;
-color:#d7d7dd;
-word-break:break-word;
+  font-size:14px;
+  line-height:1.8;
+  color:#d7d7dd;
+  word-break:break-word;
+  position:relative;
+  z-index:1;
 }
 
 .label{
-color:#9a9aa3;
-display:inline-block;
-min-width:120px;
+  color:#9a9aa3;
+  display:inline-block;
+  min-width:120px;
 }
 
 .pending{
-color:#9a9aa3;
-font-weight:600;
-letter-spacing:0.03em;
+  color:#9a9aa3;
+  font-weight:600;
+  letter-spacing:0.03em;
 }
 
 .active{
-color:#6ea8ff;
-font-weight:600;
-letter-spacing:0.03em;
+  color:#6ea8ff;
+  font-weight:600;
+  letter-spacing:0.03em;
+}
+
+.glitch-active{
+  animation:glitchText 0.22s steps(2) 2;
 }
 
 .hidden-info{
-display:none;
+  display:none;
 }
 
 .hidden-info.show{
-display:block;
+  display:block;
 }
 
 .map-wrap{
-position:relative;
-border:1px solid #2b2b30;
-background:#101013;
-padding:10px;
-overflow:hidden;
-animation:breathe 4.2s ease-in-out infinite;
-min-height:360px;
-display:flex;
-align-items:center;
-justify-content:center;
+  position:relative;
+  border:1px solid #2b2b30;
+  background:#101013;
+  padding:10px;
+  overflow:hidden;
+  animation:breathe 4.2s ease-in-out infinite;
+  min-height:360px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.map-wrap.locked{
+  animation:breatheLocked 2.8s ease-in-out infinite;
+}
+
+.glitch-flash{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.08) 48%, transparent 52%, transparent 100%),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 4px,
+      rgba(110,168,255,0.04) 5px,
+      transparent 6px
+    );
+  opacity:0;
+  pointer-events:none;
+  z-index:8;
+}
+
+.glitch-flash.show{
+  animation:flashGlitch 0.45s ease-out 1;
 }
 
 .loading-screen{
-width:100%;
-max-width:520px;
-text-align:left;
-padding:24px;
+  width:100%;
+  max-width:520px;
+  text-align:left;
+  padding:24px;
 }
 
 .loading-text{
-font-size:14px;
-color:#b8b8c2;
-margin-bottom:14px;
+  font-size:14px;
+  color:#b8b8c2;
+  margin-bottom:14px;
+  min-height:18px;
 }
 
 .loading-bar{
-width:100%;
-height:10px;
-border:1px solid #2b2b30;
-background:#0b0b0d;
-overflow:hidden;
+  width:100%;
+  height:10px;
+  border:1px solid #2b2b30;
+  background:#0b0b0d;
+  overflow:hidden;
+  position:relative;
 }
 
 .loading-fill{
-width:0%;
-height:100%;
-background:#6ea8ff;
-transition:width 4.2s linear;
+  width:0%;
+  height:100%;
+  background:#6ea8ff;
+  transition:width 4.2s linear;
+}
+
+.loading-bar::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-20%;
+  width:20%;
+  height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  animation:barSweep 1.4s linear infinite;
 }
 
 .map-content{
-display:none;
-width:100%;
-position:relative;
+  display:none;
+  width:100%;
+  position:relative;
 }
 
 .map-content.show{
-display:block;
+  display:block;
 }
 
 .map-content img{
-display:block;
-width:100%;
-height:auto;
+  display:block;
+  width:100%;
+  height:auto;
+  transform:scale(1.02);
+  animation:mapSettle 1.2s ease forwards;
+}
+
+.scan-grid{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  opacity:0;
+  pointer-events:none;
+  z-index:2;
+}
+
+.scan-grid.show{
+  opacity:0.35;
+  animation:gridFade 1.2s ease forwards;
+}
+
+.triangulation{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:4;
+  opacity:0;
+}
+
+.triangulation.show{
+  opacity:1;
+}
+
+.beam{
+  position:absolute;
+  height:2px;
+  background:linear-gradient(90deg, rgba(110,168,255,0), rgba(110,168,255,0.95), rgba(110,168,255,0));
+  transform-origin:left center;
+  filter:drop-shadow(0 0 4px rgba(110,168,255,0.4));
+}
+
+.beam.one{
+  width:42%;
+  top:26%;
+  left:8%;
+  transform:rotate(24deg);
+}
+
+.beam.two{
+  width:30%;
+  top:72%;
+  left:12%;
+  transform:rotate(-32deg);
+}
+
+.beam.three{
+  width:34%;
+  top:20%;
+  right:10%;
+  transform:rotate(132deg);
 }
 
 .location-dot{
-position:absolute;
-width:16px;
-height:16px;
-background:#1a73e8;
-border:3px solid #ffffff;
-border-radius:50%;
-box-shadow:0 0 0 2px rgba(26,115,232,0.25);
-top:41%;
-left:48%;
-transform:translate(-50%,-50%);
-z-index:3;
-opacity:0;
+  position:absolute;
+  width:16px;
+  height:16px;
+  background:#1a73e8;
+  border:3px solid #ffffff;
+  border-radius:50%;
+  box-shadow:0 0 0 2px rgba(26,115,232,0.25);
+  top:41%;
+  left:48%;
+  transform:translate(-50%,-50%) scale(0.4);
+  z-index:5;
+  opacity:0;
 }
 
 .location-dot.show{
-opacity:1;
-transition:opacity 0.25s ease;
+  opacity:1;
+  animation:dotPop 0.45s cubic-bezier(.2,1.2,.3,1) forwards;
 }
 
 .location-dot::after{
-content:"";
-position:absolute;
-top:50%;
-left:50%;
-width:34px;
-height:34px;
-background:rgba(26,115,232,0.22);
-border-radius:50%;
-transform:translate(-50%,-50%);
-animation:pulse 2s ease-out infinite;
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:34px;
+  height:34px;
+  background:rgba(26,115,232,0.22);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  animation:pulse 2s ease-out infinite;
+}
+
+.location-dot::before{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:68px;
+  height:68px;
+  border:1px solid rgba(110,168,255,0.35);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  animation:ripple 2.2s ease-out infinite;
 }
 
 .note{
-margin-top:14px;
-font-size:12px;
-color:#9a9aa3;
-display:none;
-justify-content:space-between;
-gap:12px;
-flex-wrap:wrap;
+  margin-top:14px;
+  font-size:12px;
+  color:#9a9aa3;
+  display:none;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
 .note.show{
-display:flex;
+  display:flex;
 }
 
 .note span{
-display:inline-block;
+  display:inline-block;
 }
 
 .note .live{
-color:#6ea8ff;
+  color:#6ea8ff;
 }
 
 .typing-cursor{
-display:inline-block;
-animation:blink 1s steps(1) infinite;
+  display:inline-block;
+  animation:blink 1s steps(1) infinite;
 }
 
+.coord{
+  display:inline-block;
+  min-width:115px;
+}
+
+.signal-bars{
+  display:inline-flex;
+  align-items:flex-end;
+  gap:3px;
+  height:12px;
+  margin-left:6px;
+  vertical-align:middle;
+}
+
+.signal-bars span{
+  width:3px;
+  background:#6ea8ff;
+  display:block;
+  border-radius:2px;
+  opacity:0.35;
+}
+
+.signal-bars span:nth-child(1){ height:4px; }
+.signal-bars span:nth-child(2){ height:7px; }
+.signal-bars span:nth-child(3){ height:10px; }
+.signal-bars span:nth-child(4){ height:12px; }
+
+.signal-bars.active span{
+  animation:signalBlink 1s infinite;
+}
+
+.signal-bars.active span:nth-child(2){ animation-delay:0.1s; }
+.signal-bars.active span:nth-child(3){ animation-delay:0.2s; }
+.signal-bars.active span:nth-child(4){ animation-delay:0.3s; }
+
 @keyframes blink{
-0%{opacity:1;}
-50%{opacity:0;}
-100%{opacity:1;}
+  0%{opacity:1;}
+  50%{opacity:0;}
+  100%{opacity:1;}
 }
 
 @keyframes pulse{
-0%{
-transform:translate(-50%,-50%) scale(0.6);
-opacity:0.9;
+  0%{
+    transform:translate(-50%,-50%) scale(0.6);
+    opacity:0.9;
+  }
+  100%{
+    transform:translate(-50%,-50%) scale(1.8);
+    opacity:0;
+  }
 }
-100%{
-transform:translate(-50%,-50%) scale(1.8);
-opacity:0;
-}
+
+@keyframes ripple{
+  0%{
+    transform:translate(-50%,-50%) scale(0.5);
+    opacity:0.8;
+  }
+  100%{
+    transform:translate(-50%,-50%) scale(1.4);
+    opacity:0;
+  }
 }
 
 @keyframes breathe{
-0%{
-box-shadow:0 0 0 rgba(26,115,232,0);
-border-color:#2b2b30;
+  0%{
+    box-shadow:0 0 0 rgba(26,115,232,0);
+    border-color:#2b2b30;
+  }
+  50%{
+    box-shadow:0 0 18px rgba(26,115,232,0.08);
+    border-color:#3a4d68;
+  }
+  100%{
+    box-shadow:0 0 0 rgba(26,115,232,0);
+    border-color:#2b2b30;
+  }
 }
-50%{
-box-shadow:0 0 18px rgba(26,115,232,0.08);
-border-color:#3a4d68;
+
+@keyframes breatheLocked{
+  0%{
+    box-shadow:0 0 0 rgba(26,115,232,0);
+    border-color:#3a4d68;
+  }
+  50%{
+    box-shadow:0 0 22px rgba(26,115,232,0.14);
+    border-color:#5478a8;
+  }
+  100%{
+    box-shadow:0 0 0 rgba(26,115,232,0);
+    border-color:#3a4d68;
+  }
 }
-100%{
-box-shadow:0 0 0 rgba(26,115,232,0);
-border-color:#2b2b30;
+
+@keyframes dataSweep{
+  0%{ left:-35%; }
+  100%{ left:120%; }
 }
+
+@keyframes barSweep{
+  0%{ left:-20%; }
+  100%{ left:110%; }
+}
+
+@keyframes dotPop{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(0.2);
+  }
+  70%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.14);
+  }
+  100%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+  }
+}
+
+@keyframes mapSettle{
+  0%{
+    transform:scale(1.06);
+    filter:blur(1.5px);
+  }
+  100%{
+    transform:scale(1);
+    filter:blur(0);
+  }
+}
+
+@keyframes gridFade{
+  0%{ opacity:0; }
+  100%{ opacity:0.35; }
+}
+
+@keyframes flashGlitch{
+  0%{ opacity:0; transform:translateX(0); }
+  20%{ opacity:1; transform:translateX(-2px); }
+  40%{ opacity:0.6; transform:translateX(2px); }
+  60%{ opacity:1; transform:translateX(-1px); }
+  100%{ opacity:0; transform:translateX(0); }
+}
+
+@keyframes glitchText{
+  0%{ transform:translateX(0); opacity:1; }
+  25%{ transform:translateX(-1px); opacity:0.8; }
+  50%{ transform:translateX(1px); opacity:1; }
+  75%{ transform:translateX(-1px); opacity:0.85; }
+  100%{ transform:translateX(0); opacity:1; }
+}
+
+@keyframes signalBlink{
+  0%, 100%{ opacity:0.25; }
+  50%{ opacity:1; }
 }
 
 @media (max-width:600px){
-.container{
-padding:20px;
-}
+  .container{
+    padding:20px;
+  }
 
-h1{
-font-size:26px;
-}
+  h1{
+    font-size:26px;
+  }
 
-.label{
-display:block;
-min-width:auto;
-margin-bottom:2px;
-}
+  .label{
+    display:block;
+    min-width:auto;
+    margin-bottom:2px;
+  }
 
-.location-dot{
-width:14px;
-height:14px;
-border-width:2px;
-}
+  .location-dot{
+    width:14px;
+    height:14px;
+    border-width:2px;
+  }
 
-.note.show{
-display:block;
-}
+  .note.show{
+    display:block;
+  }
 
-.note span{
-display:block;
-margin-bottom:6px;
-}
+  .note span{
+    display:block;
+    margin-bottom:6px;
+  }
 
-.map-wrap{
-min-height:260px;
-}
+  .map-wrap{
+    min-height:260px;
+  }
+
+  .beam.one{ width:45%; }
+  .beam.two{ width:34%; }
+  .beam.three{ width:38%; }
 }
 </style>
 </head>
@@ -275,26 +551,30 @@ min-height:260px;
 
 <div class="container">
 
-
-
 <h1>Location Identified</h1>
 
 <div class="status" id="statusText"><span class="pending">Status pending...</span></div>
 
 <div class="data-box">
-  <div class="data-line"><span class="label">STATUS</span> <span class="pending" id="statusValue">PENDING</span></div>
+  <div class="data-line">
+    <span class="label">STATUS</span>
+    <span class="pending" id="statusValue">PENDING</span>
+    <span class="signal-bars" id="signalBars"><span></span><span></span><span></span><span></span></span>
+  </div>
 
   <div id="hiddenInfo" class="hidden-info">
-    <div class="data-line"><span class="label">LATITUDE</span> 37.9951914</div>
-    <div class="data-line"><span class="label">LONGITUDE</span> 23.7329735</div>
-    <div class="data-line"><span class="label">PLACE</span> AKTO Art &amp; Design College</div>
-    <div class="data-line"><span class="label">ADDRESS</span> Evelpidon 11A, Athens 113 62</div>
+    <div class="data-line"><span class="label">LATITUDE</span> <span class="coord" id="latValue">--.--</span></div>
+    <div class="data-line"><span class="label">LONGITUDE</span> <span class="coord" id="lngValue">--.--</span></div>
+    <div class="data-line"><span class="label">PLACE</span> <span id="placeValue">Resolving...</span></div>
+    <div class="data-line"><span class="label">ADDRESS</span> <span id="addressValue">Cross-referencing local landmarks...</span></div>
   </div>
 </div>
 
-<div class="map-wrap">
+<div class="map-wrap" id="mapWrap">
+  <div class="glitch-flash" id="glitchFlash"></div>
+
   <div class="loading-screen" id="loadingScreen">
-    <div class="loading-text">Loading location data...</div>
+    <div class="loading-text" id="loadingText">Requesting location handshake...</div>
     <div class="loading-bar">
       <div class="loading-fill" id="loadingFill"></div>
     </div>
@@ -302,6 +582,14 @@ min-height:260px;
 
   <div class="map-content" id="mapContent">
     <img src="Live%20Location.png" alt="Map showing AKTO Athens area">
+    <div class="scan-grid" id="scanGrid"></div>
+
+    <div class="triangulation" id="triangulation">
+      <div class="beam one"></div>
+      <div class="beam two"></div>
+      <div class="beam three"></div>
+    </div>
+
     <div class="location-dot" id="locationDot"></div>
   </div>
 </div>
@@ -309,7 +597,7 @@ min-height:260px;
 <div class="note" id="noteBox">
   <span class="live">Last seen: now</span>
   <span>Accuracy: 3m</span>
-  <span>Location services remain active.</span>
+  <span>This was easier than expected.</span>
 </div>
 
 </div>
@@ -318,29 +606,73 @@ min-height:260px;
 window.addEventListener("load", function(){
   const loadingFill = document.getElementById("loadingFill");
   const loadingScreen = document.getElementById("loadingScreen");
+  const loadingText = document.getElementById("loadingText");
   const mapContent = document.getElementById("mapContent");
   const locationDot = document.getElementById("locationDot");
   const hiddenInfo = document.getElementById("hiddenInfo");
   const noteBox = document.getElementById("noteBox");
   const statusValue = document.getElementById("statusValue");
   const statusText = document.getElementById("statusText");
+  const latValue = document.getElementById("latValue");
+  const lngValue = document.getElementById("lngValue");
+  const placeValue = document.getElementById("placeValue");
+  const addressValue = document.getElementById("addressValue");
+  const mapWrap = document.getElementById("mapWrap");
+  const glitchFlash = document.getElementById("glitchFlash");
+  const scanGrid = document.getElementById("scanGrid");
+  const triangulation = document.getElementById("triangulation");
+  const signalBars = document.getElementById("signalBars");
 
-  const finalMessage = "We see you. You don’t.";
+  const finalMessage = "Found you before you found the exit.";
+  const loadingMessages = [
+    "Requesting location handshake...",
+    "Bypassing basic privacy expectations...",
+    "Triangulating nearby signals...",
+    "Cross-checking suspiciously accurate coordinates...",
+    "Locking onto your very public hiding spot..."
+  ];
+
+  const finalLat = "37.9951914";
+  const finalLng = "23.7329735";
   let i = 0;
 
   setTimeout(function(){
     loadingFill.style.width = "100%";
   }, 100);
 
+  loadingMessages.forEach(function(message, index){
+    setTimeout(function(){
+      loadingText.textContent = message;
+    }, index * 820);
+  });
+
   setTimeout(function(){
     loadingScreen.style.display = "none";
     mapContent.classList.add("show");
+    scanGrid.classList.add("show");
+    triangulation.classList.add("show");
+    mapWrap.classList.add("locked");
+    glitchFlash.classList.add("show");
 
     hiddenInfo.classList.add("show");
-    noteBox.classList.add("show");
-    statusValue.textContent = "ACTIVE";
-    statusValue.classList.remove("pending");
-    statusValue.classList.add("active");
+    signalBars.classList.add("active");
+
+    scrambleToValue(latValue, finalLat, 850);
+    scrambleToValue(lngValue, finalLng, 980);
+
+    setTimeout(function(){
+      placeValue.textContent = "AKTO Art & Design College";
+    }, 900);
+
+    setTimeout(function(){
+      addressValue.textContent = "Evelpidon 11A, Athens 113 62";
+    }, 1200);
+
+    setTimeout(function(){
+      statusValue.textContent = "ACTIVE";
+      statusValue.classList.remove("pending");
+      statusValue.classList.add("active", "glitch-active");
+    }, 1100);
 
     setTimeout(function(){
       locationDot.classList.add("show");
@@ -348,8 +680,12 @@ window.addEventListener("load", function(){
       setTimeout(function(){
         statusText.innerHTML = '<span id="typedMsg"></span><span class="typing-cursor">_</span>';
         typeMessage();
-      }, 600);
-    }, 700);
+      }, 650);
+    }, 900);
+
+    setTimeout(function(){
+      noteBox.classList.add("show");
+    }, 1400);
   }, 4400);
 
   function typeMessage(){
@@ -357,8 +693,38 @@ window.addEventListener("load", function(){
     if (i < finalMessage.length){
       typedMsg.textContent += finalMessage.charAt(i);
       i++;
-      setTimeout(typeMessage, 65);
+      setTimeout(typeMessage, 58);
     }
+  }
+
+  function scrambleToValue(element, target, duration){
+    const chars = "0123456789.-";
+    const start = performance.now();
+
+    function frame(now){
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const revealCount = Math.floor(target.length * progress);
+
+      let output = "";
+      for(let j = 0; j < target.length; j++){
+        if(j < revealCount){
+          output += target[j];
+        }else{
+          output += chars[Math.floor(Math.random() * chars.length)];
+        }
+      }
+
+      element.textContent = output;
+
+      if(progress < 1){
+        requestAnimationFrame(frame);
+      }else{
+        element.textContent = target;
+      }
+    }
+
+    requestAnimationFrame(frame);
   }
 });
 </script>
