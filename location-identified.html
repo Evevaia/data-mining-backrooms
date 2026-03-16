@@ -35,10 +35,11 @@ h1{
 }
 
 .status{
+  display:inline-block;
   font-size:14px;
   color:#9a9aa3;
   margin-bottom:22px;
-  min-height:20px;
+  min-height:0;
 }
 
 .data-box,
@@ -118,7 +119,7 @@ h1{
   display:inline-block;
   font-size:14px;
   color:#b8b8c2;
-  margin-bottom:14px;
+  margin:0 0 14px 0;
   min-height:18px;
   padding:0;
 }
@@ -243,11 +244,10 @@ h1{
 }
 
 .final-line{
-  margin-top:14px;
-  padding-top:14px;
-  border-top:1px solid #232328;
+  margin-top:28px;
   font-size:14px;
   color:#9a9aa3;
+  font-style:italic;
   opacity:0;
   transform:translateY(6px);
   transition:opacity 0.35s ease, transform 0.35s ease;
@@ -278,17 +278,6 @@ h1{
 
 .note .live{
   color:#6ea8ff;
-}
-
-.typing-cursor{
-  display:inline-block;
-  animation:blink 1s steps(1) infinite;
-}
-
-@keyframes blink{
-  0%{opacity:1;}
-  50%{opacity:0;}
-  100%{opacity:1;}
 }
 
 @keyframes pulse{
