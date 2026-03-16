@@ -115,10 +115,12 @@ h1{
 }
 
 .loading-text{
+  display:inline-block;
   font-size:14px;
   color:#b8b8c2;
   margin-bottom:14px;
   min-height:18px;
+  padding:0;
 }
 
 .loading-bar{
@@ -194,7 +196,7 @@ h1{
   letter-spacing:1px;
   text-transform:uppercase;
   color:#8e8e97;
-  margin:0 0 10px 0;
+  margin:0 0 14px 0;
 }
 
 .mining-box{
@@ -209,6 +211,12 @@ h1{
   opacity:0;
   transform:translateY(6px);
   transition:opacity 0.35s ease, transform 0.35s ease;
+  margin-bottom:10px;
+  line-height:1.95;
+}
+
+.mining-line:last-of-type{
+  margin-bottom:0;
 }
 
 .mining-line.show{
@@ -216,8 +224,17 @@ h1{
   transform:translateY(0);
 }
 
-.value-live{
+.mining-label{
   color:#f2f2f2;
+  font-weight:700;
+  display:inline-block;
+  min-width:170px;
+  vertical-align:top;
+}
+
+.value-live{
+  color:#6ea8ff;
+  font-weight:600;
 }
 
 .value-highlight{
@@ -226,11 +243,11 @@ h1{
 }
 
 .final-line{
-  margin-top:10px;
-  padding-top:12px;
+  margin-top:14px;
+  padding-top:14px;
   border-top:1px solid #232328;
   font-size:14px;
-  color:#f2f2f2;
+  color:#9a9aa3;
   opacity:0;
   transform:translateY(6px);
   transition:opacity 0.35s ease, transform 0.35s ease;
@@ -315,6 +332,12 @@ h1{
     margin-bottom:2px;
   }
 
+  .mining-label{
+    display:block;
+    min-width:auto;
+    margin-bottom:2px;
+  }
+
   .location-dot{
     width:14px;
     height:14px;
@@ -376,22 +399,22 @@ h1{
   <div class="box-title">Data Extraction Summary</div>
 
   <div class="mining-line" id="m1">
-    <span class="label">Location Data</span>
+    <span class="mining-label">Location Data</span>
     <span class="value-live">Collected</span>
   </div>
 
   <div class="mining-line" id="m2">
-    <span class="label">Potential Buyers</span>
+    <span class="mining-label">Potential Buyers</span>
     <span class="value-highlight" id="buyersValue">0</span>
   </div>
 
   <div class="mining-line" id="m3">
-    <span class="label">Interest Clusters</span>
+    <span class="mining-label">Interest Clusters</span>
     <span class="value-live" id="interestValue">Processing</span>
   </div>
 
   <div class="mining-line" id="m4">
-    <span class="label">Profile Value</span>
+    <span class="mining-label">Profile Value</span>
     <span class="value-live" id="profileValue">Estimating</span>
   </div>
 
@@ -467,7 +490,7 @@ window.addEventListener("load", function(){
     statusValue.textContent = "Resolving";
     statusValue.classList.remove("pending");
     statusValue.classList.add("active");
-    statusText.innerHTML = 'Location Data Resolved<span class="typing-cursor">_</span>';
+    statusText.textContent = "Location Data Resolved";
 
     setTimeout(function(){
       lineLat.classList.add("show");
@@ -522,7 +545,7 @@ window.addEventListener("load", function(){
 
     setTimeout(function(){
       document.getElementById("finalLine").classList.add("show");
-      statusText.innerHTML = 'Commercial Relevance Identified<span class="typing-cursor">_</span>';
+      statusText.textContent = "Commercial Relevance Identified";
     }, 4350);
 
   }, 7400);
