@@ -35,11 +35,14 @@ h1{
 }
 
 .status{
-  display:inline-block;
+  display:none;
   font-size:14px;
   color:#9a9aa3;
   margin-bottom:22px;
-  min-height:0;
+}
+
+.status.show{
+  display:inline-block;
 }
 
 .data-box,
@@ -49,6 +52,14 @@ h1{
   padding:16px;
   margin-bottom:18px;
   box-sizing:border-box;
+}
+
+.data-box{
+  display:none;
+}
+
+.data-box.show{
+  display:block;
 }
 
 .data-line,
@@ -354,9 +365,9 @@ h1{
 
 <h1>Location Identified</h1>
 
-<div class="status" id="statusText"><span class="pending">Status Pending...</span></div>
+<div class="status" id="statusText">Location Data Resolved</div>
 
-<div class="data-box">
+<div class="data-box" id="dataBox">
   <div class="data-line reveal-line show" id="lineStatus">
     <span class="label">Status</span>
     <span class="pending" id="statusValue">Pending</span>
@@ -421,7 +432,6 @@ h1{
 <script>
 window.addEventListener("load", function(){
   const loadingFill = document.getElementById("loadingFill");
-  const loadingScreen = document.getElementById("loadingScreen");
   const loadingText = document.getElementById("loadingText");
   const mapContent = document.getElementById("mapContent");
   const locationDot = document.getElementById("locationDot");
@@ -432,6 +442,7 @@ window.addEventListener("load", function(){
   const buyersValue = document.getElementById("buyersValue");
   const interestValue = document.getElementById("interestValue");
   const profileValue = document.getElementById("profileValue");
+  const dataBox = document.getElementById("dataBox");
 
   const lineLat = document.getElementById("lineLat");
   const lineLng = document.getElementById("lineLng");
@@ -473,8 +484,11 @@ window.addEventListener("load", function(){
   });
 
   setTimeout(function(){
-    loadingScreen.style.display = "none";
+    document.getElementById("loadingScreen").style.display = "none";
     mapContent.classList.add("show");
+
+    statusText.classList.add("show");
+    dataBox.classList.add("show");
 
     statusValue.textContent = "Resolving";
     statusValue.classList.remove("pending");
