@@ -28,14 +28,6 @@ body{
   box-sizing:border-box;
 }
 
-.small{
-  font-size:12px;
-  letter-spacing:1px;
-  color:#9a9aa3;
-  margin-bottom:10px;
-  text-transform:uppercase;
-}
-
 h1{
   margin:0 0 14px 0;
   font-size:28px;
@@ -99,10 +91,10 @@ button{
 
 .recording-screen{
   display:none;
-  min-height:320px;
+  min-height:360px;
   background:#050505;
   border:1px solid #2b2b30;
-  padding:22px;
+  padding:28px 24px;
   box-sizing:border-box;
 }
 
@@ -110,36 +102,38 @@ button{
   display:block;
 }
 
-.recording-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:18px;
-  flex-wrap:wrap;
-  margin-bottom:30px;
-}
-
-.big-ohwell{
-  font-size:32px;
-  font-weight:700;
-  margin:0;
-  letter-spacing:0.3px;
-}
-
-.rec-side{
-  display:flex;
+.recording-header{
+  display:inline-flex;
   flex-direction:column;
-  align-items:flex-end;
-  gap:10px;
+  gap:14px;
+  padding:16px 18px;
+  border:1px solid #2b2b30;
+  background:#0d0d10;
+  margin-bottom:34px;
+}
+
+.recording-title{
+  margin:0;
+  font-size:30px;
+  font-weight:700;
+  letter-spacing:0.3px;
+  line-height:1;
+}
+
+.recording-meta{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
 }
 
 .rec-line{
   display:flex;
   align-items:center;
   gap:12px;
-  font-size:34px;
+  font-size:30px;
   font-weight:400;
-  letter-spacing:1.4px;
+  letter-spacing:1.3px;
   color:#f2f2f2;
   line-height:1;
 }
@@ -154,40 +148,24 @@ button{
 }
 
 .timer{
-  font-size:17px;
+  font-size:16px;
   font-weight:400;
   color:#b8b8c2;
   letter-spacing:0.8px;
   line-height:1;
 }
 
-.analysis-shell{
-  border:1px solid #2b2b30;
-  background:#101013;
-  padding:16px;
-  min-height:160px;
-  box-sizing:border-box;
+.free-text-area{
+  min-height:120px;
+  display:flex;
+  align-items:flex-start;
 }
 
-.analysis-title{
-  font-size:11px;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  color:#8e8e97;
-  margin-bottom:18px;
-}
-
-.analysis{
-  font-size:18px;
-  line-height:1.75;
+.typed-line{
+  font-size:24px;
+  line-height:1.5;
   color:#d7d7dd;
-  min-height:70px;
-}
-
-.analysis-line{
-  min-height:28px;
-  white-space:normal;
-  word-break:break-word;
+  min-height:40px;
 }
 
 .cursor{
@@ -219,27 +197,33 @@ button{
     font-size:18px;
   }
 
-  .big-ohwell{
-    font-size:26px;
+  .recording-screen{
+    padding:20px 18px;
+    min-height:300px;
+  }
+
+  .recording-title{
+    font-size:24px;
   }
 
   .rec-line{
-    font-size:28px;
+    font-size:24px;
   }
 
   .timer{
-    font-size:15px;
+    font-size:14px;
   }
 
-  .analysis{
-    font-size:16px;
+  .typed-line{
+    font-size:20px;
   }
 
-  .recording-top{
-    align-items:flex-start;
+  .recording-header{
+    width:100%;
+    margin-bottom:28px;
   }
 
-  .rec-side{
+  .recording-meta{
     align-items:flex-start;
   }
 }
@@ -252,7 +236,6 @@ button{
 
   <div id="permissionScreen">
 
-    <div class="small">Access Interface</div>
     <h1>Permission Request</h1>
 
     <div class="status">Awaiting response.</div>
@@ -281,10 +264,10 @@ button{
 
   <div class="recording-screen" id="recordingScreen">
 
-    <div class="recording-top">
-      <h2 class="big-ohwell">ACCESS GRANTED</h2>
+    <div class="recording-header">
+      <h2 class="recording-title">RECORDING STARTED</h2>
 
-      <div class="rec-side">
+      <div class="recording-meta">
         <div class="rec-line">
           <div class="rec-dot"></div>
           <div>REC</div>
@@ -294,12 +277,8 @@ button{
       </div>
     </div>
 
-    <div class="analysis-shell">
-      <div class="analysis-title">Live Processing Notes</div>
-
-      <div class="analysis" id="analysisText">
-        <div class="analysis-line" id="line0"></div>
-      </div>
+    <div class="free-text-area">
+      <div class="typed-line" id="typedLine"></div>
     </div>
 
   </div>
@@ -368,7 +347,7 @@ function startTimer(){
 }
 
 function typeHaNice(){
-  const lineEl = document.getElementById("line0");
+  const lineEl = document.getElementById("typedLine");
   const partOne = "Ha.";
   const partTwo = " Nice.";
 
