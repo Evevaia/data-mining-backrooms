@@ -165,7 +165,7 @@ button{
   border:1px solid #2b2b30;
   background:#101013;
   padding:16px;
-  min-height:260px;
+  min-height:160px;
   box-sizing:border-box;
 }
 
@@ -178,21 +178,16 @@ button{
 }
 
 .analysis{
-  font-size:15px;
+  font-size:18px;
   line-height:1.75;
   color:#d7d7dd;
-  min-height:190px;
+  min-height:70px;
 }
 
 .analysis-line{
-  min-height:26px;
-  margin-bottom:24px;
+  min-height:28px;
   white-space:normal;
   word-break:break-word;
-}
-
-.analysis-line:last-child{
-  margin-bottom:0;
 }
 
 .cursor{
@@ -237,12 +232,7 @@ button{
   }
 
   .analysis{
-    font-size:14px;
-  }
-
-  .analysis-line{
-    min-height:24px;
-    margin-bottom:22px;
+    font-size:16px;
   }
 
   .recording-top{
@@ -309,10 +299,6 @@ button{
 
       <div class="analysis" id="analysisText">
         <div class="analysis-line" id="line0"></div>
-        <div class="analysis-line" id="line1"></div>
-        <div class="analysis-line" id="line2"></div>
-        <div class="analysis-line" id="line3"></div>
-        <div class="analysis-line" id="line4"></div>
       </div>
     </div>
 
@@ -324,16 +310,6 @@ button{
 let countdown = 10;
 let accepted = false;
 let timerInterval;
-
-const lines = [
-  "Nice room tone.",
-  "Face detected. Confidence: unnecessary.",
-  "Voice pattern saved for later judgment.",
-  "Lighting conditions: emotionally revealing.",
-  "General composure: holding, somehow."
-];
-
-let currentLineIndex = 0;
 
 window.onload = function(){
   startCountdown();
@@ -372,7 +348,7 @@ function forceAccept(){
   startTimer();
 
   setTimeout(function(){
-    typeLine(0);
+    typeHaNice();
   }, 700);
 }
 
@@ -391,32 +367,40 @@ function startTimer(){
   }, 1000);
 }
 
-function typeLine(lineIndex){
-  if(lineIndex >= lines.length) return;
+function typeHaNice(){
+  const lineEl = document.getElementById("line0");
+  const partOne = "Ha.";
+  const partTwo = " Nice.";
 
-  const lineEl = document.getElementById("line" + lineIndex);
-  const text = lines[lineIndex];
-  let charIndex = 0;
+  let text = "";
+  let index = 0;
 
-  function typeChar(){
-    if(charIndex < text.length){
-      const visibleText = text.slice(0, charIndex + 1);
-      lineEl.innerHTML = visibleText + '<span class="cursor">_</span>';
-      charIndex++;
-
-      const speed = 95 + Math.random() * 65;
-      setTimeout(typeChar, speed);
+  function typeFirstPart(){
+    if(index < partOne.length){
+      text += partOne.charAt(index);
+      lineEl.innerHTML = text + '<span class="cursor">_</span>';
+      index++;
+      setTimeout(typeFirstPart, 110 + Math.random() * 50);
     }else{
-      lineEl.textContent = text;
-      currentLineIndex = lineIndex + 1;
-
       setTimeout(function(){
-        typeLine(currentLineIndex);
+        index = 0;
+        typeSecondPart();
       }, 700);
     }
   }
 
-  typeChar();
+  function typeSecondPart(){
+    if(index < partTwo.length){
+      text += partTwo.charAt(index);
+      lineEl.innerHTML = text + '<span class="cursor">_</span>';
+      index++;
+      setTimeout(typeSecondPart, 110 + Math.random() * 50);
+    }else{
+      lineEl.textContent = text;
+    }
+  }
+
+  typeFirstPart();
 }
 </script>
 
