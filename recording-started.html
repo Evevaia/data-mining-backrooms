@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recording Started</title>
-
 <style>
 body{
   background:#0e0e10;
@@ -18,7 +17,6 @@ body{
   padding:20px;
   box-sizing:border-box;
 }
-
 .container{
   width:100%;
   max-width:760px;
@@ -27,49 +25,41 @@ body{
   padding:26px;
   box-sizing:border-box;
 }
-
 h1{
   margin:0 0 14px 0;
   font-size:28px;
 }
-
 .status{
   font-size:14px;
   color:#b8b8c2;
   margin-bottom:20px;
 }
-
 .permission-box{
   border:1px solid #2b2b30;
   background:#101013;
   padding:20px;
 }
-
 .permission-title{
   font-size:20px;
   font-weight:700;
   margin-bottom:10px;
 }
-
 .permission-text{
   font-size:14px;
   color:#b8b8c2;
   line-height:1.6;
   margin-bottom:18px;
 }
-
 .countdown{
   font-size:15px;
   color:#ff8f8f;
   margin-bottom:20px;
 }
-
 .buttons{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
 }
-
 button{
   padding:12px 18px;
   font-size:14px;
@@ -78,30 +68,24 @@ button{
   color:#111;
   cursor:pointer;
 }
-
 .accept-green{
   background:#4caf50;
   color:white;
   border:none;
 }
-
 .hidden{
   display:none !important;
 }
 
+/* ── RECORDING SCREEN ── */
 .recording-screen{
   display:none;
-  min-height:360px;
-  background:#050505;
-  border:1px solid #2b2b30;
-  padding:28px 24px;
-  box-sizing:border-box;
 }
-
 .recording-screen.show{
   display:block;
 }
 
+/* header row */
 .recording-header{
   display:inline-flex;
   flex-direction:column;
@@ -109,9 +93,8 @@ button{
   padding:16px 18px;
   border:1px solid #2b2b30;
   background:#0d0d10;
-  margin-bottom:34px;
+  margin-bottom:22px;
 }
-
 .recording-title{
   margin:0;
   font-size:30px;
@@ -119,14 +102,12 @@ button{
   letter-spacing:0.3px;
   line-height:1;
 }
-
 .recording-meta{
   display:flex;
   align-items:center;
   gap:14px;
   flex-wrap:wrap;
 }
-
 .rec-line{
   display:flex;
   align-items:center;
@@ -137,7 +118,6 @@ button{
   color:#f2f2f2;
   line-height:1;
 }
-
 .rec-dot{
   width:14px;
   height:14px;
@@ -146,7 +126,6 @@ button{
   animation:recBlink 1s infinite;
   flex-shrink:0;
 }
-
 .timer{
   font-size:16px;
   font-weight:400;
@@ -155,22 +134,58 @@ button{
   line-height:1;
 }
 
-.free-text-area{
-  min-height:120px;
-  display:flex;
-  align-items:flex-start;
+/* ── VISUALIZER BOX ── */
+.visualizer-box{
+  border:1px solid #2b2b30;
+  background:#080809;
+  padding:0;
+  margin-bottom:22px;
+  position:relative;
+  height:130px;
+  overflow:hidden;
+}
+.visualizer-label{
+  position:absolute;
+  top:10px;
+  left:14px;
+  font-size:10px;
+  letter-spacing:1.8px;
+  color:#444450;
+  text-transform:uppercase;
+  z-index:2;
+  pointer-events:none;
+}
+.visualizer-label-right{
+  position:absolute;
+  top:10px;
+  right:14px;
+  font-size:10px;
+  letter-spacing:1.2px;
+  color:#444450;
+  text-transform:uppercase;
+  z-index:2;
+  pointer-events:none;
+}
+canvas#waveCanvas{
+  display:block;
+  width:100%;
+  height:100%;
 }
 
+/* ── TYPED MESSAGE (outside box) ── */
+.typed-message{
+  min-height:36px;
+  padding:0 4px;
+}
 .typed-line{
-  font-size:24px;
+  font-size:22px;
   line-height:1.5;
-  color:#d7d7dd;
-  min-height:40px;
+  color:#888892;
+  min-height:36px;
 }
-
 .cursor{
   display:inline-block;
-  margin-left:3px;
+  margin-left:2px;
   animation:blink 1s steps(1) infinite;
   color:inherit;
   vertical-align:baseline;
@@ -179,209 +194,219 @@ button{
 @keyframes blink{
   50%{opacity:0;}
 }
-
 @keyframes recBlink{
   50%{opacity:0.3;}
 }
 
 @media (max-width:600px){
-  .container{
-    padding:18px;
-  }
-
-  h1{
-    font-size:24px;
-  }
-
-  .permission-title{
-    font-size:18px;
-  }
-
-  .recording-screen{
-    padding:20px 18px;
-    min-height:300px;
-  }
-
-  .recording-title{
-    font-size:24px;
-  }
-
-  .rec-line{
-    font-size:24px;
-  }
-
-  .timer{
-    font-size:14px;
-  }
-
-  .typed-line{
-    font-size:20px;
-  }
-
-  .recording-header{
-    width:100%;
-    margin-bottom:28px;
-  }
-
-  .recording-meta{
-    align-items:flex-start;
-  }
+  .container{ padding:18px; }
+  h1{ font-size:24px; }
+  .permission-title{ font-size:18px; }
+  .recording-title{ font-size:24px; }
+  .rec-line{ font-size:24px; }
+  .timer{ font-size:14px; }
+  .typed-line{ font-size:18px; }
+  .recording-header{ width:100%; }
+  .visualizer-box{ height:100px; }
 }
 </style>
 </head>
-
 <body>
-
 <div class="container">
 
+  <!-- PERMISSION SCREEN -->
   <div id="permissionScreen">
-
     <h1>Permission Request</h1>
-
     <div class="status">Awaiting response.</div>
-
     <div class="permission-box">
-
-      <div class="permission-title">
-        Microphone &amp; Camera Access Required
-      </div>
-
+      <div class="permission-title">Microphone &amp; Camera Access Required</div>
       <div class="permission-text">
         This experience requires full audiovisual access in order to continue.
       </div>
-
-      <div class="countdown" id="countdownText">
-        Your acceptance will be mandatory in 10...
-      </div>
-
+      <div class="countdown" id="countdownText">Your acceptance will be mandatory in 10...</div>
       <div class="buttons">
         <button onclick="forceAccept()">ACCEPT</button>
         <button class="accept-green" onclick="forceAccept()">ACCEPT</button>
       </div>
-
     </div>
   </div>
 
+  <!-- RECORDING SCREEN -->
   <div class="recording-screen" id="recordingScreen">
 
     <div class="recording-header">
       <h2 class="recording-title">RECORDING STARTED</h2>
-
       <div class="recording-meta">
         <div class="rec-line">
           <div class="rec-dot"></div>
           <div>REC</div>
         </div>
-
         <div class="timer" id="timerText">00:00:00</div>
       </div>
     </div>
 
-    <div class="free-text-area">
+    <!-- fake waveform box -->
+    <div class="visualizer-box">
+      <span class="visualizer-label">AUDIO INPUT — CH 1&amp;2</span>
+      <span class="visualizer-label-right" id="dbLabel">–∞ dB</span>
+      <canvas id="waveCanvas"></canvas>
+    </div>
+
+    <!-- message sits outside -->
+    <div class="typed-message">
       <div class="typed-line" id="typedLine"></div>
     </div>
 
   </div>
-
 </div>
 
 <script>
 let countdown = 10;
 let accepted = false;
-let timerInterval;
 
-window.onload = function(){
-  startCountdown();
-};
+window.onload = function(){ startCountdown(); };
 
 function startCountdown(){
   const countdownText = document.getElementById("countdownText");
-
   const interval = setInterval(function(){
     countdown--;
-
     if(countdown > 0){
-      countdownText.textContent =
-        "Your acceptance will be mandatory in " + countdown + "...";
-    }else{
-      countdownText.textContent =
-        "Your acceptance is now mandatory.";
-
+      countdownText.textContent = "Your acceptance will be mandatory in " + countdown + "...";
+    } else {
+      countdownText.textContent = "Your acceptance is now mandatory.";
       clearInterval(interval);
-
-      setTimeout(function(){
-        if(!accepted){
-          forceAccept();
-        }
-      }, 500);
+      setTimeout(function(){ if(!accepted){ forceAccept(); } }, 500);
     }
   }, 1000);
 }
 
 function forceAccept(){
   accepted = true;
-
   document.getElementById("permissionScreen").classList.add("hidden");
   document.getElementById("recordingScreen").classList.add("show");
-
   startTimer();
-
-  setTimeout(function(){
-    typeHaNice();
-  }, 700);
+  initWaveform();
+  setTimeout(typeMessage, 1200);
 }
 
+/* ── TIMER ── */
 function startTimer(){
   let seconds = 0;
   const timerText = document.getElementById("timerText");
-
-  timerInterval = setInterval(function(){
+  setInterval(function(){
     seconds++;
-
-    const hrs = String(Math.floor(seconds / 3600)).padStart(2,"0");
-    const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2,"0");
-    const secs = String(seconds % 60).padStart(2,"0");
-
-    timerText.textContent = hrs + ":" + mins + ":" + secs;
+    const h = String(Math.floor(seconds/3600)).padStart(2,"0");
+    const m = String(Math.floor((seconds%3600)/60)).padStart(2,"0");
+    const s = String(seconds%60).padStart(2,"0");
+    timerText.textContent = h+":"+m+":"+s;
   }, 1000);
 }
 
-function typeHaNice(){
-  const lineEl = document.getElementById("typedLine");
-  const partOne = "Ha.";
-  const partTwo = " Nice.";
+/* ── FAKE WAVEFORM ── */
+function initWaveform(){
+  const canvas = document.getElementById("waveCanvas");
+  const box    = canvas.parentElement;
+  const ctx    = canvas.getContext("2d");
+  const dbLabel = document.getElementById("dbLabel");
 
+  function resize(){
+    canvas.width  = box.clientWidth;
+    canvas.height = box.clientHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  // rolling buffer of amplitude values
+  const bufLen = 220;
+  const buf = new Float32Array(bufLen).fill(0);
+  let frame = 0;
+
+  // humanised noise: sum of slow sinusoids + random jitter
+  function nextAmp(){
+    const t = frame / 60;
+    // slow breathing envelope
+    const envelope = 0.28 + 0.22 * Math.sin(t * 0.41) + 0.10 * Math.sin(t * 1.13);
+    // medium frequency voice-like variation
+    const voice    = Math.sin(t * 7.3) * 0.35 + Math.sin(t * 13.1) * 0.15;
+    // small fast jitter
+    const jitter   = (Math.random() - 0.5) * 0.18;
+    return Math.max(0.01, envelope + voice * envelope + jitter);
+  }
+
+  function drawWave(){
+    frame++;
+    // push new sample
+    buf.copyWithin(0, 1);
+    buf[bufLen - 1] = nextAmp();
+
+    const W = canvas.width;
+    const H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // grid line
+    ctx.strokeStyle = "#1a1a1e";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, H/2);
+    ctx.lineTo(W, H/2);
+    ctx.stroke();
+
+    // waveform — mirrored above/below centre
+    const slotW = W / bufLen;
+    const colour = "#ff4d4d";
+
+    ctx.fillStyle = colour;
+    for(let i = 0; i < bufLen; i++){
+      const amp  = buf[i];
+      const barH = amp * (H * 0.82);
+      const x    = i * slotW;
+      const w    = Math.max(1, slotW - 1);
+      ctx.globalAlpha = 0.18 + amp * 0.55;
+      ctx.fillRect(x, H/2 - barH/2, w, barH);
+    }
+    ctx.globalAlpha = 1;
+
+    // dB readout (fake but believable)
+    const lastAmp = buf[bufLen-1];
+    const db = (20 * Math.log10(lastAmp + 0.001)).toFixed(1);
+    dbLabel.textContent = db + " dB";
+
+    requestAnimationFrame(drawWave);
+  }
+  drawWave();
+}
+
+/* ── TYPED MESSAGE ── */
+function typeMessage(){
+  const lineEl   = document.getElementById("typedLine");
+  const partOne  = "Ha.";
+  const partTwo  = " Nice.";
   let text = "";
   let index = 0;
 
-  function typeFirstPart(){
+  function typeFirst(){
     if(index < partOne.length){
       text += partOne.charAt(index);
       lineEl.innerHTML = text + '<span class="cursor">_</span>';
       index++;
-      setTimeout(typeFirstPart, 110 + Math.random() * 50);
-    }else{
-      setTimeout(function(){
-        index = 0;
-        typeSecondPart();
-      }, 700);
+      setTimeout(typeFirst, 120 + Math.random()*60);
+    } else {
+      setTimeout(function(){ index=0; typeSecond(); }, 800);
     }
   }
-
-  function typeSecondPart(){
+  function typeSecond(){
     if(index < partTwo.length){
       text += partTwo.charAt(index);
       lineEl.innerHTML = text + '<span class="cursor">_</span>';
       index++;
-      setTimeout(typeSecondPart, 110 + Math.random() * 50);
-    }else{
-      lineEl.textContent = text;
+      setTimeout(typeSecond, 110 + Math.random()*55);
+    } else {
+      // leave cursor blinking after done
+      lineEl.innerHTML = text + '<span class="cursor">_</span>';
     }
   }
-
-  typeFirstPart();
+  typeFirst();
 }
 </script>
-
 </body>
 </html>
