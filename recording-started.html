@@ -132,7 +132,12 @@ button{
   min-width:320px;
   max-width:90vw;
 }
-
+.recording-sub{
+  font-size:11px;
+  letter-spacing:0.22em;
+  color:#5f5f68;
+  text-transform:uppercase;
+}
 .recording-title{
   margin:0;
   font-size:32px;
@@ -168,15 +173,7 @@ button{
   letter-spacing:0.18em;
 }
 
-/* optional micro status */
-.recording-sub{
-  font-size:11px;
-  letter-spacing:0.22em;
-  color:#5f5f68;
-  text-transform:uppercase;
-}
-
-/* typed line OUTSIDE block */
+/* typed line outside block */
 .typed-message{
   margin-top:28px;
   min-height:36px;
@@ -277,6 +274,7 @@ button{
 let countdown = 10;
 let accepted = false;
 let timerStarted = false;
+let messageStarted = false;
 
 window.onload = function(){
   startCountdown();
@@ -293,6 +291,7 @@ function startCountdown(){
     } else {
       countdownText.textContent = "Your acceptance is now mandatory.";
       clearInterval(interval);
+
       setTimeout(function(){
         if(!accepted){
           forceAccept();
@@ -314,7 +313,10 @@ function forceAccept(){
     timerStarted = true;
   }
 
-  setTimeout(typeMessage, 1100);
+  if(!messageStarted){
+    messageStarted = true;
+    typeMessage();
+  }
 }
 
 function startTimer(){
@@ -330,7 +332,6 @@ function startTimer(){
   }, 1000);
 }
 
-<script>
 function typeMessage(){
   const lineEl = document.getElementById("typedLine");
   const partOne = "Ha.";
@@ -338,17 +339,19 @@ function typeMessage(){
   let text = "";
   let index = 0;
 
+  lineEl.innerHTML = '<span class="cursor">_</span>';
+
   function typeFirst(){
     if(index < partOne.length){
       text += partOne.charAt(index);
       lineEl.innerHTML = text + '<span class="cursor">_</span>';
       index++;
-      setTimeout(typeFirst, 260 + Math.random() * 140);
+      setTimeout(typeFirst, 380 + Math.random() * 180);
     } else {
       setTimeout(function(){
         index = 0;
         typeSecond();
-      }, 1400);
+      }, 1800);
     }
   }
 
@@ -357,17 +360,13 @@ function typeMessage(){
       text += partTwo.charAt(index);
       lineEl.innerHTML = text + '<span class="cursor">_</span>';
       index++;
-      setTimeout(typeSecond, 300 + Math.random() * 160);
+      setTimeout(typeSecond, 420 + Math.random() * 200);
     } else {
       lineEl.innerHTML = text + '<span class="cursor">_</span>';
     }
   }
 
-  setTimeout(typeFirst, 900);
-}
-</script>
-
-  type();
+  setTimeout(typeFirst, 1300);
 }
 </script>
 </body>
