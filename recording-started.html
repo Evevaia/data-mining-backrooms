@@ -330,20 +330,42 @@ function startTimer(){
   }, 1000);
 }
 
+<script>
 function typeMessage(){
   const lineEl = document.getElementById("typedLine");
-  const fullText = "Ha. Nice.";
+  const partOne = "Ha.";
+  const partTwo = " Nice.";
+  let text = "";
   let index = 0;
 
-  function type(){
-    if(index < fullText.length){
-      lineEl.innerHTML = fullText.slice(0, index + 1) + '<span class="cursor">_</span>';
+  function typeFirst(){
+    if(index < partOne.length){
+      text += partOne.charAt(index);
+      lineEl.innerHTML = text + '<span class="cursor">_</span>';
       index++;
-      setTimeout(type, 120 + Math.random() * 45);
+      setTimeout(typeFirst, 260 + Math.random() * 140);
     } else {
-      lineEl.innerHTML = fullText + '<span class="cursor">_</span>';
+      setTimeout(function(){
+        index = 0;
+        typeSecond();
+      }, 1400);
     }
   }
+
+  function typeSecond(){
+    if(index < partTwo.length){
+      text += partTwo.charAt(index);
+      lineEl.innerHTML = text + '<span class="cursor">_</span>';
+      index++;
+      setTimeout(typeSecond, 300 + Math.random() * 160);
+    } else {
+      lineEl.innerHTML = text + '<span class="cursor">_</span>';
+    }
+  }
+
+  setTimeout(typeFirst, 900);
+}
+</script>
 
   type();
 }
