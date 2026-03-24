@@ -136,7 +136,7 @@ button:active{
   transform:translate(-50%,-50%);
   background:#101013;
   border:1px solid #2b2b30;
-  padding:34px 38px;
+  padding:30px 34px 28px 34px;
   width:520px;
   max-width:calc(100vw - 48px);
   text-align:center;
@@ -165,19 +165,17 @@ button:active{
   display:block;
 }
 
-/* -------- scan popup layout -------- */
-.scan-header{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
+/* scan popup */
 .scan-title{
-  font-size:66px;
+  font-size:64px;
   font-weight:700;
   line-height:0.94;
   margin:0;
   letter-spacing:-0.06em;
+}
+
+.scan-gap{
+  height:120px;
 }
 
 .scan-command{
@@ -185,9 +183,8 @@ button:active{
   font-weight:700;
   letter-spacing:0.16em;
   text-transform:uppercase;
+  margin:0 0 28px 0;
   color:#f2f2f2;
-  margin-top:132px; /* THIS is the real big gap */
-  margin-bottom:28px;
 }
 
 .scan-wrap{
@@ -358,17 +355,20 @@ button:active{
 
   .popup{
     width:380px;
-    padding:26px 20px;
+    padding:24px 18px 22px 18px;
   }
 
   .scan-title{
-    font-size:50px;
+    font-size:48px;
+  }
+
+  .scan-gap{
+    height:96px;
   }
 
   .scan-command{
     font-size:18px;
-    margin-top:110px; /* big gap on mobile too */
-    margin-bottom:22px;
+    margin:0 0 22px 0;
   }
 
   .scan-wrap{
@@ -393,17 +393,20 @@ button:active{
 
   .popup{
     width:340px;
-    padding:22px 16px;
+    padding:22px 14px 20px 14px;
   }
 
   .scan-title{
-    font-size:42px;
+    font-size:40px;
+  }
+
+  .scan-gap{
+    height:84px;
   }
 
   .scan-command{
     font-size:16px;
-    margin-top:92px;
-    margin-bottom:20px;
+    margin:0 0 20px 0;
   }
 
   .scan-wrap{
@@ -487,10 +490,9 @@ button:active{
   <div class="overlay" id="overlay"></div>
 
   <div class="popup" id="scanPopup">
-    <div class="scan-header">
-      <p class="scan-title">Pinky promise?</p>
-      <p class="scan-command">Scan your pinky</p>
-    </div>
+    <p class="scan-title">Pinky promise?</p>
+    <div class="scan-gap"></div>
+    <p class="scan-command">Scan your pinky</p>
 
     <div class="scan-wrap" id="scanWrap" aria-label="Scan pinky" role="button" tabindex="0">
       <div class="pinky-image-wrap">
