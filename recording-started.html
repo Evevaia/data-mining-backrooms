@@ -5,29 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recording Started</title>
 <style>
-body{
+*{
+  box-sizing:border-box;
+}
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
   background:#0e0e10;
   color:#f2f2f2;
   font-family:Arial, Helvetica, sans-serif;
+}
+body{
+  min-height:100vh;
+}
+
+/* ---------------- PERMISSION SCREEN ---------------- */
+.permission-stage{
+  min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  min-height:100vh;
-  margin:0;
   padding:20px;
-  box-sizing:border-box;
 }
-.container{
+.permission-wrap{
   width:100%;
   max-width:760px;
   background:#151518;
   border:1px solid #2b2b30;
   padding:26px;
-  box-sizing:border-box;
 }
-h1{
+.permission-wrap h1{
   margin:0 0 14px 0;
   font-size:28px;
+  font-weight:700;
 }
 .status{
   font-size:14px;
@@ -70,342 +82,270 @@ button{
 }
 .accept-green{
   background:#4caf50;
-  color:white;
+  color:#fff;
   border:none;
 }
 .hidden{
   display:none !important;
 }
 
-/* ── RECORDING SCREEN ── */
+/* ---------------- RECORDING SCREEN ---------------- */
 .recording-screen{
   display:none;
+  min-height:100vh;
+  width:100%;
+  padding:48px 28px;
+  position:relative;
 }
 .recording-screen.show{
-  display:block;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
 
-/* header row */
-.recording-header{
-  display:inline-flex;
-  flex-direction:column;
-  gap:14px;
-  padding:16px 18px;
-  border:1px solid #2b2b30;
-  background:#0d0d10;
-  margin-bottom:22px;
+/* subtle ambient noise */
+.recording-screen::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:0.06;
+  background-image:
+    radial-gradient(circle at 20% 20%, #ffffff 0 1px, transparent 1px),
+    radial-gradient(circle at 80% 30%, #ffffff 0 1px, transparent 1px),
+    radial-gradient(circle at 35% 70%, #ffffff 0 1px, transparent 1px),
+    radial-gradient(circle at 60% 80%, #ffffff 0 1px, transparent 1px);
+  background-size:240px 240px;
 }
+
+/* small status module only */
+.recording-block{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:14px;
+  padding:18px 20px;
+  border:1px solid #2b2b30;
+  background:rgba(15,15,18,0.82);
+  backdrop-filter:blur(2px);
+  min-width:320px;
+  max-width:90vw;
+}
+
 .recording-title{
   margin:0;
-  font-size:30px;
+  font-size:32px;
   font-weight:700;
-  letter-spacing:0.3px;
+  letter-spacing:0.04em;
   line-height:1;
 }
 .recording-meta{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:16px;
   flex-wrap:wrap;
 }
 .rec-line{
   display:flex;
   align-items:center;
-  gap:12px;
-  font-size:30px;
-  font-weight:400;
-  letter-spacing:1.3px;
-  color:#f2f2f2;
+  gap:10px;
+  font-size:28px;
+  letter-spacing:0.14em;
   line-height:1;
 }
 .rec-dot{
-  width:14px;
-  height:14px;
-  background:#ff4d4d;
+  width:13px;
+  height:13px;
   border-radius:50%;
+  background:#ff4d4d;
   animation:recBlink 1s infinite;
   flex-shrink:0;
 }
 .timer{
-  font-size:16px;
-  font-weight:400;
-  color:#b8b8c2;
-  letter-spacing:0.8px;
-  line-height:1;
+  font-size:15px;
+  color:#aaaab3;
+  letter-spacing:0.18em;
 }
 
-/* ── VISUALIZER BOX ── */
-.visualizer-box{
-  border:1px solid #2b2b30;
-  background:#080809;
-  padding:0;
-  margin-bottom:22px;
-  position:relative;
-  height:130px;
-  overflow:hidden;
-}
-.visualizer-label{
-  position:absolute;
-  top:10px;
-  left:14px;
-  font-size:10px;
-  letter-spacing:1.8px;
-  color:#444450;
+/* optional micro status */
+.recording-sub{
+  font-size:11px;
+  letter-spacing:0.22em;
+  color:#5f5f68;
   text-transform:uppercase;
-  z-index:2;
-  pointer-events:none;
-}
-.visualizer-label-right{
-  position:absolute;
-  top:10px;
-  right:14px;
-  font-size:10px;
-  letter-spacing:1.2px;
-  color:#444450;
-  text-transform:uppercase;
-  z-index:2;
-  pointer-events:none;
-}
-canvas#waveCanvas{
-  display:block;
-  width:100%;
-  height:100%;
 }
 
-/* ── TYPED MESSAGE (outside box) ── */
+/* typed line OUTSIDE block */
 .typed-message{
+  margin-top:28px;
   min-height:36px;
-  padding:0 4px;
+  width:min(520px, 90vw);
 }
 .typed-line{
-  font-size:22px;
-  line-height:1.5;
-  color:#888892;
-  min-height:36px;
+  font-size:28px;
+  line-height:1.4;
+  color:#8b8b95;
+  letter-spacing:0.01em;
 }
 .cursor{
   display:inline-block;
   margin-left:2px;
   animation:blink 1s steps(1) infinite;
-  color:inherit;
-  vertical-align:baseline;
 }
 
 @keyframes blink{
   50%{opacity:0;}
 }
 @keyframes recBlink{
-  50%{opacity:0.3;}
+  50%{opacity:0.25;}
 }
 
 @media (max-width:600px){
-  .container{ padding:18px; }
-  h1{ font-size:24px; }
-  .permission-title{ font-size:18px; }
-  .recording-title{ font-size:24px; }
-  .rec-line{ font-size:24px; }
-  .timer{ font-size:14px; }
-  .typed-line{ font-size:18px; }
-  .recording-header{ width:100%; }
-  .visualizer-box{ height:100px; }
+  .permission-wrap{
+    padding:18px;
+  }
+  .permission-wrap h1{
+    font-size:24px;
+  }
+  .permission-title{
+    font-size:18px;
+  }
+  .recording-screen{
+    padding:32px 18px;
+  }
+  .recording-block{
+    min-width:unset;
+    width:100%;
+  }
+  .recording-title{
+    font-size:24px;
+  }
+  .rec-line{
+    font-size:22px;
+  }
+  .typed-line{
+    font-size:22px;
+  }
 }
 </style>
 </head>
 <body>
-<div class="container">
 
-  <!-- PERMISSION SCREEN -->
-  <div id="permissionScreen">
+<!-- PERMISSION SCREEN -->
+<div class="permission-stage" id="permissionScreen">
+  <div class="permission-wrap">
     <h1>Permission Request</h1>
     <div class="status">Awaiting response.</div>
+
     <div class="permission-box">
       <div class="permission-title">Microphone &amp; Camera Access Required</div>
       <div class="permission-text">
         This experience requires full audiovisual access in order to continue.
       </div>
       <div class="countdown" id="countdownText">Your acceptance will be mandatory in 10...</div>
+
       <div class="buttons">
         <button onclick="forceAccept()">ACCEPT</button>
         <button class="accept-green" onclick="forceAccept()">ACCEPT</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- RECORDING SCREEN -->
-  <div class="recording-screen" id="recordingScreen">
+<!-- RECORDING SCREEN -->
+<div class="recording-screen" id="recordingScreen">
+  <div class="recording-block">
+    <div class="recording-sub">Live capture enabled</div>
+    <h2 class="recording-title">RECORDING STARTED</h2>
 
-    <div class="recording-header">
-      <h2 class="recording-title">RECORDING STARTED</h2>
-      <div class="recording-meta">
-        <div class="rec-line">
-          <div class="rec-dot"></div>
-          <div>REC</div>
-        </div>
-        <div class="timer" id="timerText">00:00:00</div>
+    <div class="recording-meta">
+      <div class="rec-line">
+        <div class="rec-dot"></div>
+        <div>REC</div>
       </div>
+      <div class="timer" id="timerText">00:00:00</div>
     </div>
+  </div>
 
-    <!-- fake waveform box -->
-    <div class="visualizer-box">
-      <span class="visualizer-label">AUDIO INPUT — CH 1&amp;2</span>
-      <span class="visualizer-label-right" id="dbLabel">–∞ dB</span>
-      <canvas id="waveCanvas"></canvas>
-    </div>
-
-    <!-- message sits outside -->
-    <div class="typed-message">
-      <div class="typed-line" id="typedLine"></div>
-    </div>
-
+  <div class="typed-message">
+    <div class="typed-line" id="typedLine"></div>
   </div>
 </div>
 
 <script>
 let countdown = 10;
 let accepted = false;
+let timerStarted = false;
 
-window.onload = function(){ startCountdown(); };
+window.onload = function(){
+  startCountdown();
+};
 
 function startCountdown(){
   const countdownText = document.getElementById("countdownText");
+
   const interval = setInterval(function(){
     countdown--;
+
     if(countdown > 0){
       countdownText.textContent = "Your acceptance will be mandatory in " + countdown + "...";
     } else {
       countdownText.textContent = "Your acceptance is now mandatory.";
       clearInterval(interval);
-      setTimeout(function(){ if(!accepted){ forceAccept(); } }, 500);
+      setTimeout(function(){
+        if(!accepted){
+          forceAccept();
+        }
+      }, 500);
     }
   }, 1000);
 }
 
 function forceAccept(){
+  if(accepted) return;
   accepted = true;
+
   document.getElementById("permissionScreen").classList.add("hidden");
   document.getElementById("recordingScreen").classList.add("show");
-  startTimer();
-  initWaveform();
-  setTimeout(typeMessage, 1200);
+
+  if(!timerStarted){
+    startTimer();
+    timerStarted = true;
+  }
+
+  setTimeout(typeMessage, 1100);
 }
 
-/* ── TIMER ── */
 function startTimer(){
   let seconds = 0;
   const timerText = document.getElementById("timerText");
+
   setInterval(function(){
     seconds++;
-    const h = String(Math.floor(seconds/3600)).padStart(2,"0");
-    const m = String(Math.floor((seconds%3600)/60)).padStart(2,"0");
-    const s = String(seconds%60).padStart(2,"0");
-    timerText.textContent = h+":"+m+":"+s;
+    const h = String(Math.floor(seconds / 3600)).padStart(2,"0");
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2,"0");
+    const s = String(seconds % 60).padStart(2,"0");
+    timerText.textContent = h + ":" + m + ":" + s;
   }, 1000);
 }
 
-/* ── FAKE WAVEFORM ── */
-function initWaveform(){
-  const canvas = document.getElementById("waveCanvas");
-  const box    = canvas.parentElement;
-  const ctx    = canvas.getContext("2d");
-  const dbLabel = document.getElementById("dbLabel");
-
-  function resize(){
-    canvas.width  = box.clientWidth;
-    canvas.height = box.clientHeight;
-  }
-  resize();
-  window.addEventListener("resize", resize);
-
-  // rolling buffer of amplitude values
-  const bufLen = 220;
-  const buf = new Float32Array(bufLen).fill(0);
-  let frame = 0;
-
-  // humanised noise: sum of slow sinusoids + random jitter
-  function nextAmp(){
-    const t = frame / 60;
-    // slow breathing envelope
-    const envelope = 0.28 + 0.22 * Math.sin(t * 0.41) + 0.10 * Math.sin(t * 1.13);
-    // medium frequency voice-like variation
-    const voice    = Math.sin(t * 7.3) * 0.35 + Math.sin(t * 13.1) * 0.15;
-    // small fast jitter
-    const jitter   = (Math.random() - 0.5) * 0.18;
-    return Math.max(0.01, envelope + voice * envelope + jitter);
-  }
-
-  function drawWave(){
-    frame++;
-    // push new sample
-    buf.copyWithin(0, 1);
-    buf[bufLen - 1] = nextAmp();
-
-    const W = canvas.width;
-    const H = canvas.height;
-    ctx.clearRect(0, 0, W, H);
-
-    // grid line
-    ctx.strokeStyle = "#1a1a1e";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(0, H/2);
-    ctx.lineTo(W, H/2);
-    ctx.stroke();
-
-    // waveform — mirrored above/below centre
-    const slotW = W / bufLen;
-    const colour = "#ff4d4d";
-
-    ctx.fillStyle = colour;
-    for(let i = 0; i < bufLen; i++){
-      const amp  = buf[i];
-      const barH = amp * (H * 0.82);
-      const x    = i * slotW;
-      const w    = Math.max(1, slotW - 1);
-      ctx.globalAlpha = 0.18 + amp * 0.55;
-      ctx.fillRect(x, H/2 - barH/2, w, barH);
-    }
-    ctx.globalAlpha = 1;
-
-    // dB readout (fake but believable)
-    const lastAmp = buf[bufLen-1];
-    const db = (20 * Math.log10(lastAmp + 0.001)).toFixed(1);
-    dbLabel.textContent = db + " dB";
-
-    requestAnimationFrame(drawWave);
-  }
-  drawWave();
-}
-
-/* ── TYPED MESSAGE ── */
 function typeMessage(){
-  const lineEl   = document.getElementById("typedLine");
-  const partOne  = "Ha.";
-  const partTwo  = " Nice.";
-  let text = "";
+  const lineEl = document.getElementById("typedLine");
+  const fullText = "Ha. Nice.";
   let index = 0;
 
-  function typeFirst(){
-    if(index < partOne.length){
-      text += partOne.charAt(index);
-      lineEl.innerHTML = text + '<span class="cursor">_</span>';
+  function type(){
+    if(index < fullText.length){
+      lineEl.innerHTML = fullText.slice(0, index + 1) + '<span class="cursor">_</span>';
       index++;
-      setTimeout(typeFirst, 120 + Math.random()*60);
+      setTimeout(type, 120 + Math.random() * 45);
     } else {
-      setTimeout(function(){ index=0; typeSecond(); }, 800);
+      lineEl.innerHTML = fullText + '<span class="cursor">_</span>';
     }
   }
-  function typeSecond(){
-    if(index < partTwo.length){
-      text += partTwo.charAt(index);
-      lineEl.innerHTML = text + '<span class="cursor">_</span>';
-      index++;
-      setTimeout(typeSecond, 110 + Math.random()*55);
-    } else {
-      // leave cursor blinking after done
-      lineEl.innerHTML = text + '<span class="cursor">_</span>';
-    }
-  }
-  typeFirst();
+
+  type();
 }
 </script>
 </body>
