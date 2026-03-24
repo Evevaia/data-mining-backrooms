@@ -136,8 +136,8 @@ button:active{
   transform:translate(-50%,-50%);
   background:#101013;
   border:1px solid #2b2b30;
-  padding:28px 30px;
-  width:420px;
+  padding:34px 38px;
+  width:520px;
   max-width:calc(100vw - 48px);
   text-align:center;
   display:none;
@@ -165,37 +165,42 @@ button:active{
   display:block;
 }
 
+/* -------- scan popup layout -------- */
+.scan-header{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
 .scan-title{
-  font-size:52px;
+  font-size:66px;
   font-weight:700;
-  line-height:0.96;
+  line-height:0.94;
   margin:0;
-  letter-spacing:-0.05em;
-  display:block;
+  letter-spacing:-0.06em;
 }
 
 .scan-command{
-  display:block;
-  font-size:20px;
+  font-size:22px;
   font-weight:700;
-  letter-spacing:0.14em;
+  letter-spacing:0.16em;
   text-transform:uppercase;
-  margin-top:120px;
-  margin-bottom:22px;
   color:#f2f2f2;
+  margin-top:132px; /* THIS is the real big gap */
+  margin-bottom:28px;
 }
 
 .scan-wrap{
   margin:0 auto;
-  width:150px;
-  height:190px;
+  width:190px;
+  height:240px;
   border:1px solid #2b2b30;
   background:
     radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%),
     #0c0c0f;
   position:relative;
   overflow:hidden;
-  border-radius:18px;
+  border-radius:22px;
   cursor:pointer;
   transition:
     border-color 0.2s ease,
@@ -225,7 +230,7 @@ button:active{
 
 .pinky-image-wrap{
   position:absolute;
-  inset:16px;
+  inset:18px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -273,15 +278,15 @@ button:active{
 }
 
 .scan-bottom{
-  margin-top:18px;
+  margin-top:24px;
 }
 
 .scan-text{
-  font-size:11px;
+  font-size:12px;
   color:#9a9aa3;
-  min-height:16px;
-  letter-spacing:1px;
-  margin-bottom:10px;
+  min-height:18px;
+  letter-spacing:1.2px;
+  margin-bottom:12px;
   text-transform:uppercase;
 }
 
@@ -352,27 +357,27 @@ button:active{
   }
 
   .popup{
-    width:360px;
-    padding:22px 18px;
+    width:380px;
+    padding:26px 20px;
   }
 
   .scan-title{
-    font-size:40px;
+    font-size:50px;
   }
 
   .scan-command{
-    font-size:17px;
-    margin-top:72px;
-    margin-bottom:18px;
+    font-size:18px;
+    margin-top:110px; /* big gap on mobile too */
+    margin-bottom:22px;
   }
 
   .scan-wrap{
-    width:136px;
-    height:176px;
+    width:164px;
+    height:212px;
   }
 
   .pinky-image-wrap{
-    inset:14px;
+    inset:16px;
   }
 
   .accepted-state{
@@ -386,14 +391,24 @@ button:active{
     min-height:calc(100vh - 175px);
   }
 
+  .popup{
+    width:340px;
+    padding:22px 16px;
+  }
+
   .scan-title{
-    font-size:34px;
+    font-size:42px;
   }
 
   .scan-command{
-    font-size:15px;
-    margin-top:56px;
-    margin-bottom:18px;
+    font-size:16px;
+    margin-top:92px;
+    margin-bottom:20px;
+  }
+
+  .scan-wrap{
+    width:150px;
+    height:194px;
   }
 }
 </style>
@@ -472,8 +487,10 @@ button:active{
   <div class="overlay" id="overlay"></div>
 
   <div class="popup" id="scanPopup">
-    <p class="scan-title">Pinky promise?</p>
-    <p class="scan-command">Scan your pinky</p>
+    <div class="scan-header">
+      <p class="scan-title">Pinky promise?</p>
+      <p class="scan-command">Scan your pinky</p>
+    </div>
 
     <div class="scan-wrap" id="scanWrap" aria-label="Scan pinky" role="button" tabindex="0">
       <div class="pinky-image-wrap">
