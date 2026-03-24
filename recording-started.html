@@ -89,6 +89,18 @@ button{
   display:none !important;
 }
 
+/* ---------------- BLACK TRANSITION ---------------- */
+.transition-screen{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#050506;
+  z-index:20;
+}
+.transition-screen.show{
+  display:block;
+}
+
 /* ---------------- RECORDING SCREEN ---------------- */
 .recording-screen{
   display:none;
@@ -96,21 +108,22 @@ button{
   width:100%;
   padding:48px 28px;
   position:relative;
+  background:#0e0e10;
 }
 .recording-screen.show{
   display:flex;
   flex-direction:column;
   justify-content:center;
-  align-items:center;
+  align-items:flex-start;
 }
 
-/* subtle ambient noise */
+/* subtle ambient texture */
 .recording-screen::before{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
-  opacity:0.06;
+  opacity:0.04;
   background-image:
     radial-gradient(circle at 20% 20%, #ffffff 0 1px, transparent 1px),
     radial-gradient(circle at 80% 30%, #ffffff 0 1px, transparent 1px),
@@ -119,23 +132,32 @@ button{
   background-size:240px 240px;
 }
 
-/* small status module only */
+/* slightly off-center wrapper */
+.recording-wrap{
+  width:min(620px, 90vw);
+  margin-left:48%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+/* harsher, less polished block */
 .recording-block{
   display:flex;
   flex-direction:column;
   align-items:flex-start;
   gap:14px;
-  padding:18px 20px;
-  border:1px solid #2b2b30;
-  background:rgba(15,15,18,0.82);
-  backdrop-filter:blur(2px);
+  padding:17px 18px;
+  border:1px solid #26262b;
+  background:rgba(13,13,16,0.9);
   min-width:320px;
   max-width:90vw;
 }
 .recording-sub{
   font-size:11px;
   letter-spacing:0.22em;
-  color:#5f5f68;
+  color:#66666f;
   text-transform:uppercase;
 }
 .recording-title{
@@ -169,20 +191,20 @@ button{
 }
 .timer{
   font-size:15px;
-  color:#aaaab3;
+  color:#9f9faa;
   letter-spacing:0.18em;
 }
 
 /* typed line outside block */
 .typed-message{
-  margin-top:28px;
+  margin-top:32px;
   min-height:36px;
   width:min(520px, 90vw);
 }
 .typed-line{
   font-size:28px;
   line-height:1.4;
-  color:#8b8b95;
+  color:#6f6f78;
   letter-spacing:0.01em;
 }
 .cursor{
@@ -210,6 +232,12 @@ button{
   }
   .recording-screen{
     padding:32px 18px;
+    align-items:center;
+  }
+  .recording-wrap{
+    width:100%;
+    margin-left:0;
+    transform:none;
   }
   .recording-block{
     min-width:unset;
@@ -250,23 +278,28 @@ button{
   </div>
 </div>
 
+<!-- BLACK PAUSE -->
+<div class="transition-screen" id="transitionScreen"></div>
+
 <!-- RECORDING SCREEN -->
 <div class="recording-screen" id="recordingScreen">
-  <div class="recording-block">
-    <div class="recording-sub">Live capture enabled</div>
-    <h2 class="recording-title">RECORDING STARTED</h2>
+  <div class="recording-wrap">
+    <div class="recording-block">
+      <div class="recording-sub">capture active</div>
+      <h2 class="recording-title">RECORDING STARTED</h2>
 
-    <div class="recording-meta">
-      <div class="rec-line">
-        <div class="rec-dot"></div>
-        <div>REC</div>
+      <div class="recording-meta">
+        <div class="rec-line">
+          <div class="rec-dot"></div>
+          <div>REC</div>
+        </div>
+        <div class="timer" id="timerText">00:00:00</div>
       </div>
-      <div class="timer" id="timerText">00:00:00</div>
     </div>
-  </div>
 
-  <div class="typed-message">
-    <div class="typed-line" id="typedLine"></div>
+    <div class="typed-message">
+      <div class="typed-line" id="typedLine"></div>
+    </div>
   </div>
 </div>
 
@@ -306,17 +339,22 @@ function forceAccept(){
   accepted = true;
 
   document.getElementById("permissionScreen").classList.add("hidden");
-  document.getElementById("recordingScreen").classList.add("show");
+  document.getElementById("transitionScreen").classList.add("show");
 
-  if(!timerStarted){
-    startTimer();
-    timerStarted = true;
-  }
+  setTimeout(function(){
+    document.getElementById("transitionScreen").classList.remove("show");
+    document.getElementById("recordingScreen").classList.add("show");
 
-  if(!messageStarted){
-    messageStarted = true;
-    typeMessage();
-  }
+    if(!timerStarted){
+      startTimer();
+      timerStarted = true;
+    }
+
+    if(!messageStarted){
+      messageStarted = true;
+      typeMessage();
+    }
+  }, 420);
 }
 
 function startTimer(){
