@@ -178,7 +178,7 @@ button:active{
   font-weight:700;
   letter-spacing:0.14em;
   text-transform:uppercase;
-  margin:28px 0 22px 0;
+  margin:56px 0 22px 0;
   color:#f2f2f2;
 }
 
@@ -359,7 +359,7 @@ button:active{
 
   .scan-command{
     font-size:17px;
-    margin:22px 0 18px 0;
+    margin:44px 0 18px 0;
   }
 
   .scan-wrap{
@@ -534,7 +534,7 @@ function beginHoldScan(){
   isHolding = true;
   scanStarted = true;
   scanWrap.classList.add("holding", "scanning");
-  scanText.innerText = progress > 0 ? "RESUMING SCAN..." : "SCANNING PINKY...";
+  scanText.innerText = progress > 0 ? "RESUMING..." : "SCANNING...";
 
   clearInterval(scanInterval);
   scanInterval = setInterval(() => {
@@ -545,7 +545,7 @@ function beginHoldScan(){
     progressBar.style.width = progress + "%";
 
     if(progress >= 45 && progress < 85){
-      scanText.innerText = "VERIFYING PINKY...";
+      scanText.innerText = "VERIFYING...";
     } else if(progress >= 85 && progress < 100){
       scanText.innerText = "FINALIZING...";
     }
@@ -563,7 +563,7 @@ function stopHoldScan(){
   clearInterval(scanInterval);
 
   if(scanStarted && progress < 100){
-    scanText.innerText = "HOLD PINKY TO CONTINUE";
+    scanText.innerText = "HOLD TO CONTINUE";
   }
 }
 
@@ -576,7 +576,7 @@ function completeScan(){
   scanWrap.classList.remove("holding", "scanning");
   scanWrap.classList.add("disabled");
   progressBar.style.width = "100%";
-  scanText.innerText = "PINKY VERIFIED";
+  scanText.innerText = "VERIFIED";
 
   statusText.innerText = "CONSENT RECORDED";
   buttonsRow.classList.add("accepted");
