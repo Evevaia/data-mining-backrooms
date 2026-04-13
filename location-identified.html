@@ -4,13 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Location Identified</title>
-  <!-- Google tag (gtag.js) -->
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V90RVSJZCT"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-V90RVSJZCT');
 </script>
 
@@ -48,69 +47,12 @@ h1{
   font-size:14px;
   color:#9a9aa3;
   margin-bottom:22px;
+  letter-spacing:0.6px;
+  text-transform:uppercase;
 }
 
 .status.show{
   display:inline-block;
-}
-
-.data-box,
-.mining-box{
-  border:1px solid #2b2b30;
-  background:#101013;
-  padding:16px;
-  margin-bottom:18px;
-  box-sizing:border-box;
-}
-
-.data-box{
-  display:none;
-}
-
-.data-box.show{
-  display:block;
-}
-
-.data-line,
-.mining-line{
-  font-size:14px;
-  line-height:1.8;
-  color:#d7d7dd;
-  word-break:break-word;
-}
-
-.label{
-  color:#9a9aa3;
-  display:inline-block;
-  min-width:150px;
-  vertical-align:top;
-}
-
-.pending{
-  color:#9a9aa3;
-  font-weight:600;
-  letter-spacing:0.03em;
-}
-
-.active{
-  color:#6ea8ff;
-  font-weight:600;
-  letter-spacing:0.03em;
-}
-
-.reveal-line{
-  opacity:0;
-  transform:translateY(6px);
-  transition:opacity 0.35s ease, transform 0.35s ease;
-}
-
-.reveal-line.show{
-  opacity:1;
-  transform:translateY(0);
-}
-
-.hidden-info{
-  display:block;
 }
 
 .map-wrap{
@@ -141,7 +83,6 @@ h1{
   color:#b8b8c2;
   margin:0 0 14px 0;
   min-height:18px;
-  padding:0;
 }
 
 .loading-bar{
@@ -181,134 +122,73 @@ h1{
 
 .location-dot{
   position:absolute;
-  width:16px;
-  height:16px;
+  width:22px;
+  height:22px;
   background:#1a73e8;
   border:3px solid #ffffff;
   border-radius:50%;
-  box-shadow:0 0 0 2px rgba(26,115,232,0.25);
   top:44%;
   left:49%;
   transform:translate(-50%,-50%);
   z-index:3;
   opacity:0;
+  box-shadow:0 0 0 rgba(26,115,232,0.7);
 }
 
 .location-dot.show{
   opacity:1;
-  transition:opacity 0.3s ease;
+  animation:dotPulse 1.6s ease-out infinite;
 }
 
-.location-dot::after{
-  content:"";
-  position:absolute;
-  top:50%;
-  left:50%;
-  width:34px;
-  height:34px;
-  background:rgba(26,115,232,0.22);
-  border-radius:50%;
-  transform:translate(-50%,-50%);
-  animation:pulse 2s ease-out infinite;
+@keyframes dotPulse{
+  0%{
+    box-shadow:0 0 0 0 rgba(26,115,232,0.85);
+  }
+  70%{
+    box-shadow:0 0 0 28px rgba(26,115,232,0);
+  }
+  100%{
+    box-shadow:0 0 0 0 rgba(26,115,232,0);
+  }
 }
 
-.box-title{
-  font-size:11px;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  color:#8e8e97;
-  margin:0 0 14px 0;
-}
-
-.mining-box{
+.data-block{
   display:none;
+  border:1px solid #2b2b30;
+  background:#101013;
+  padding:16px;
+  box-sizing:border-box;
 }
 
-.mining-box.show{
+.data-block.show{
   display:block;
 }
 
-.mining-line{
+.data-line{
+  font-size:14px;
+  line-height:1.9;
+  color:#d7d7dd;
+  word-break:break-word;
   opacity:0;
   transform:translateY(6px);
   transition:opacity 0.35s ease, transform 0.35s ease;
-  margin-bottom:10px;
-  line-height:1.95;
 }
 
-.mining-line:last-of-type{
-  margin-bottom:0;
-}
-
-.mining-line.show{
+.data-line.show{
   opacity:1;
   transform:translateY(0);
 }
 
-.mining-label{
-  color:#f2f2f2;
-  font-weight:700;
+.label{
+  color:#9a9aa3;
   display:inline-block;
-  min-width:170px;
+  min-width:120px;
   vertical-align:top;
 }
 
-.value-live{
+.time-value{
   color:#6ea8ff;
   font-weight:600;
-}
-
-.value-highlight{
-  color:#6ea8ff;
-  font-weight:600;
-}
-
-.final-line{
-  margin-top:28px;
-  font-size:14px;
-  color:#9a9aa3;
-  font-style:italic;
-  opacity:0;
-  transform:translateY(6px);
-  transition:opacity 0.35s ease, transform 0.35s ease;
-}
-
-.final-line.show{
-  opacity:1;
-  transform:translateY(0);
-}
-
-.note{
-  margin-top:14px;
-  font-size:12px;
-  color:#9a9aa3;
-  display:none;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-}
-
-.note.show{
-  display:flex;
-}
-
-.note span{
-  display:inline-block;
-}
-
-.note .live{
-  color:#6ea8ff;
-}
-
-@keyframes pulse{
-  0%{
-    transform:translate(-50%,-50%) scale(0.6);
-    opacity:0.9;
-  }
-  100%{
-    transform:translate(-50%,-50%) scale(1.8);
-    opacity:0;
-  }
 }
 
 @keyframes breathe{
@@ -330,40 +210,21 @@ h1{
   .container{
     padding:20px;
   }
-
   h1{
     font-size:26px;
   }
-
   .label{
     display:block;
     min-width:auto;
     margin-bottom:2px;
   }
-
-  .mining-label{
-    display:block;
-    min-width:auto;
-    margin-bottom:2px;
-  }
-
-  .location-dot{
-    width:14px;
-    height:14px;
-    border-width:2px;
-  }
-
-  .note.show{
-    display:block;
-  }
-
-  .note span{
-    display:block;
-    margin-bottom:6px;
-  }
-
   .map-wrap{
     height:300px;
+  }
+  .location-dot{
+    width:18px;
+    height:18px;
+    border-width:2px;
   }
 }
 </style>
@@ -372,69 +233,30 @@ h1{
 
 <div class="container">
 
-<h1>Location Identified</h1>
+  <h1>Location Identified</h1>
+  <div class="status" id="statusText">TRACKING ACTIVE</div>
 
-<div class="status" id="statusText">Location Data Resolved</div>
+  <div class="map-wrap">
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-text" id="loadingText">Loading Location Data...</div>
+      <div class="loading-bar">
+        <div class="loading-fill" id="loadingFill"></div>
+      </div>
+    </div>
 
-<div class="data-box" id="dataBox">
-  <div class="data-line reveal-line show" id="lineStatus">
-    <span class="label">Status</span>
-    <span class="pending" id="statusValue">Pending</span>
-  </div>
-
-  <div id="hiddenInfo" class="hidden-info">
-    <div class="data-line reveal-line" id="lineLat"><span class="label">Latitude</span> 37.9951914</div>
-    <div class="data-line reveal-line" id="lineLng"><span class="label">Longitude</span> 23.7329735</div>
-    <div class="data-line reveal-line" id="linePlace"><span class="label">Place</span> AKTO Art &amp; Design College</div>
-    <div class="data-line reveal-line" id="lineAddress"><span class="label">Address</span> Evelpidon 11A, Athens 113 62</div>
-  </div>
-</div>
-
-<div class="map-wrap">
-  <div class="loading-screen" id="loadingScreen">
-    <div class="loading-text" id="loadingText">Loading Location Data...</div>
-    <div class="loading-bar">
-      <div class="loading-fill" id="loadingFill"></div>
+    <div class="map-content" id="mapContent">
+      <img src="Live%20Location.png" alt="Map showing AKTO Athens area">
+      <div class="location-dot" id="locationDot"></div>
     </div>
   </div>
 
-  <div class="map-content" id="mapContent">
-    <img src="Live%20Location.png" alt="Map showing AKTO Athens area">
-    <div class="location-dot" id="locationDot"></div>
+  <div class="data-block" id="dataBlock">
+    <div class="data-line" id="dLat"><span class="label">Latitude</span> 37.9951914</div>
+    <div class="data-line" id="dLng"><span class="label">Longitude</span> 23.7329735</div>
+    <div class="data-line" id="dPlace"><span class="label">Location</span> AKTO Art &amp; Design College</div>
+    <div class="data-line" id="dAddress"><span class="label">Address</span> Evelpidon 11A, Athens 113 62</div>
+    <div class="data-line" id="dTime"><span class="label">Time</span> <span class="time-value" id="liveTime">--:--:--</span></div>
   </div>
-</div>
-
-<div class="mining-box" id="miningBox">
-  <div class="box-title">Data Extraction Summary</div>
-
-  <div class="mining-line" id="m1">
-    <span class="mining-label">Location Data</span>
-    <span class="value-live">Collected</span>
-  </div>
-
-  <div class="mining-line" id="m2">
-    <span class="mining-label">Potential Buyers</span>
-    <span class="value-highlight" id="buyersValue">0</span>
-  </div>
-
-  <div class="mining-line" id="m3">
-    <span class="mining-label">Interest Clusters</span>
-    <span class="value-live" id="interestValue">Processing</span>
-  </div>
-
-  <div class="mining-line" id="m4">
-    <span class="mining-label">Profile Value</span>
-    <span class="value-live" id="profileValue">Estimating</span>
-  </div>
-
-  <div class="final-line" id="finalLine">Apparently, your whereabouts remain marketable.</div>
-</div>
-
-<div class="note" id="noteBox">
-  <span class="live">Last Seen: Now</span>
-  <span>Accuracy: 3m</span>
-  <span>Location Services Remain Active.</span>
-</div>
 
 </div>
 
@@ -444,19 +266,9 @@ window.addEventListener("load", function(){
   const loadingText = document.getElementById("loadingText");
   const mapContent = document.getElementById("mapContent");
   const locationDot = document.getElementById("locationDot");
-  const noteBox = document.getElementById("noteBox");
-  const miningBox = document.getElementById("miningBox");
-  const statusValue = document.getElementById("statusValue");
   const statusText = document.getElementById("statusText");
-  const buyersValue = document.getElementById("buyersValue");
-  const interestValue = document.getElementById("interestValue");
-  const profileValue = document.getElementById("profileValue");
-  const dataBox = document.getElementById("dataBox");
-
-  const lineLat = document.getElementById("lineLat");
-  const lineLng = document.getElementById("lineLng");
-  const linePlace = document.getElementById("linePlace");
-  const lineAddress = document.getElementById("lineAddress");
+  const dataBlock = document.getElementById("dataBlock");
+  const liveTime = document.getElementById("liveTime");
 
   const loadingMessages = [
     "Loading Location Data...",
@@ -465,22 +277,15 @@ window.addEventListener("load", function(){
     "Preparing Commercially Useful Conclusions..."
   ];
 
-  const buyerCount = Math.floor(Math.random() * 73) + 28;
-  const interestOptions = [
-    "7 Categories Matched",
-    "9 Categories Matched",
-    "11 Categories Matched",
-    "12 Categories Matched"
-  ];
-  const profileOptions = [
-    "Moderately Profitable",
-    "Commercially Promising",
-    "Surprisingly Tradable",
-    "Above Average"
-  ];
-
-  const chosenInterest = interestOptions[Math.floor(Math.random() * interestOptions.length)];
-  const chosenProfile = profileOptions[Math.floor(Math.random() * profileOptions.length)];
+  function updateClock(){
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,"0");
+    const m = String(now.getMinutes()).padStart(2,"0");
+    const s = String(now.getSeconds()).padStart(2,"0");
+    liveTime.textContent = h + ":" + m + ":" + s;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
 
   setTimeout(function(){
     loadingFill.style.width = "100%";
@@ -495,91 +300,37 @@ window.addEventListener("load", function(){
   setTimeout(function(){
     document.getElementById("loadingScreen").style.display = "none";
     mapContent.classList.add("show");
-
     statusText.classList.add("show");
-    dataBox.classList.add("show");
-
-    statusValue.textContent = "Resolving";
-    statusValue.classList.remove("pending");
-    statusValue.classList.add("active");
-    statusText.textContent = "Location Data Resolved";
-
-    setTimeout(function(){
-      lineLat.classList.add("show");
-    }, 250);
-
-    setTimeout(function(){
-      lineLng.classList.add("show");
-    }, 550);
-
-    setTimeout(function(){
-      linePlace.classList.add("show");
-    }, 900);
-
-    setTimeout(function(){
-      lineAddress.classList.add("show");
-    }, 1250);
-
-    setTimeout(function(){
-      statusValue.textContent = "Active";
-    }, 1500);
 
     setTimeout(function(){
       locationDot.classList.add("show");
-    }, 1750);
+    }, 600);
 
     setTimeout(function(){
-      noteBox.classList.add("show");
+      dataBlock.classList.add("show");
+    }, 1200);
+
+    setTimeout(function(){
+      document.getElementById("dLat").classList.add("show");
+    }, 1400);
+
+    setTimeout(function(){
+      document.getElementById("dLng").classList.add("show");
+    }, 1700);
+
+    setTimeout(function(){
+      document.getElementById("dPlace").classList.add("show");
     }, 2050);
 
     setTimeout(function(){
-      miningBox.classList.add("show");
-    }, 2450);
+      document.getElementById("dAddress").classList.add("show");
+    }, 2400);
 
     setTimeout(function(){
-      document.getElementById("m1").classList.add("show");
-    }, 2700);
-
-    setTimeout(function(){
-      document.getElementById("m2").classList.add("show");
-      animateNumber(buyersValue, buyerCount, 1100);
-    }, 3050);
-
-    setTimeout(function(){
-      document.getElementById("m3").classList.add("show");
-      interestValue.textContent = chosenInterest;
-    }, 3450);
-
-    setTimeout(function(){
-      document.getElementById("m4").classList.add("show");
-      profileValue.textContent = chosenProfile;
-    }, 3850);
-
-    setTimeout(function(){
-      document.getElementById("finalLine").classList.add("show");
-      statusText.textContent = "Commercial Relevance Identified";
-    }, 4350);
+      document.getElementById("dTime").classList.add("show");
+    }, 2800);
 
   }, 7400);
-
-  function animateNumber(el, target, duration){
-    const start = 0;
-    const startTime = performance.now();
-
-    function update(now){
-      const progress = Math.min((now - startTime) / duration, 1);
-      const value = Math.floor(start + (target - start) * progress);
-      el.textContent = value;
-
-      if(progress < 1){
-        requestAnimationFrame(update);
-      }else{
-        el.textContent = target;
-      }
-    }
-
-    requestAnimationFrame(update);
-  }
 });
 </script>
 
