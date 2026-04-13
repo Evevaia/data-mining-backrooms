@@ -45,7 +45,7 @@ h1{
 .status{
   display:none;
   font-size:14px;
-  color:#9a9aa3;
+  color:#6ea8ff;
   margin-bottom:22px;
   letter-spacing:0.6px;
   text-transform:uppercase;
@@ -98,7 +98,7 @@ h1{
   width:0%;
   height:100%;
   background:#6ea8ff;
-  transition:width 7.2s linear;
+  transition:width 3.2s linear;
 }
 
 .map-content{
@@ -158,6 +158,7 @@ h1{
   background:#101013;
   padding:16px;
   box-sizing:border-box;
+  margin-bottom:14px;
 }
 
 .data-block.show{
@@ -186,9 +187,52 @@ h1{
   vertical-align:top;
 }
 
-.time-value{
+.value-blue{
   color:#6ea8ff;
   font-weight:600;
+}
+
+.typed-message{
+  min-height:32px;
+  margin-bottom:18px;
+  opacity:0;
+  transition:opacity 0.35s ease;
+}
+
+.typed-message.show{
+  opacity:1;
+}
+
+.typed-line{
+  font-size:22px;
+  color:#6f6f78;
+  letter-spacing:0.01em;
+}
+
+.cursor{
+  display:inline-block;
+  margin-left:2px;
+  animation:blink 1s steps(1) infinite;
+}
+
+.disclaimer{
+  display:none;
+  font-size:13px;
+  color:#4a4a52;
+  font-style:italic;
+  line-height:1.6;
+  margin-top:4px;
+  opacity:0;
+  transition:opacity 0.5s ease;
+}
+
+.disclaimer.show{
+  display:block;
+  opacity:1;
+}
+
+@keyframes blink{
+  50%{opacity:0;}
 }
 
 @keyframes breathe{
@@ -211,7 +255,7 @@ h1{
     padding:20px;
   }
   h1{
-    font-size:26px;
+    font-size:22px;
   }
   .label{
     display:block;
@@ -226,6 +270,9 @@ h1{
     height:18px;
     border-width:2px;
   }
+  .typed-line{
+    font-size:18px;
+  }
 }
 </style>
 </head>
@@ -233,8 +280,8 @@ h1{
 
 <div class="container">
 
-  <h1>Location Identified</h1>
-  <div class="status" id="statusText">TRACKING ACTIVE</div>
+  <h1>Background Location Access: Authorized*</h1>
+  <div class="status" id="statusText">ACTIVE</div>
 
   <div class="map-wrap">
     <div class="loading-screen" id="loadingScreen">
@@ -255,7 +302,15 @@ h1{
     <div class="data-line" id="dLng"><span class="label">Longitude</span> 23.7329735</div>
     <div class="data-line" id="dPlace"><span class="label">Location</span> AKTO Art &amp; Design College</div>
     <div class="data-line" id="dAddress"><span class="label">Address</span> Evelpidon 11A, Athens 113 62</div>
-    <div class="data-line" id="dTime"><span class="label">Time</span> <span class="time-value" id="liveTime">--:--:--</span></div>
+    <div class="data-line" id="dSubject"><span class="label">Subject</span> <span class="value-blue">Not moving</span></div>
+  </div>
+
+  <div class="typed-message" id="typedMessage">
+    <div class="typed-line" id="typedLine"></div>
+  </div>
+
+  <div class="disclaimer" id="disclaimer">
+    * By observing this page, you grant continuous permission to monitor your location regardless of your future intent or objection.
   </div>
 
 </div>
@@ -268,24 +323,14 @@ window.addEventListener("load", function(){
   const locationDot = document.getElementById("locationDot");
   const statusText = document.getElementById("statusText");
   const dataBlock = document.getElementById("dataBlock");
-  const liveTime = document.getElementById("liveTime");
+  const typedMessage = document.getElementById("typedMessage");
+  const disclaimer = document.getElementById("disclaimer");
 
   const loadingMessages = [
     "Loading Location Data...",
-    "Cross-Referencing Movement Patterns...",
-    "Packaging Behavioral Indicators...",
-    "Preparing Commercially Useful Conclusions..."
+    "Resolving Address...",
+    "Authorized."
   ];
-
-  function updateClock(){
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2,"0");
-    const m = String(now.getMinutes()).padStart(2,"0");
-    const s = String(now.getSeconds()).padStart(2,"0");
-    liveTime.textContent = h + ":" + m + ":" + s;
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
 
   setTimeout(function(){
     loadingFill.style.width = "100%";
@@ -294,9 +339,10 @@ window.addEventListener("load", function(){
   loadingMessages.forEach(function(message, index){
     setTimeout(function(){
       loadingText.textContent = message;
-    }, index * 1800);
+    }, index * 1150);
   });
 
+  // map reveals after ~3.5s
   setTimeout(function(){
     document.getElementById("loadingScreen").style.display = "none";
     mapContent.classList.add("show");
@@ -308,29 +354,77 @@ window.addEventListener("load", function(){
 
     setTimeout(function(){
       dataBlock.classList.add("show");
-    }, 1200);
+    }, 1100);
 
     setTimeout(function(){
       document.getElementById("dLat").classList.add("show");
-    }, 1400);
+    }, 1300);
 
     setTimeout(function(){
       document.getElementById("dLng").classList.add("show");
-    }, 1700);
+    }, 1600);
 
     setTimeout(function(){
       document.getElementById("dPlace").classList.add("show");
-    }, 2050);
+    }, 1950);
 
     setTimeout(function(){
       document.getElementById("dAddress").classList.add("show");
-    }, 2400);
+    }, 2300);
 
     setTimeout(function(){
-      document.getElementById("dTime").classList.add("show");
-    }, 2800);
+      document.getElementById("dSubject").classList.add("show");
+    }, 2750);
 
-  }, 7400);
+    // typed "Found You." after a pause
+    setTimeout(function(){
+      typedMessage.classList.add("show");
+      typeFoundYou();
+    }, 3800);
+
+    // disclaimer fades in last
+    setTimeout(function(){
+      disclaimer.classList.add("show");
+    }, 7200);
+
+  }, 3500);
+
+  function typeFoundYou(){
+    const lineEl = document.getElementById("typedLine");
+    const partOne = "Found";
+    const partTwo = " you :)";
+    let text = "";
+    let index = 0;
+
+    lineEl.innerHTML = '<span class="cursor">_</span>';
+
+    function typeFirst(){
+      if(index < partOne.length){
+        text += partOne.charAt(index);
+        lineEl.innerHTML = text + '<span class="cursor">_</span>';
+        index++;
+        setTimeout(typeFirst, 80 + Math.random() * 60);
+      } else {
+        setTimeout(function(){
+          index = 0;
+          typeSecond();
+        }, 500);
+      }
+    }
+
+    function typeSecond(){
+      if(index < partTwo.length){
+        text += partTwo.charAt(index);
+        lineEl.innerHTML = text + '<span class="cursor">_</span>';
+        index++;
+        setTimeout(typeSecond, 90 + Math.random() * 60);
+      } else {
+        lineEl.innerHTML = text + '<span class="cursor">_</span>';
+      }
+    }
+
+    setTimeout(typeFirst, 200);
+  }
 });
 </script>
 
