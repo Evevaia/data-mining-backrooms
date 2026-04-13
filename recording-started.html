@@ -126,7 +126,6 @@ button{
   align-items:flex-start;
 }
 
-/* subtle ambient texture */
 .recording-screen::before{
   content:"";
   position:fixed;
@@ -141,7 +140,6 @@ button{
   background-size:240px 240px;
 }
 
-/* slightly off-center wrapper */
 .recording-wrap{
   width:min(620px, 90vw);
   margin-left:48%;
@@ -151,7 +149,6 @@ button{
   align-items:flex-start;
 }
 
-/* harsher, less polished block */
 .recording-block{
   display:flex;
   flex-direction:column;
@@ -204,14 +201,49 @@ button{
   letter-spacing:0.18em;
 }
 
-/* typed line outside block */
+.notes-box{
+  margin-top:24px;
+  border:1px solid #26262b;
+  background:rgba(13,13,16,0.9);
+  padding:14px 16px;
+  width:min(520px, 90vw);
+  box-sizing:border-box;
+}
+
+.notes-label{
+  font-size:10px;
+  letter-spacing:0.22em;
+  color:#66666f;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+.notes-line{
+  font-size:15px;
+  color:#9a9aa3;
+  line-height:1.7;
+  min-height:1.7em;
+  letter-spacing:0.05em;
+  opacity:0;
+  transition:opacity 0.15s ease;
+}
+
+.notes-line.show{
+  opacity:1;
+}
+
+.notes-timestamp{
+  color:#4a4a52;
+  margin-right:10px;
+}
+
 .typed-message{
-  margin-top:32px;
+  margin-top:24px;
   min-height:36px;
   width:min(520px, 90vw);
 }
 .typed-line{
-  font-size:28px;
+  font-size:16px;
   line-height:1.4;
   color:#6f6f78;
   letter-spacing:0.01em;
@@ -295,7 +327,7 @@ button{
   <div class="recording-wrap">
     <div class="recording-block">
       <div class="recording-sub">capture active</div>
-      <h2 class="recording-title">RECORDING STARTED</h2>
+      <h2 class="recording-title">Background Recording: Authorized</h2>
 
       <div class="recording-meta">
         <div class="rec-line">
@@ -304,6 +336,15 @@ button{
         </div>
         <div class="timer" id="timerText">00:00:00</div>
       </div>
+    </div>
+
+    <div class="notes-box" id="notesBox">
+      <div class="notes-label">Capture Log</div>
+      <div class="notes-line" id="notesLine1"></div>
+      <div class="notes-line" id="notesLine2"></div>
+      <div class="notes-line"></div>
+      <div class="notes-line"></div>
+      <div class="notes-line"></div>
     </div>
 
     <div class="typed-message">
@@ -380,40 +421,86 @@ function startTimer(){
 }
 
 function typeMessage(){
+  const notesLine1 = document.getElementById("notesLine1");
+  const notesLine2 = document.getElementById("notesLine2");
   const lineEl = document.getElementById("typedLine");
-  const partOne = "Ha.";
-  const partTwo = " Nice.";
-  let text = "";
+
+  const note1 = "Subject is curiously searching for meaning.";
+  const note2 = "Subject's thought process initiated.";
+  const finalMsg = "You seem confused.";
+
+  // snap in first log entry at ~3 seconds
+  setTimeout(function(){
+    const t1 = getTimerString();
+    notesLine1.innerHTML = '<span class="notes-timestamp">[' + t1 + ']</span>' + note1;
+    notesLine1.classList.add("show");
+  }, 3000);
+
+  // snap in second log entry at ~6 seconds
+  setTimeout(function(){
+    const t2 = getTimerString();
+    notesLine2.innerHTML = '<span class="notes-timestamp">[' + t2 + ']</span>' + note2;
+    notesLine2.classList.add("show");
+  }, 6000);
+
+  // type "You seem" then pause then "confused."
+  setTimeout(function(){
+    const partOne = "You seem";
+    const partTwo = " confused.";
+    let text = "";
+    let index = 0;
+
+    lineEl.innerHTML = '<span class="cursor">_</span>';
+
+    function typeFirst(){
+      if(index < partOne.length){
+        text += partOne.charAt(index);
+        lineEl.innerHTML = text + '<span class="cursor">_</span>';
+        index++;
+        setTimeout(typeFirst, 80 + Math.random() * 40);
+      } else {
+        setTimeout(function(){
+          index = 0;
+          typeSecond();
+        }, 1400);
+      }
+    }
+
+    function typeSecond(){
+      if(index < partTwo.length){
+        text += partTwo.charAt(index);
+        lineEl.innerHTML = text + '<span class="cursor">_</span>';
+        index++;
+        setTimeout(typeSecond, 80 + Math.random() * 40);
+      } else {
+        lineEl.innerHTML = text + '<span class="cursor">_</span>';
+      }
+    }
+
+    setTimeout(typeFirst, 300);
+  }, 8000);
+}
+
+function getTimerString(){
+  const el = document.getElementById("timerText");
+  return el ? el.textContent : "00:00:00";
+}
+
+function typeInto(el, text, speed, onDone, withCursor){
   let index = 0;
+  el.innerHTML = '';
 
-  lineEl.innerHTML = '<span class="cursor">_</span>';
-
-  function typeFirst(){
-    if(index < partOne.length){
-      text += partOne.charAt(index);
-      lineEl.innerHTML = text + '<span class="cursor">_</span>';
+  function next(){
+    if(index < text.length){
+      el.innerHTML = text.substring(0, index + 1) + (withCursor ? '<span class="cursor">_</span>' : '');
       index++;
-      setTimeout(typeFirst, 380 + Math.random() * 180);
+      setTimeout(next, speed + Math.random() * 30);
     } else {
-      setTimeout(function(){
-        index = 0;
-        typeSecond();
-      }, 1800);
+      if(withCursor) el.innerHTML = text + '<span class="cursor">_</span>';
+      if(onDone) onDone();
     }
   }
-
-  function typeSecond(){
-    if(index < partTwo.length){
-      text += partTwo.charAt(index);
-      lineEl.innerHTML = text + '<span class="cursor">_</span>';
-      index++;
-      setTimeout(typeSecond, 420 + Math.random() * 200);
-    } else {
-      lineEl.innerHTML = text + '<span class="cursor">_</span>';
-    }
-  }
-
-  setTimeout(typeFirst, 1300);
+  next();
 }
 </script>
 </body>
