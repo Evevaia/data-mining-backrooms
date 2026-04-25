@@ -169,27 +169,37 @@
     position: relative;
     z-index: 2;
     transform: rotate(45deg);
+    opacity: 0.8;
+  }
+
+  .glow-wrap::before{
+    content: '';
+    position: absolute;
+    inset: -60px;
+    background: radial-gradient(circle, rgba(0, 180, 255, 1) 0%, rgba(0, 100, 255, 0.7) 30%, rgba(0, 50, 180, 0.3) 55%, transparent 75%);
+    border-radius: 50%;
+    animation: glowPulse 6s ease-in-out infinite;
   }
 
   @keyframes glowPulse{
     0%{
-      opacity: 0.5;
-      transform: scale(0.95);
+      opacity: 0;
+      transform: scale(0.3);
     }
     /* inhale 1-2-3 */
-    50%{
+    45%{
       opacity: 1;
-      transform: scale(1.18);
+      transform: scale(2.4);
     }
     /* exhale 1-2 */
-    83%{
-      opacity: 0.4;
-      transform: scale(0.9);
+    80%{
+      opacity: 0;
+      transform: scale(0.3);
     }
-    /* pause 1 */
+    /* pause 1 — stays dead */
     100%{
-      opacity: 0.5;
-      transform: scale(0.95);
+      opacity: 0;
+      transform: scale(0.3);
     }
   }
 
