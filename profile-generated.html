@@ -4,13 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profile Generated</title>
-  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V90RVSJZCT"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-V90RVSJZCT');
 </script>
 
@@ -101,7 +99,7 @@ text-align:right;
 .big-warning{
 position:fixed;
 left:50%;
-top:40%;
+top:32%;
 transform:translate(-50%,-50%);
 font-size:54px;
 line-height:1.08;
@@ -118,6 +116,135 @@ font-family:"Lucida Console";
 
 .big-warning.show{
 opacity:1;
+}
+
+/* EXIT BUTTON */
+.exit-btn{
+position:fixed;
+left:50%;
+top:58%;
+transform:translate(-50%,-50%);
+font-family:"Lucida Console";
+font-size:16px;
+letter-spacing:0.25em;
+color:#e8e8e8;
+background:transparent;
+border:1px solid #e8e8e8;
+padding:12px 36px;
+cursor:pointer;
+opacity:0;
+pointer-events:none;
+z-index:21;
+text-decoration:none;
+display:block;
+text-align:center;
+transition:opacity 0.2s ease;
+}
+
+.exit-btn.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.exit-btn.glitching{
+animation:btnGlitch 0.08s steps(1) infinite;
+}
+
+@keyframes btnGlitch{
+0%{
+  transform:translate(-50%,-50%) skewX(0deg);
+  filter:none;
+  border-color:#e8e8e8;
+  color:#e8e8e8;
+}
+20%{
+  transform:translate(calc(-50% + 3px),-50%) skewX(4deg);
+  filter:brightness(2) hue-rotate(90deg);
+  border-color:#ff0080;
+  color:#ff0080;
+}
+40%{
+  transform:translate(calc(-50% - 4px),-50%) skewX(-3deg);
+  filter:brightness(1.5) hue-rotate(180deg);
+  border-color:#00ffff;
+  color:#00ffff;
+}
+60%{
+  transform:translate(calc(-50% + 2px),calc(-50% + 2px)) skewX(2deg);
+  filter:brightness(2) hue-rotate(270deg);
+  border-color:#ffffff;
+  color:#ffffff;
+}
+80%{
+  transform:translate(calc(-50% - 2px),calc(-50% - 1px)) skewX(-5deg);
+  filter:brightness(1.8) hue-rotate(45deg);
+  border-color:#ff0080;
+  color:#ff0080;
+}
+100%{
+  transform:translate(-50%,-50%) skewX(0deg);
+  filter:none;
+  border-color:#e8e8e8;
+  color:#e8e8e8;
+}
+}
+
+@keyframes statGlitch{
+0%{
+  transform:skewX(0deg) translateX(0);
+  color:#e8e8e8;
+}
+20%{
+  transform:skewX(4deg) translateX(3px);
+  color:#ff0080;
+}
+40%{
+  transform:skewX(-3deg) translateX(-4px);
+  color:#00ffff;
+}
+60%{
+  transform:skewX(2deg) translateX(2px);
+  color:#ff0080;
+}
+80%{
+  transform:skewX(-5deg) translateX(-2px);
+  color:#00ffff;
+}
+100%{
+  transform:skewX(0deg) translateX(0);
+  color:#e8e8e8;
+}
+}
+
+body.hacking{
+animation:screenGlitch 0.08s steps(1) infinite;
+}
+
+@keyframes screenGlitch{
+0%{
+  transform:skewX(0deg) translateX(0);
+  color:#e8e8e8;
+}
+20%{
+  transform:skewX(1.5deg) translateX(3px);
+  color:#ff0080;
+}
+40%{
+  transform:skewX(-2deg) translateX(-4px);
+  color:#00ffff;
+}
+60%{
+  transform:skewX(1deg) translateX(2px);
+  color:#ff0080;
+}
+80%{
+  transform:skewX(-1.5deg) translateX(-2px);
+  color:#00ffff;
+}
+100%{
+  transform:skewX(0deg) translateX(0);
+  color:#e8e8e8;
+}
 }
 
 .flash{
@@ -165,26 +292,49 @@ pointer-events:none;
 }
 
 .crt-overlay::before{
-background:
-repeating-linear-gradient(
-to bottom,
-rgba(255,255,255,0.05) 0px,
-rgba(255,255,255,0.05) 1px,
-transparent 2px,
-transparent 4px
-);
-opacity:0.9;
+display:none;
 }
 
 .crt-overlay::after{
-background:linear-gradient(
-90deg,
-rgba(255,0,80,0.08),
-transparent 35%,
-transparent 65%,
-rgba(0,180,255,0.08)
-);
-opacity:0.85;
+background:transparent;
+}
+
+.crt-overlay.active{
+opacity:1;
+animation:screenGlitch 0.08s steps(1) infinite;
+}
+
+@keyframes screenGlitch{
+0%{
+  transform:skewX(0deg) translateX(0);
+  filter:none;
+  opacity:0.6;
+}
+20%{
+  transform:skewX(1.5deg) translateX(3px);
+  filter:hue-rotate(90deg) brightness(1.4);
+  opacity:0.8;
+}
+40%{
+  transform:skewX(-2deg) translateX(-4px);
+  filter:hue-rotate(180deg) brightness(1.2);
+  opacity:0.7;
+}
+60%{
+  transform:skewX(1deg) translateX(2px);
+  filter:hue-rotate(270deg) brightness(1.5);
+  opacity:0.9;
+}
+80%{
+  transform:skewX(-1.5deg) translateX(-2px);
+  filter:hue-rotate(45deg) brightness(1.3);
+  opacity:0.75;
+}
+100%{
+  transform:skewX(0deg) translateX(0);
+  filter:none;
+  opacity:0.6;
+}
 }
 
 .fragment{
@@ -234,11 +384,16 @@ height:8px;
 text-align:left;
 }
 .big-warning{
-top:38%;
+top:30%;
 font-size:34px;
 letter-spacing:2px;
 line-height:1.12;
 font-family:"Lucida Console";
+}
+.exit-btn{
+font-size:13px;
+padding:10px 24px;
+top:56%;
 }
 }
 </style>
@@ -250,6 +405,7 @@ font-family:"Lucida Console";
 <div class="crt-overlay" id="crtOverlay"></div>
 <div class="flash" id="flash"></div>
 <div class="big-warning" id="getOut"></div>
+<a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html">EXIT</a>
 
 <script>
 const screen = document.getElementById("screen");
@@ -257,6 +413,7 @@ const flash = document.getElementById("flash");
 const preFlicker = document.getElementById("preFlicker");
 const crtOverlay = document.getElementById("crtOverlay");
 const getOut = document.getElementById("getOut");
+const exitBtn = document.getElementById("exitBtn");
 
 const introLines = [
   "RUNNING BEHAVIORAL ANALYSIS...",
@@ -283,10 +440,48 @@ let barInterval = null;
 let physicsRunning = false;
 let trembleInterval = null;
 let crtInterval = null;
+let glitchTimeout = null;
 
 const cursor = document.createElement("span");
 cursor.className = "cursor";
 cursor.textContent = "_";
+
+// irregular glitch pattern: [normalDuration, glitchDuration] in ms
+const glitchPattern = [
+  [2000, 600],
+  [5000, 400],
+  [2000, 700],
+  [8000, 300],
+  [3000, 500],
+  [6000, 800],
+  [2000, 400],
+];
+
+function startGlitchCycle(patternIndex){
+  const pattern = glitchPattern[patternIndex % glitchPattern.length];
+  const normalDur = pattern[0];
+  const glitchDur = pattern[1];
+
+  exitBtn.classList.remove("glitching");
+  glitchTimeout = setTimeout(function(){
+    exitBtn.classList.add("glitching");
+    glitchTimeout = setTimeout(function(){
+      startGlitchCycle(patternIndex + 1);
+    }, glitchDur);
+  }, normalDur);
+}
+
+function showExitBtn(){
+  exitBtn.classList.add("show");
+  exitBtn.classList.add("glitching");
+  setTimeout(function(){
+    exitBtn.classList.remove("glitching");
+    exitBtn.textContent = "EXIT";
+    setTimeout(function(){
+      startGlitchCycle(0);
+    }, 400);
+  }, 800);
+}
 
 function startLine() {
   currentLineEl = document.createElement("div");
@@ -361,7 +556,23 @@ function revealStats() {
   let i = 0;
   function addNextStat() {
     if (i >= stats.length) {
-      setTimeout(runPreHackFlicker, 220);
+      // single glitch beat — 150ms
+      const targets = Array.from(document.querySelectorAll(".particle-target"));
+      targets.forEach(el => {
+        el.style.animation = "statGlitch 0.08s steps(1) infinite";
+      });
+
+      // stop glitch after 150ms — visible but not quite readable for 500ms
+      setTimeout(function(){
+        targets.forEach(el => {
+          el.style.animation = "";
+          el.style.color = "";
+          el.style.transform = "";
+        });
+
+        // after 1000ms of being visible, start hack phase
+        setTimeout(startHackPhase, 1000);
+      }, 150);
       return;
     }
 
@@ -405,41 +616,21 @@ function revealStats() {
 }
 
 function runPreHackFlicker() {
-  crtOverlay.classList.add("active");
+  // apply button-style glitch to all stat rows
+  const targets = Array.from(document.querySelectorAll(".particle-target"));
+  
+  targets.forEach(el => {
+    el.style.animation = "statGlitch 0.08s steps(1) infinite";
+  });
 
-  const flickers = [
-    { opacity: 0.12, duration: 90, shift: 2 },
-    { opacity: 0.00, duration: 55, shift: 0 },
-    { opacity: 0.08, duration: 75, shift: 1 },
-    { opacity: 0.00, duration: 50, shift: 0 },
-    { opacity: 0.16, duration: 110, shift: 3 },
-    { opacity: 0.05, duration: 80, shift: 1 },
-    { opacity: 0.00, duration: 65, shift: 0 },
-    { opacity: 0.11, duration: 90, shift: 2 }
-  ];
-
-  let i = 0;
-
-  function nextFlicker() {
-    if (i >= flickers.length) {
-      preFlicker.style.opacity = "0";
-      screen.style.opacity = "1";
-      screen.style.transform = "";
-      setTimeout(startHackPhase, 100);
-      return;
-    }
-
-    const step = flickers[i];
-    preFlicker.style.opacity = step.opacity;
-    screen.style.opacity = step.opacity > 0 ? "0.88" : "1";
-    screen.style.transform = step.opacity > 0
-      ? `translate(${(Math.random()-0.5)*step.shift}px, ${(Math.random()-0.5)*step.shift}px) skewX(${(Math.random()-0.5)*1.2}deg)`
-      : "";
-    i++;
-    setTimeout(nextFlicker, step.duration);
-  }
-
-  nextFlicker();
+  setTimeout(function(){
+    targets.forEach(el => {
+      el.style.animation = "";
+      el.style.color = "";
+      el.style.transform = "";
+    });
+    setTimeout(startHackPhase, 100);
+  }, 800);
 }
 
 function startHackPhase() {
@@ -490,11 +681,14 @@ function startHackPhase() {
 }
 
 function startCRTBleed() {
+  document.body.classList.add("hacking");
   crtInterval = setInterval(() => {
     const x = (Math.random() - 0.5) * 3.2;
     const y = (Math.random() - 0.5) * 2.2;
     const skew = (Math.random() - 0.5) * 1.3;
-    screen.style.filter = `contrast(${1 + Math.random() * 0.15}) brightness(${0.92 + Math.random() * 0.12})`;
+    const hue = Math.floor(Math.random() * 360);
+    const brightness = 0.92 + Math.random() * 0.3;
+    screen.style.filter = `contrast(${1 + Math.random() * 0.15}) brightness(${brightness}) hue-rotate(${hue}deg)`;
     screen.style.transform = `translate(${x}px, ${y}px) skewX(${skew}deg)`;
   }, 85);
 }
@@ -504,6 +698,7 @@ function stopCRTBleed() {
     clearInterval(crtInterval);
     crtInterval = null;
   }
+  document.body.classList.remove("hacking");
   screen.style.filter = "";
   screen.style.transform = "";
   crtOverlay.classList.remove("active");
@@ -512,15 +707,15 @@ function stopCRTBleed() {
 function startTremblePhase() {
   const targets = Array.from(document.querySelectorAll(".particle-target"));
   const startTime = performance.now();
-  const buildDuration = 2450;
+  const buildDuration = 4500;
 
   trembleInterval = setInterval(() => {
     const elapsed = performance.now() - startTime;
     const progress = Math.min(elapsed / buildDuration, 1);
 
-    const eased = Math.pow(progress, 1.9);
-    const strength = 0.15 + eased * 12;
-    const rotateStrength = 0.02 + eased * 2.4;
+    const eased = Math.pow(progress, 2.5);
+    const strength = 0.1 + eased * 12;
+    const rotateStrength = 0.01 + eased * 2.4;
 
     targets.forEach((el) => {
       const tx = (Math.random() - 0.5) * strength;
@@ -615,10 +810,17 @@ function explodeScreen() {
 
   runPhysics(pieces);
 
+  // GET OUT. appears at 2800ms
   setTimeout(() => {
     typeBigWarning(getOut, "GET OUT.");
   }, 2800);
 
+  // EXIT button appears at 5000ms (between GET OUT and NOW)
+  setTimeout(() => {
+    showExitBtn();
+  }, 5000);
+
+  // NOW! appears at 7600ms
   setTimeout(() => {
     appendWarningLine(getOut, "NOW!");
   }, 7600);
