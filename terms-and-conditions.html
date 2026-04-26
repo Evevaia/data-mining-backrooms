@@ -10,7 +10,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-V90RVSJZCT');
 </script>
 <style>
@@ -158,7 +157,14 @@ button:active{
 }
 
 .popup p{
-  margin:0;
+  margin:0 0 20px 0;
+}
+
+.popup-buttons{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
 }
 
 .overlay{
@@ -310,8 +316,25 @@ button:active{
   transition:width 0.06s linear;
 }
 
-.ok-popup-text{
-  margin:0 0 14px 0 !important;
+/* EXIT BUTTON */
+.exit-btn{
+  display:none;
+  margin-top:16px;
+  padding:12px 18px;
+  font-size:14px;
+  border:1px solid #2b2b30;
+  background:#f2f2f2;
+  color:#111;
+  cursor:pointer;
+  width:100%;
+  box-sizing:border-box;
+  text-align:center;
+  text-decoration:none;
+  letter-spacing:0.05em;
+}
+
+.exit-btn.show{
+  display:block;
 }
 
 @keyframes scanMove{
@@ -438,51 +461,39 @@ button:active{
     <p>
       By accessing this page, scanning the associated code, or simply existing in the general proximity of this interface, you acknowledge that you have read, understood, and agreed to the following Terms & Conditions, whether or not you have actually read them.
     </p>
-
     <p>
       By accepting these terms, you grant the system permission to observe, record, interpret, archive, and occasionally misinterpret any interaction taking place between you and this interface.
     </p>
-
     <p>
       You agree that any hesitation, scrolling, blinking, curiosity, eye movement, or accidental engagement may be interpreted as clear and enthusiastic consent.
     </p>
-
     <p>
       The system reserves the right to collect small portions of your attention span, fragments of your patience, and any remaining belief that you are still fully in control of what happens next.
     </p>
-
     <p>
       In the event that a firstborn child is available, the system reserves the symbolic right to claim said child for ceremonial, promotional, narrative, or otherwise unspecified purposes.
     </p>
-
     <p>
       Should a firstborn not be available, the system may instead claim: one moderately important childhood memory, your favorite snack, or the permanent ownership of a single left sock.
     </p>
-
     <p>
       By continuing, you agree to grant the interface a vague but legally impressive sense of authority over minor aspects of your digital destiny.
     </p>
-
     <p>
       The system may also occasionally judge your scrolling speed, silently evaluate your decisions, and remember that one time you almost clicked decline.
     </p>
-
     <p>
       Refusal to accept these terms may result in limited functionality, mild existential doubt, spontaneous inconvenience, or the immediate disappearance of any visible decline option.
     </p>
-
     <p>
       You acknowledge that any attempt to resist, question, or outsmart the system may be logged, archived, and possibly laughed at by an algorithm at a later date.
     </p>
-
     <p>
       These Terms & Conditions may be updated, expanded, rewritten, worsened, or made slightly more ominous at any time without prior notice.
     </p>
-
     <p>
       Continued interaction with this interface constitutes acceptance of all current and future versions, including those that have not yet been invented.
     </p>
-
     <p>
       By proceeding, you confirm that your agreement is given freely, willingly, and with only minimal existential resistance.
     </p>
@@ -493,6 +504,8 @@ button:active{
     <button class="decline" id="declineBtn" onclick="declineTerms()">DECLINE</button>
     <div class="accepted-state" id="acceptedState">TERMS ACCEPTED</div>
   </div>
+
+  <a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html">EXIT</a>
 
   <div class="overlay" id="overlay"></div>
 
@@ -518,7 +531,10 @@ button:active{
 
   <div class="popup" id="popup">
     <p class="ok-popup-text">Thank you. See you soon.</p>
-    <button onclick="closePopup()">OK</button>
+    <div class="popup-buttons">
+      <button onclick="closePopup()">REREAD THE TERMS</button>
+      <button onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/info.html'">EXIT</button>
+    </div>
   </div>
 
 </div>
@@ -540,6 +556,7 @@ const scanText = document.getElementById("scanText");
 const progressBar = document.getElementById("progressBar");
 const buttonsRow = document.getElementById("buttonsRow");
 const statusText = document.getElementById("status");
+const exitBtn = document.getElementById("exitBtn");
 
 let scanStarted = false;
 let scanComplete = false;
@@ -552,7 +569,6 @@ const progressStep = (tickRate / requiredHold) * 100;
 
 function acceptTerms(){
   if(termsAccepted || acceptanceStarted) return;
-
   acceptanceStarted = true;
   statusText.innerText = "CONSENT IN PROGRESS";
   buttonsRow.classList.add("hidden-actions");
@@ -562,7 +578,6 @@ function acceptTerms(){
 
 function beginHoldScan(){
   if(scanComplete || isHolding || termsAccepted) return;
-
   isHolding = true;
   scanStarted = true;
   scanWrap.classList.add("holding", "scanning");
@@ -571,7 +586,6 @@ function beginHoldScan(){
   clearInterval(scanInterval);
   scanInterval = setInterval(() => {
     if(!isHolding || scanComplete) return;
-
     progress += progressStep;
     if(progress > 100) progress = 100;
     progressBar.style.width = progress + "%";
@@ -593,7 +607,6 @@ function stopHoldScan(){
   isHolding = false;
   scanWrap.classList.remove("holding", "scanning");
   clearInterval(scanInterval);
-
   if(scanStarted && progress < 100){
     scanText.innerText = "HOLD TO CONTINUE";
   }
@@ -609,13 +622,13 @@ function completeScan(){
   scanWrap.classList.add("disabled");
   progressBar.style.width = "100%";
   scanText.innerText = "VERIFIED";
-
   statusText.innerText = "CONSENT RECORDED";
   buttonsRow.classList.add("accepted");
 
   setTimeout(() => {
     document.getElementById("scanPopup").classList.remove("show");
     document.getElementById("popup").classList.add("show");
+    exitBtn.classList.add("show");
   }, 900);
 }
 
@@ -636,7 +649,6 @@ document.addEventListener("touchcancel", stopHoldScan);
 
 scanWrap.addEventListener("keydown", function(e){
   if(scanComplete || termsAccepted) return;
-
   if((e.key === "Enter" || e.key === " ") && !isHolding){
     e.preventDefault();
     beginHoldScan();
@@ -660,17 +672,14 @@ function declineTerms(){
 
   if(!moving){
     moving = true;
-
     const rect = btn.getBoundingClientRect();
     x = rect.left;
     y = rect.top;
-
     btn.style.position = "fixed";
     btn.style.left = x + "px";
     btn.style.top = y + "px";
     btn.style.margin = "0";
     btn.style.zIndex = "1000";
-
     moveButton();
     return;
   }
@@ -683,16 +692,12 @@ function moveButton(){
 
   function animate(){
     if(!btn || termsAccepted || acceptanceStarted || !moving || declineDestroyed) return;
-
     x += dx;
     y += dy;
-
     if(x + btn.offsetWidth >= window.innerWidth || x <= 0) dx *= -1;
     if(y + btn.offsetHeight >= window.innerHeight || y <= 0) dy *= -1;
-
     btn.style.left = x + "px";
     btn.style.top = y + "px";
-
     moveFrame = requestAnimationFrame(animate);
   }
 
@@ -701,7 +706,6 @@ function moveButton(){
 
 function snapPieces(){
   if(termsAccepted || acceptanceStarted || declineDestroyed || !btn) return;
-
   declineDestroyed = true;
   moving = false;
   cancelAnimationFrame(moveFrame);
@@ -727,7 +731,6 @@ function snapPieces(){
       const vx = Math.cos(angle) * speed;
       const vy = Math.sin(angle) * speed - (Math.random() * 1.5);
       const rotateSpeed = -12 + Math.random() * 24;
-
       animatePiece(p, vx, vy, rotateSpeed);
     }
   }
@@ -748,15 +751,13 @@ function animatePiece(piece, vx, vy, rotateSpeed){
     vy += gravity;
     rotation += rotateSpeed;
     opacity -= 0.025;
-
     piece.style.left = currentX + "px";
     piece.style.top = currentY + "px";
     piece.style.opacity = opacity;
     piece.style.transform = `scale(${Math.max(opacity, 0)}) rotate(${rotation}deg)`;
-
     if(opacity > 0){
       requestAnimationFrame(move);
-    }else{
+    } else {
       piece.remove();
     }
   }
