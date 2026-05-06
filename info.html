@@ -251,6 +251,38 @@
     font-style: italic;
   }
 
+  /* nav buttons */
+  .nav-block{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.85s;
+  }
+
+  .nav-btn{
+    display: block;
+    padding: 12px 8px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: transparent;
+    border: 1px solid #1e2d4a;
+    text-decoration: none;
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .nav-btn:active{
+    border-color: #3a6fd8;
+    background: rgba(58, 111, 216, 0.08);
+  }
+
   /* divider */
   .divider{
     height: 1px;
@@ -350,6 +382,13 @@
     <p class="body-text" style="font-size: 18px; line-height: 1.7; font-style: italic; font-weight: 300;">
       Hawthorne Effect: the tendency to alter behavior when aware of being observed. The effect persists long after observation has ceased.
     </p>
+  </div>
+
+  <div class="nav-block">
+    <button class="nav-btn" onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/terms-and-conditions.html'">CONSENT</button>
+    <button class="nav-btn" onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/location-identified.html'">LOCATION</button>
+    <button class="nav-btn" onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/recording-started.html'">RECORDING</button>
+    <button class="nav-btn" onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/profile-generated.html'">PROFILE</button>
   </div>
 
   <div class="divider"></div>
