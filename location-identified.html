@@ -250,7 +250,25 @@ h1{
   }
 }
 
-@media (max-width:600px){
+.exit-btn{
+  display:none;
+  margin-top:16px;
+  padding:12px 18px;
+  font-size:14px;
+  border:none;
+  background:#1a73e8;
+  color:#ffffff;
+  cursor:pointer;
+  width:100%;
+  box-sizing:border-box;
+  text-align:center;
+  text-decoration:none;
+  letter-spacing:0.05em;
+}
+
+.exit-btn.show{
+  display:block;
+}
   .container{
     padding:20px;
   }
@@ -312,6 +330,8 @@ h1{
   <div class="disclaimer" id="disclaimer">
     * By observing this page, you grant continuous permission to monitor your location regardless of your future intent or objection.
   </div>
+
+  <a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html">EXIT</a>
 
 </div>
 
@@ -385,6 +405,9 @@ window.addEventListener("load", function(){
     // disclaimer fades in last
     setTimeout(function(){
       disclaimer.classList.add("show");
+      setTimeout(function(){
+        document.getElementById("exitBtn").classList.add("show");
+      }, 600);
     }, 7200);
 
   }, 3500);
