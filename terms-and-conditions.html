@@ -4,568 +4,272 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pinky Consent Protocol</title>
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V90RVSJZCT"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-V90RVSJZCT');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-V90RVSJZCT');
 </script>
 <style>
 body{
-  background:#0e0e10;
-  color:#f2f2f2;
-  font-family:Arial, Helvetica, sans-serif;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
-  margin:0;
-  overflow:hidden;
+background:#0e0e10;
+color:#f2f2f2;
+font-family:Arial, Helvetica, sans-serif;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+margin:0;
+overflow:hidden;
 }
-
 .container{
-  width:720px;
-  max-width:calc(100vw - 32px);
-  background:#151518;
-  border:1px solid #2b2b30;
-  padding:30px;
-  position:relative;
-  box-sizing:border-box;
+width:720px;
+max-width:calc(100vw - 32px);
+background:#151518;
+border:1px solid #2b2b30;
+padding:30px;
+position:relative;
+box-sizing:border-box;
 }
-
-h1{
-  margin-top:0;
-  margin-bottom:15px;
-  font-size:28px;
-}
-
-.status{
-  font-size:14px;
-  color:#9a9aa3;
-  margin-bottom:20px;
-  letter-spacing:0.6px;
-  text-transform:uppercase;
-}
-
+h1{ margin-top:0; margin-bottom:15px; font-size:28px; }
+.status{ font-size:14px; color:#9a9aa3; margin-bottom:20px; letter-spacing:0.6px; text-transform:uppercase; }
 .terms{
-  height:300px;
-  overflow:auto;
-  border:1px solid #2b2b30;
-  background:#101013;
-  padding:15px;
-  font-size:13px;
-  line-height:1.5;
-  color:#d7d7dd;
-  box-sizing:border-box;
-  scrollbar-width:thin;
-  scrollbar-color:#4a4a50 #101013;
+height:300px; overflow:auto; border:1px solid #2b2b30; background:#101013;
+padding:15px; font-size:13px; line-height:1.5; color:#d7d7dd; box-sizing:border-box;
+scrollbar-width:thin; scrollbar-color:#4a4a50 #101013;
 }
-
-.terms::-webkit-scrollbar{
-  width:5px;
-}
-.terms::-webkit-scrollbar-track{
-  background:#101013;
-}
-.terms::-webkit-scrollbar-thumb{
-  background:#4a4a50;
-  border-radius:10px;
-}
-
-.buttons{
-  margin-top:20px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-  min-height:46px;
-}
-
-button{
-  padding:12px 18px;
-  font-size:14px;
-  border:1px solid #2b2b30;
-  background:#f2f2f2;
-  color:#111;
-  cursor:pointer;
-  transition:opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
-}
-
-button:active{
-  transform:scale(0.98);
-}
-
-.decline{
-  background:#c52828;
-  color:white;
-  border:none;
-  position:relative;
-  z-index:2;
-}
-
-.buttons.hidden-actions button{
-  display:none;
-}
-
-.accepted-state{
-  display:none;
-  width:100%;
-  border:1px solid #2b2b30;
-  background:#101013;
-  color:#d7d7dd;
-  padding:13px 16px;
-  font-size:13px;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  box-sizing:border-box;
-}
-
-.buttons.accepted .accepted-state{
-  display:block;
-}
-
-.snap-piece{
-  position:fixed;
-  background:#c52828;
-  border-radius:3px;
-  pointer-events:none;
-  opacity:1;
-  transform:scale(1) rotate(0deg);
-  z-index:9999;
-}
-
-.popup{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:#101013;
-  border:1px solid #2b2b30;
-  padding:30px 34px 28px 34px;
-  width:520px;
-  max-width:calc(100vw - 48px);
-  text-align:center;
-  display:none;
-  z-index:1001;
-  box-sizing:border-box;
-}
-
-.popup.show{
-  display:block;
-}
-
-.popup p{
-  margin:0 0 20px 0;
-}
-
-.popup-buttons{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.45);
-  display:none;
-  z-index:1000;
-}
-
-.overlay.show{
-  display:block;
-}
-
-.scan-title{
-  font-size:64px;
-  font-weight:700;
-  line-height:0.94;
-  margin:0;
-  letter-spacing:-0.06em;
-}
-
-.scan-gap{
-  height:72px;
-}
-
-.scan-command{
-  font-size:22px;
-  font-weight:700;
-  letter-spacing:0.16em;
-  text-transform:uppercase;
-  margin:0 0 28px 0;
-  color:#f2f2f2;
-}
-
+.terms::-webkit-scrollbar{ width:5px; }
+.terms::-webkit-scrollbar-track{ background:#101013; }
+.terms::-webkit-scrollbar-thumb{ background:#4a4a50; border-radius:10px; }
+.buttons{ margin-top:20px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; min-height:46px; }
+button{ padding:12px 18px; font-size:14px; border:1px solid #2b2b30; background:#f2f2f2; color:#111; cursor:pointer; transition:opacity 0.2s ease, transform 0.2s ease, background 0.2s ease; }
+button:active{ transform:scale(0.98); }
+.decline{ background:#c52828; color:white; border:none; position:relative; z-index:2; }
+.buttons.hidden-actions button{ display:none; }
+.accepted-state{ display:none; width:100%; border:1px solid #2b2b30; background:#101013; color:#d7d7dd; padding:13px 16px; font-size:13px; letter-spacing:1px; text-transform:uppercase; box-sizing:border-box; }
+.buttons.accepted .accepted-state{ display:block; }
+.snap-piece{ position:fixed; background:#c52828; border-radius:3px; pointer-events:none; opacity:1; transform:scale(1) rotate(0deg); z-index:9999; }
+.popup{ position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#101013; border:1px solid #2b2b30; padding:30px 34px 28px 34px; width:520px; max-width:calc(100vw - 48px); text-align:center; display:none; z-index:1001; box-sizing:border-box; }
+.popup.show{ display:block; }
+.popup p{ margin:0 0 20px 0; }
+.popup-buttons{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.45); display:none; z-index:1000; }
+.overlay.show{ display:block; }
+.scan-title{ font-size:64px; font-weight:700; line-height:0.94; margin:0; letter-spacing:-0.06em; }
+.scan-gap{ height:72px; }
+.scan-command{ font-size:22px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; margin:0 0 28px 0; color:#f2f2f2; text-align:center; }
 .scan-wrap{
-  margin:0 auto;
-  width:190px;
-  height:240px;
-  border:1px solid #2b2b30;
-  background:
-    radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%),
-    #0c0c0f;
-  position:relative;
-  overflow:hidden;
-  border-radius:22px;
-  cursor:pointer;
-  transition:
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
-  touch-action:none;
+margin:0 auto; width:190px; height:240px; border:1px solid #2b2b30;
+background:radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%), #0c0c0f;
+position:relative; overflow:hidden; border-radius:22px; cursor:pointer;
+transition:border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+touch-action:none;
 }
+.scan-wrap:hover{ border-color:#4d4d56; box-shadow:0 0 0 1px rgba(255,255,255,0.04), 0 0 22px rgba(255,255,255,0.04); transform:translateY(-1px); }
+.scan-wrap.holding{ transform:scale(0.985); border-color:#6a6a74; box-shadow:0 0 0 1px rgba(255,255,255,0.05), 0 0 28px rgba(255,255,255,0.06); }
+.scan-wrap.disabled{ pointer-events:none; cursor:default; opacity:0.92; }
+.pinky-image-wrap{ position:absolute; inset:18px; display:flex; align-items:center; justify-content:center; user-select:none; transition:opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease; opacity:0.86; }
+.scan-wrap:hover .pinky-image-wrap{ opacity:1; transform:scale(1.02); }
+.scan-wrap.holding .pinky-image-wrap{ opacity:1; transform:scale(0.99); filter:brightness(1.08); }
+.pinky-image{ max-width:100%; max-height:100%; width:auto; height:auto; display:block; object-fit:contain; filter:grayscale(1) contrast(1.08) brightness(1.02); pointer-events:none; }
+.scan-line{ position:absolute; left:8px; right:8px; height:3px; background:linear-gradient(90deg, transparent, #f2f2f2, transparent); box-shadow:0 0 10px rgba(255,255,255,0.35); top:-10px; opacity:0; }
+.scan-wrap.scanning .scan-line{ opacity:1; animation:scanMove 1.6s linear infinite; }
+.scan-bottom{ margin-top:24px; }
+.scan-text{ font-size:12px; color:#9a9aa3; min-height:18px; letter-spacing:1.2px; margin-bottom:12px; text-transform:uppercase; }
+.progress-track{ width:100%; height:4px; background:#1f1f24; border:1px solid #2b2b30; overflow:hidden; box-sizing:border-box; }
+.progress-bar{ width:0%; height:100%; background:#f2f2f2; transition:width 0.06s linear; }
 
-.scan-wrap:hover{
-  border-color:#4d4d56;
-  box-shadow:0 0 0 1px rgba(255,255,255,0.04), 0 0 22px rgba(255,255,255,0.04);
-  transform:translateY(-1px);
-}
-
-.scan-wrap.holding{
-  transform:scale(0.985);
-  border-color:#6a6a74;
-  box-shadow:0 0 0 1px rgba(255,255,255,0.05), 0 0 28px rgba(255,255,255,0.06);
-}
-
-.scan-wrap.disabled{
-  pointer-events:none;
-  cursor:default;
-  opacity:0.92;
-}
-
-.pinky-image-wrap{
-  position:absolute;
-  inset:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  user-select:none;
-  transition:opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
-  opacity:0.86;
-}
-
-.scan-wrap:hover .pinky-image-wrap{
-  opacity:1;
-  transform:scale(1.02);
-}
-
-.scan-wrap.holding .pinky-image-wrap{
-  opacity:1;
-  transform:scale(0.99);
-  filter:brightness(1.08);
-}
-
-.pinky-image{
-  max-width:100%;
-  max-height:100%;
-  width:auto;
-  height:auto;
-  display:block;
-  object-fit:contain;
-  filter:grayscale(1) contrast(1.08) brightness(1.02);
-  pointer-events:none;
-}
-
-.scan-line{
-  position:absolute;
-  left:8px;
-  right:8px;
-  height:3px;
-  background:linear-gradient(90deg, transparent, #f2f2f2, transparent);
-  box-shadow:0 0 10px rgba(255,255,255,0.35);
-  top:-10px;
-  opacity:0;
-}
-
-.scan-wrap.scanning .scan-line{
-  opacity:1;
-  animation:scanMove 1.6s linear infinite;
-}
-
-.scan-bottom{
-  margin-top:24px;
-}
-
-.scan-text{
-  font-size:12px;
-  color:#9a9aa3;
-  min-height:18px;
-  letter-spacing:1.2px;
-  margin-bottom:12px;
-  text-transform:uppercase;
-}
-
-.progress-track{
-  width:100%;
-  height:4px;
-  background:#1f1f24;
-  border:1px solid #2b2b30;
-  overflow:hidden;
-  box-sizing:border-box;
-}
-
-.progress-bar{
-  width:0%;
-  height:100%;
-  background:#f2f2f2;
-  transition:width 0.06s linear;
-}
-
-/* EXIT BUTTON */
+/* EXIT BUTTON — glitch only here */
 .exit-btn{
-  display:none;
-  margin-top:16px;
-  padding:12px 18px;
-  font-size:14px;
-  border:1px solid #2b2b30;
-  background:#f2f2f2;
-  color:#111;
-  cursor:pointer;
-  width:100%;
-  box-sizing:border-box;
-  text-align:center;
-  text-decoration:none;
-  letter-spacing:0.05em;
+display:none;
+margin-top:16px;
+padding:12px 18px;
+font-size:14px;
+border:1px solid #f2f2f2;
+background:#f2f2f2;
+color:#111;
+cursor:pointer;
+width:100%;
+box-sizing:border-box;
+text-align:center;
+text-decoration:none;
+letter-spacing:0.05em;
+position:relative;
 }
+.exit-btn.show{ display:block; }
 
-.exit-btn.show{
-  display:block;
+@keyframes boxGhost{
+0%{   opacity:0;   transform:translate(0,0); }
+15%{  opacity:0.35; transform:translate(6px,0); }
+30%{  opacity:0.25; transform:translate(-5px,0); }
+50%{  opacity:0.4;  transform:translate(7px,0); }
+70%{  opacity:0.2;  transform:translate(-4px,0); }
+85%{  opacity:0.3;  transform:translate(5px,0); }
+100%{ opacity:0;    transform:translate(0,0); }
 }
-
-@keyframes scanMove{
-  0%{ top:-10px; }
-  100%{ top:calc(100% - 8px); }
+@keyframes btnShake{
+0%{   transform:translate(0,0); }
+25%{  transform:translate(-2px,0); }
+50%{  transform:translate(1px,0); }
+75%{  transform:translate(-1px,0); }
+100%{ transform:translate(0,0); }
 }
+@keyframes btnGlitch{
+0%{   transform:translate(0,0); }
+15%{  transform:translate(-3px,0); }
+30%{  transform:translate(4px,0); }
+50%{  transform:translate(-2px,0); }
+70%{  transform:translate(3px,0); }
+85%{  transform:translate(-1px,0); }
+100%{ transform:translate(0,0); }
+}
+@keyframes btnGhost{
+0%{   opacity:0;   transform:translate(0,0); }
+15%{  opacity:0.7; transform:translate(6px,0); }
+30%{  opacity:0.5; transform:translate(-5px,0); }
+50%{  opacity:0.8; transform:translate(7px,0); }
+70%{  opacity:0.4; transform:translate(-4px,0); }
+85%{  opacity:0.6; transform:translate(5px,0); }
+100%{ opacity:0;   transform:translate(0,0); }
+}
+@keyframes scanMove{ 0%{ top:-10px; } 100%{ top:calc(100% - 8px); } }
 
 @media (max-width:700px){
-  body{
-    align-items:flex-start;
-    padding:12px 0;
-    height:auto;
-    min-height:100vh;
-    overflow:auto;
-  }
-
-  .container{
-    width:calc(100vw - 24px);
-    min-height:calc(100vh - 24px);
-    padding:18px;
-    display:flex;
-    flex-direction:column;
-  }
-
-  h1{
-    font-size:24px;
-    margin-bottom:12px;
-  }
-
-  .status{
-    font-size:12px;
-    margin-bottom:14px;
-  }
-
-  .terms{
-    flex:1;
-    height:auto;
-    min-height:calc(100vh - 190px);
-    font-size:12px;
-    line-height:1.45;
-    padding:12px;
-  }
-
-  button{
-    font-size:13px;
-    padding:11px 14px;
-  }
-
-  .popup{
-    width:380px;
-    padding:24px 18px 22px 18px;
-  }
-
-  .scan-title{
-    font-size:48px;
-  }
-
-  .scan-gap{
-    height:58px;
-  }
-
-  .scan-command{
-    font-size:18px;
-    margin:0 0 22px 0;
-  }
-
-  .scan-wrap{
-    width:164px;
-    height:212px;
-  }
-
-  .pinky-image-wrap{
-    inset:16px;
-  }
-
-  .accepted-state{
-    font-size:12px;
-    padding:12px 14px;
-  }
+body{ align-items:flex-start; padding:12px 0; height:auto; min-height:100vh; overflow:auto; }
+.container{ width:calc(100vw - 24px); min-height:calc(100vh - 24px); padding:18px; display:flex; flex-direction:column; }
+h1{ font-size:24px; margin-bottom:12px; }
+.status{ font-size:12px; margin-bottom:14px; }
+.terms{ flex:1; height:auto; min-height:calc(100vh - 190px); font-size:12px; line-height:1.45; padding:12px; }
+button{ font-size:13px; padding:11px 14px; }
+.popup{ width:380px; padding:24px 18px 22px 18px; }
+.scan-title{ font-size:48px; }
+.scan-gap{ height:58px; }
+.scan-command{ font-size:18px; margin:0 0 22px 0; }
+.scan-wrap{ width:164px; height:212px; }
+.pinky-image-wrap{ inset:16px; }
+.accepted-state{ font-size:12px; padding:12px 14px; }
 }
-
 @media (max-width:420px){
-  .terms{
-    min-height:calc(100vh - 175px);
-  }
-
-  .popup{
-    width:340px;
-    padding:22px 14px 20px 14px;
-  }
-
-  .scan-title{
-    font-size:40px;
-  }
-
-  .scan-gap{
-    height:48px;
-  }
-
-  .scan-command{
-    font-size:16px;
-    margin:0 0 20px 0;
-  }
-
-  .scan-wrap{
-    width:150px;
-    height:194px;
-  }
+.terms{ min-height:calc(100vh - 175px); }
+.popup{ width:340px; padding:22px 14px 20px 14px; }
+.scan-title{ font-size:40px; }
+.scan-gap{ height:48px; }
+.scan-command{ font-size:16px; margin:0 0 20px 0; }
+.scan-wrap{ width:150px; height:194px; }
 }
+
+/* POPUP EXIT BUTTON GLITCH */
+.popup-exit-text{ display:inline-block; position:relative; }
+.popup-exit-text::after{
+content:'EXIT';
+position:absolute;
+left:0; top:0;
+color:#c52828;
+opacity:0;
+pointer-events:none;
+}
+.popup-exit-btn.glitching .popup-exit-text{ animation:btnGlitch 0.35s steps(1) forwards; }
+.popup-exit-btn.glitching .popup-exit-text::after{ animation:btnGhost 0.35s steps(1) forwards; }
+.popup-exit-btn.glitching{ animation:btnShake 0.08s steps(1) forwards; }
+.popup-exit-btn.glitching::before{
+content:'EXIT';
+position:absolute;
+inset:0;
+background:#c52828;
+color:#ffffff;
+display:flex;
+align-items:center;
+justify-content:center;
+letter-spacing:0.05em;
+font-size:14px;
+animation:boxGhost 0.35s steps(1) forwards;
+pointer-events:none;
+}
+.popup-exit-btn{ position:relative; }
 </style>
 </head>
-
 <body>
-
 <div class="container">
-
-  <h1>Terms & Conditions</h1>
-
-  <div class="status" id="status">
-    CONSENT REQUIRED
-  </div>
-
+  <h1>Terms &amp; Conditions</h1>
+  <div class="status" id="status">CONSENT REQUIRED</div>
   <div class="terms">
-    <p>
-      By accessing this page, scanning the associated code, or simply existing in the general proximity of this interface, you acknowledge that you have read, understood, and agreed to the following Terms & Conditions, whether or not you have actually read them.
-    </p>
-    <p>
-      By accepting these terms, you grant the system permission to observe, record, interpret, archive, and occasionally misinterpret any interaction taking place between you and this interface.
-    </p>
-    <p>
-      You agree that any hesitation, scrolling, blinking, curiosity, eye movement, or accidental engagement may be interpreted as clear and enthusiastic consent.
-    </p>
-    <p>
-      The system reserves the right to collect small portions of your attention span, fragments of your patience, and any remaining belief that you are still fully in control of what happens next.
-    </p>
-    <p>
-      In the event that a firstborn child is available, the system reserves the symbolic right to claim said child for ceremonial, promotional, narrative, or otherwise unspecified purposes.
-    </p>
-    <p>
-      Should a firstborn not be available, the system may instead claim: one moderately important childhood memory, your favorite snack, or the permanent ownership of a single left sock.
-    </p>
-    <p>
-      By continuing, you agree to grant the interface a vague but legally impressive sense of authority over minor aspects of your digital destiny.
-    </p>
-    <p>
-      The system may also occasionally judge your scrolling speed, silently evaluate your decisions, and remember that one time you almost clicked decline.
-    </p>
-    <p>
-      Refusal to accept these terms may result in limited functionality, mild existential doubt, spontaneous inconvenience, or the immediate disappearance of any visible decline option.
-    </p>
-    <p>
-      You acknowledge that any attempt to resist, question, or outsmart the system may be logged, archived, and possibly laughed at by an algorithm at a later date.
-    </p>
-    <p>
-      These Terms & Conditions may be updated, expanded, rewritten, worsened, or made slightly more ominous at any time without prior notice.
-    </p>
-    <p>
-      Continued interaction with this interface constitutes acceptance of all current and future versions, including those that have not yet been invented.
-    </p>
-    <p>
-      By proceeding, you confirm that your agreement is given freely, willingly, and with only minimal existential resistance.
-    </p>
+    <p>By accessing this page, scanning the associated code, or simply existing in the general proximity of this interface, you acknowledge that you have read, understood, and agreed to the following Terms &amp; Conditions, whether or not you have actually read them.</p>
+    <p>By accepting these terms, you grant the system permission to observe, record, interpret, archive, and occasionally misinterpret any interaction taking place between you and this interface.</p>
+    <p>You agree that any hesitation, scrolling, blinking, curiosity, eye movement, or accidental engagement may be interpreted as clear and enthusiastic consent.</p>
+    <p>The system reserves the right to collect small portions of your attention span, fragments of your patience, and any remaining belief that you are still fully in control of what happens next.</p>
+    <p>In the event that a firstborn child is available, the system reserves the symbolic right to claim said child for ceremonial, promotional, narrative, or otherwise unspecified purposes.</p>
+    <p>Should a firstborn not be available, the system may instead claim: one moderately important childhood memory, your favorite snack, or the permanent ownership of a single left sock.</p>
+    <p>By continuing, you agree to grant the interface a vague but legally impressive sense of authority over minor aspects of your digital destiny.</p>
+    <p>The system may also occasionally judge your scrolling speed, silently evaluate your decisions, and remember that one time you almost clicked decline.</p>
+    <p>Refusal to accept these terms may result in limited functionality, mild existential doubt, spontaneous inconvenience, or the immediate disappearance of any visible decline option.</p>
+    <p>You acknowledge that any attempt to resist, question, or outsmart the system may be logged, archived, and possibly laughed at by an algorithm at a later date.</p>
+    <p>These Terms &amp; Conditions may be updated, expanded, rewritten, worsened, or made slightly more ominous at any time without prior notice.</p>
+    <p>Continued interaction with this interface constitutes acceptance of all current and future versions, including those that have not yet been invented.</p>
+    <p>By proceeding, you confirm that your agreement is given freely, willingly, and with only minimal existential resistance.</p>
   </div>
-
   <div class="buttons" id="buttonsRow">
     <button id="acceptBtn" onclick="acceptTerms()">ACCEPT</button>
     <button class="decline" id="declineBtn" onclick="declineTerms()">DECLINE</button>
     <div class="accepted-state" id="acceptedState">TERMS ACCEPTED</div>
   </div>
-
-  <a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html">EXIT</a>
-
+  <a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html"><span class="exit-btn-text">EXIT</span></a>
   <div class="overlay" id="overlay"></div>
-
   <div class="popup" id="scanPopup">
     <p class="scan-title">Pinky promise?</p>
     <div class="scan-gap"></div>
-    <p class="scan-command">Scan your pinky</p>
-
+    <p class="scan-command">Press and hold<br>your pinky to scan</p>
     <div class="scan-wrap" id="scanWrap" aria-label="Scan pinky" role="button" tabindex="0">
       <div class="pinky-image-wrap">
         <img src="Pinky%20Promise.png" alt="Pinky scan" class="pinky-image">
       </div>
       <div class="scan-line"></div>
     </div>
-
     <div class="scan-bottom">
-      <div class="scan-text" id="scanText">PRESS AND HOLD PINKY TO SCAN</div>
-      <div class="progress-track">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
+      <div class="scan-text" id="scanText"></div>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
     </div>
   </div>
-
   <div class="popup" id="popup">
     <p class="ok-popup-text">Thank you. See you soon.</p>
     <div class="popup-buttons">
       <button onclick="closePopup()">REREAD THE TERMS</button>
-      <button onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/info.html'">EXIT</button>
+      <button class="popup-exit-btn" id="popupExitBtn" onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/info.html'"><span class="popup-exit-text">EXIT</span></button>
     </div>
   </div>
-
 </div>
 
 <script>
 let btn = document.getElementById("declineBtn");
-let dx = 2.5;
-let dy = 2.2;
-let x = 0;
-let y = 0;
-let moving = false;
-let termsAccepted = false;
-let acceptanceStarted = false;
-let declineDestroyed = false;
+let dx = 2.5, dy = 2.2, x = 0, y = 0;
+let moving = false, termsAccepted = false, acceptanceStarted = false, declineDestroyed = false;
 let moveFrame = null;
-
 const scanWrap = document.getElementById("scanWrap");
 const scanText = document.getElementById("scanText");
 const progressBar = document.getElementById("progressBar");
 const buttonsRow = document.getElementById("buttonsRow");
 const statusText = document.getElementById("status");
 const exitBtn = document.getElementById("exitBtn");
-
-let scanStarted = false;
-let scanComplete = false;
-let isHolding = false;
-let progress = 0;
-let scanInterval = null;
-const requiredHold = 3400;
-const tickRate = 30;
+let scanStarted = false, scanComplete = false, isHolding = false, progress = 0, scanInterval = null;
+const requiredHold = 3400, tickRate = 30;
 const progressStep = (tickRate / requiredHold) * 100;
+
+const glitchPattern = [[2000,600],[5000,400],[2000,700],[8000,300],[3000,500],[6000,800],[2000,400]];
+let glitchTimeout = null;
+
+function startGlitchCycle(index){
+  const pattern = glitchPattern[index % glitchPattern.length];
+  const popupExitBtn = document.getElementById("popupExitBtn");
+  if(!popupExitBtn) return;
+  popupExitBtn.classList.remove("glitching");
+  glitchTimeout = setTimeout(function(){
+    popupExitBtn.classList.add("glitching");
+    glitchTimeout = setTimeout(function(){
+      popupExitBtn.classList.remove("glitching");
+      startGlitchCycle(index + 1);
+    }, pattern[1]);
+  }, pattern[0]);
+}
 
 function acceptTerms(){
   if(termsAccepted || acceptanceStarted) return;
@@ -578,193 +282,131 @@ function acceptTerms(){
 
 function beginHoldScan(){
   if(scanComplete || isHolding || termsAccepted) return;
-  isHolding = true;
-  scanStarted = true;
-  scanWrap.classList.add("holding", "scanning");
+  isHolding = true; scanStarted = true;
+  scanWrap.classList.add("holding","scanning");
   scanText.innerText = progress > 0 ? "RESUMING..." : "SCANNING...";
-
   clearInterval(scanInterval);
   scanInterval = setInterval(() => {
     if(!isHolding || scanComplete) return;
     progress += progressStep;
     if(progress > 100) progress = 100;
     progressBar.style.width = progress + "%";
-
-    if(progress >= 45 && progress < 85){
-      scanText.innerText = "VERIFYING...";
-    } else if(progress >= 85 && progress < 100){
-      scanText.innerText = "FINALIZING...";
-    }
-
-    if(progress >= 100){
-      completeScan();
-    }
+    if(progress >= 45 && progress < 85){ scanText.innerText = "VERIFYING..."; }
+    else if(progress >= 85 && progress < 100){ scanText.innerText = "FINALIZING..."; }
+    if(progress >= 100){ completeScan(); }
   }, tickRate);
 }
 
 function stopHoldScan(){
   if(scanComplete) return;
   isHolding = false;
-  scanWrap.classList.remove("holding", "scanning");
+  scanWrap.classList.remove("holding","scanning");
   clearInterval(scanInterval);
-  if(scanStarted && progress < 100){
-    scanText.innerText = "HOLD TO CONTINUE";
-  }
+  if(scanStarted && progress < 100){ scanText.innerText = "HOLD TO CONTINUE"; }
 }
 
 function completeScan(){
-  scanComplete = true;
-  isHolding = false;
-  termsAccepted = true;
+  scanComplete = true; isHolding = false; termsAccepted = true;
   clearInterval(scanInterval);
-
-  scanWrap.classList.remove("holding", "scanning");
+  scanWrap.classList.remove("holding","scanning");
   scanWrap.classList.add("disabled");
   progressBar.style.width = "100%";
   scanText.innerText = "VERIFIED";
   statusText.innerText = "CONSENT RECORDED";
   buttonsRow.classList.add("accepted");
-
   setTimeout(() => {
     document.getElementById("scanPopup").classList.remove("show");
     document.getElementById("popup").classList.add("show");
-    exitBtn.classList.add("show");
+    setTimeout(() => { startGlitchCycle(0); }, 600);
   }, 900);
 }
 
 scanWrap.addEventListener("mousedown", beginHoldScan);
-scanWrap.addEventListener("touchstart", function(e){
-  e.preventDefault();
-  beginHoldScan();
-}, { passive:false });
-
+scanWrap.addEventListener("touchstart", function(e){ e.preventDefault(); beginHoldScan(); }, { passive:false });
 scanWrap.addEventListener("mouseup", stopHoldScan);
 scanWrap.addEventListener("mouseleave", stopHoldScan);
 scanWrap.addEventListener("touchend", stopHoldScan);
 scanWrap.addEventListener("touchcancel", stopHoldScan);
-
 document.addEventListener("mouseup", stopHoldScan);
 document.addEventListener("touchend", stopHoldScan);
 document.addEventListener("touchcancel", stopHoldScan);
-
 scanWrap.addEventListener("keydown", function(e){
   if(scanComplete || termsAccepted) return;
-  if((e.key === "Enter" || e.key === " ") && !isHolding){
-    e.preventDefault();
-    beginHoldScan();
-  }
+  if((e.key === "Enter" || e.key === " ") && !isHolding){ e.preventDefault(); beginHoldScan(); }
 });
-
 scanWrap.addEventListener("keyup", function(e){
-  if(e.key === "Enter" || e.key === " "){
-    e.preventDefault();
-    stopHoldScan();
-  }
+  if(e.key === "Enter" || e.key === " "){ e.preventDefault(); stopHoldScan(); }
 });
 
 function closePopup(){
   document.getElementById("overlay").classList.remove("show");
   document.getElementById("popup").classList.remove("show");
+  exitBtn.classList.add("show");
 }
 
 function declineTerms(){
   if(termsAccepted || acceptanceStarted || declineDestroyed || !btn) return;
-
   if(!moving){
     moving = true;
     const rect = btn.getBoundingClientRect();
-    x = rect.left;
-    y = rect.top;
+    x = rect.left; y = rect.top;
     btn.style.position = "fixed";
-    btn.style.left = x + "px";
-    btn.style.top = y + "px";
-    btn.style.margin = "0";
-    btn.style.zIndex = "1000";
-    moveButton();
-    return;
+    btn.style.left = x + "px"; btn.style.top = y + "px";
+    btn.style.margin = "0"; btn.style.zIndex = "1000";
+    moveButton(); return;
   }
-
   snapPieces();
 }
 
 function moveButton(){
   cancelAnimationFrame(moveFrame);
-
   function animate(){
     if(!btn || termsAccepted || acceptanceStarted || !moving || declineDestroyed) return;
-    x += dx;
-    y += dy;
+    x += dx; y += dy;
     if(x + btn.offsetWidth >= window.innerWidth || x <= 0) dx *= -1;
     if(y + btn.offsetHeight >= window.innerHeight || y <= 0) dy *= -1;
-    btn.style.left = x + "px";
-    btn.style.top = y + "px";
+    btn.style.left = x + "px"; btn.style.top = y + "px";
     moveFrame = requestAnimationFrame(animate);
   }
-
   animate();
 }
 
 function snapPieces(){
   if(termsAccepted || acceptanceStarted || declineDestroyed || !btn) return;
-  declineDestroyed = true;
-  moving = false;
+  declineDestroyed = true; moving = false;
   cancelAnimationFrame(moveFrame);
-
   const rect = btn.getBoundingClientRect();
-  const piecesX = 5;
-  const piecesY = 4;
-  const pieceWidth = rect.width / piecesX;
-  const pieceHeight = rect.height / piecesY;
-
+  const piecesX = 5, piecesY = 4;
+  const pieceWidth = rect.width / piecesX, pieceHeight = rect.height / piecesY;
   for(let row = 0; row < piecesY; row++){
     for(let col = 0; col < piecesX; col++){
       const p = document.createElement("div");
       p.className = "snap-piece";
-      p.style.width = pieceWidth + "px";
-      p.style.height = pieceHeight + "px";
+      p.style.width = pieceWidth + "px"; p.style.height = pieceHeight + "px";
       p.style.left = (rect.left + col * pieceWidth) + "px";
       p.style.top = (rect.top + row * pieceHeight) + "px";
       document.body.appendChild(p);
-
       const angle = Math.random() * Math.PI * 2;
       const speed = 2 + Math.random() * 5;
-      const vx = Math.cos(angle) * speed;
-      const vy = Math.sin(angle) * speed - (Math.random() * 1.5);
-      const rotateSpeed = -12 + Math.random() * 24;
-      animatePiece(p, vx, vy, rotateSpeed);
+      animatePiece(p, Math.cos(angle)*speed, Math.sin(angle)*speed - Math.random()*1.5, -12 + Math.random()*24);
     }
   }
-
   btn.remove();
 }
 
 function animatePiece(piece, vx, vy, rotateSpeed){
-  let opacity = 1;
-  let rotation = 0;
-  let gravity = 0.18;
-  let currentX = parseFloat(piece.style.left);
-  let currentY = parseFloat(piece.style.top);
-
+  let opacity = 1, rotation = 0, gravity = 0.18;
+  let currentX = parseFloat(piece.style.left), currentY = parseFloat(piece.style.top);
   function move(){
-    currentX += vx;
-    currentY += vy;
-    vy += gravity;
-    rotation += rotateSpeed;
-    opacity -= 0.025;
-    piece.style.left = currentX + "px";
-    piece.style.top = currentY + "px";
+    currentX += vx; currentY += vy; vy += gravity;
+    rotation += rotateSpeed; opacity -= 0.025;
+    piece.style.left = currentX + "px"; piece.style.top = currentY + "px";
     piece.style.opacity = opacity;
-    piece.style.transform = `scale(${Math.max(opacity, 0)}) rotate(${rotation}deg)`;
-    if(opacity > 0){
-      requestAnimationFrame(move);
-    } else {
-      piece.remove();
-    }
+    piece.style.transform = `scale(${Math.max(opacity,0)}) rotate(${rotation}deg)`;
+    if(opacity > 0){ requestAnimationFrame(move); } else { piece.remove(); }
   }
-
   move();
 }
 </script>
-
 </body>
 </html>
