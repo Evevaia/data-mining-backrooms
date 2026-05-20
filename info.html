@@ -156,7 +156,6 @@ html, body{
   position: relative;
   z-index: 2;
   opacity: 0.8;
-  transition: filter 0.05s ease;
 }
 
 .fetus-img.glitching{
@@ -164,15 +163,14 @@ html, body{
 }
 
 @keyframes fetusGlitch{
-  0%  { filter: none; transform: translate(0,0); }
-  10% { filter: hue-rotate(90deg) saturate(3); transform: translate(-4px, 1px) skewX(-3deg); }
-  20% { filter: invert(0.15) brightness(1.4); transform: translate(3px, -2px); }
-  30% { filter: hue-rotate(180deg) saturate(2); transform: translate(-2px, 2px) skewX(2deg); }
-  40% { filter: none; transform: translate(2px, 0); }
-  55% { filter: brightness(1.6) saturate(0); transform: translate(-3px, 1px); }
-  70% { filter: hue-rotate(270deg); transform: translate(1px, -1px) skewX(-1deg); }
-  85% { filter: none; transform: translate(0,0); }
-  100%{ filter: none; transform: translate(0,0); }
+  0%  { transform: translate(0,0);          filter: none; }
+  10% { transform: translate(-5px, 0)       skewX(-4deg); filter: brightness(1.3); }
+  20% { transform: translate(4px, -2px);    filter: brightness(0.8); }
+  35% { transform: translate(-3px, 1px)     skewX(2deg);  filter: brightness(1.1); }
+  50% { transform: translate(5px, 0);       filter: brightness(1.4) contrast(1.2); }
+  65% { transform: translate(-2px, 2px)     skewX(-1deg); filter: brightness(0.9); }
+  80% { transform: translate(2px, -1px);    filter: none; }
+  100%{ transform: translate(0,0);          filter: none; }
 }
 
 .question-block{
