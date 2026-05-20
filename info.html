@@ -682,143 +682,6 @@ html, body{
 </div>
 
 <script>
-// ── AUDIO ENGINE ──────────────────────────────────────────
-const Audio = (function(){
-  let ctx = null;
-  let ambientStarted = false;
-
-  function getCtx(){
-    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-    if(ctx.state === 'suspended') ctx.resume();
-    return ctx;
-  }
-
-  function startAmbient(){
-    if(ambientStarted) return;
-    ambientStarted = true;
-    const ac = getCtx();
-
-    const master = ac.createGain();
-    master.gain.setValueAtTime(0, ac.currentTime);
-    master.gain.linearRampToValueAtTime(0.04, ac.currentTime + 4);
-    master.connect(ac.destination);
-
-    [55, 55.3].forEach(freq => {
-      const osc = ac.createOscillator();
-      const g = ac.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      g.gain.value = 0.5;
-      osc.connect(g);
-      g.connect(master);
-      osc.start();
-    });
-
-    const shimmer = ac.createOscillator();
-    const shimGain = ac.createGain();
-    shimmer.type = 'sine';
-    shimmer.frequency.value = 880;
-    shimGain.gain.setValueAtTime(0, ac.currentTime);
-    shimGain.gain.linearRampToValueAtTime(0.008, ac.currentTime + 6);
-    shimmer.connect(shimGain);
-    shimGain.connect(master);
-    shimmer.start();
-
-    const lfo = ac.createOscillator();
-    const lfoGain = ac.createGain();
-    lfo.frequency.value = 0.15;
-    lfoGain.gain.value = 3;
-    lfo.connect(lfoGain);
-    lfoGain.connect(shimmer.frequency);
-    lfo.start();
-  }
-
-  function glitchSound(){
-    const ac = getCtx();
-    const t = ac.currentTime;
-    const bufSize = ac.sampleRate * 0.18;
-    const buf = ac.createBuffer(1, bufSize, ac.sampleRate);
-    const data = buf.getChannelData(0);
-    for(let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1);
-    const noise = ac.createBufferSource();
-    noise.buffer = buf;
-    const filter = ac.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(800, t);
-    filter.frequency.linearRampToValueAtTime(3200, t + 0.12);
-    filter.frequency.linearRampToValueAtTime(400, t + 0.18);
-    filter.Q.value = 1.5;
-    const gain = ac.createGain();
-    gain.gain.setValueAtTime(0.18, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(ac.destination);
-    noise.start(t);
-    noise.stop(t + 0.18);
-  }
-
-  function scanSound(duration){
-    const ac = getCtx();
-    const t = ac.currentTime;
-    const osc = ac.createOscillator();
-    const oscGain = ac.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(1200, t);
-    osc.frequency.exponentialRampToValueAtTime(300, t + duration * 0.9);
-    oscGain.gain.setValueAtTime(0.06, t);
-    oscGain.gain.linearRampToValueAtTime(0.03, t + duration * 0.8);
-    oscGain.gain.linearRampToValueAtTime(0.0, t + duration);
-    osc.connect(oscGain);
-    oscGain.connect(ac.destination);
-    osc.start(t);
-    osc.stop(t + duration);
-
-    const bufSize = ac.sampleRate * duration;
-    const buf = ac.createBuffer(1, bufSize, ac.sampleRate);
-    const data = buf.getChannelData(0);
-    for(let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1);
-    const noise = ac.createBufferSource();
-    noise.buffer = buf;
-    const nFilter = ac.createBiquadFilter();
-    nFilter.type = 'highpass';
-    nFilter.frequency.value = 2000;
-    const nGain = ac.createGain();
-    nGain.gain.setValueAtTime(0.012, t);
-    nGain.gain.linearRampToValueAtTime(0.0, t + duration);
-    noise.connect(nFilter);
-    nFilter.connect(nGain);
-    nGain.connect(ac.destination);
-    noise.start(t);
-    noise.stop(t + duration);
-  }
-
-  function identifiedSound(){
-    const ac = getCtx();
-    const t = ac.currentTime;
-    [0, 0.12].forEach((offset, i) => {
-      const osc = ac.createOscillator();
-      const g = ac.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = i === 0 ? 660 : 880;
-      g.gain.setValueAtTime(0.08, t + offset);
-      g.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.09);
-      osc.connect(g);
-      g.connect(ac.destination);
-      osc.start(t + offset);
-      osc.stop(t + offset + 0.09);
-    });
-  }
-
-  ['touchstart','mousedown','keydown'].forEach(e => {
-    window.addEventListener(e, startAmbient, { once: true, passive: true });
-  });
-
-  return { glitchSound, scanSound, identifiedSound };
-})();
-</script>
-
-<script>
     { img: 'terms.jpg',     label: 'Terms & Conditions',  url: 'https://evevaia.github.io/data-mining-backrooms/terms-and-conditions.html' },
     { img: 'location.jpg',  label: 'Location Identified', url: 'https://evevaia.github.io/data-mining-backrooms/location-identified.html' },
     { img: 'recording.jpg', label: 'Recording Enabled',   url: 'https://evevaia.github.io/data-mining-backrooms/recording-started.html' },
@@ -908,11 +771,9 @@ const Audio = (function(){
     void scanLine.offsetWidth;
     scanLine.classList.add('scanning');
 
-    Audio.scanSound(1.6);
 
     setTimeout(() => {
       scanBtn.textContent = 'IDENTIFIED';
-      Audio.identifiedSound();
       setTimeout(() => {
         window.location.href = posters[current].url;
       }, 400);
@@ -940,23 +801,31 @@ const Audio = (function(){
   (function(){
     const wrap = document.getElementById('fetusWrap');
     let isGlitching = false;
-    let didScroll = false;
+    let gestureGlitched = false;
 
     function triggerGlitch(){
       if(isGlitching) return;
       isGlitching = true;
       wrap.classList.add('glitching');
-      Audio.glitchSound();
       setTimeout(() => {
         wrap.classList.remove('glitching');
         isGlitching = false;
       }, 380);
     }
 
-    window.addEventListener('touchstart', () => { didScroll = false; }, { passive: true });
-    window.addEventListener('touchmove',  () => { didScroll = true;  }, { passive: true });
-    window.addEventListener('touchend',   () => { if(didScroll) triggerGlitch(); didScroll = false; }, { passive: true });
+    // mobile: fire on first move of each gesture, reset on touchstart
+    window.addEventListener('touchstart', () => {
+      gestureGlitched = false;
+    }, { passive: true });
 
+    window.addEventListener('touchmove', () => {
+      if(!gestureGlitched){
+        gestureGlitched = true;
+        triggerGlitch();
+      }
+    }, { passive: true });
+
+    // desktop: fire when wheel stops
     let wheelTimer = null;
     window.addEventListener('wheel', () => {
       clearTimeout(wheelTimer);
