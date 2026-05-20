@@ -200,7 +200,7 @@ display:block;
 margin-top:16px;
 padding:12px 18px;
 font-size:14px;
-border:none;
+border:1px solid #1a73e8;
 background:#1a73e8;
 color:#ffffff;
 cursor:pointer;
@@ -211,9 +211,80 @@ text-decoration:none;
 letter-spacing:0.05em;
 opacity:0;
 transition:opacity 0.5s ease;
+position:relative;
 }
 .exit-btn.show{
 opacity:1;
+}
+.exit-btn-text{
+display:inline-block;
+position:relative;
+}
+.exit-btn-text::after{
+content:'EXIT';
+position:absolute;
+left:0;
+top:0;
+color:#ffffff;
+opacity:0;
+pointer-events:none;
+}
+.exit-btn.glitching .exit-btn-text{
+animation:btnGlitch 0.35s steps(1) forwards;
+}
+.exit-btn.glitching .exit-btn-text::after{
+animation:btnGhost 0.35s steps(1) forwards;
+}
+.exit-btn.glitching{
+animation:btnShake 0.08s steps(1) forwards;
+}
+.exit-btn.glitching::before{
+content:'EXIT';
+position:absolute;
+inset:0;
+background:#1a73e8;
+color:#ffffff;
+display:flex;
+align-items:center;
+justify-content:center;
+letter-spacing:0.05em;
+font-size:14px;
+animation:boxGhost 0.35s steps(1) forwards;
+pointer-events:none;
+}
+@keyframes boxGhost{
+0%{   opacity:0;   transform:translate(0,0); }
+15%{  opacity:0.35; transform:translate(6px,0); }
+30%{  opacity:0.25; transform:translate(-5px,0); }
+50%{  opacity:0.4;  transform:translate(7px,0); }
+70%{  opacity:0.2;  transform:translate(-4px,0); }
+85%{  opacity:0.3;  transform:translate(5px,0); }
+100%{ opacity:0;    transform:translate(0,0); }
+}
+@keyframes btnShake{
+0%{   transform:translate(0,0); }
+25%{  transform:translate(-2px, 0); }
+50%{  transform:translate(1px, 0); }
+75%{  transform:translate(-1px, 0); }
+100%{ transform:translate(0,0); }
+}
+@keyframes btnGlitch{
+0%{   transform:translate(0,0); }
+15%{  transform:translate(-3px,0); }
+30%{  transform:translate(4px,0); }
+50%{  transform:translate(-2px,0); }
+70%{  transform:translate(3px,0); }
+85%{  transform:translate(-1px,0); }
+100%{ transform:translate(0,0); }
+}
+@keyframes btnGhost{
+0%{   opacity:0;   transform:translate(0,0); }
+15%{  opacity:0.7; transform:translate(6px,0); }
+30%{  opacity:0.5; transform:translate(-5px,0); }
+50%{  opacity:0.8; transform:translate(7px,0); }
+70%{  opacity:0.4; transform:translate(-4px,0); }
+85%{  opacity:0.6; transform:translate(5px,0); }
+100%{ opacity:0;   transform:translate(0,0); }
 }
 @media(max-width:700px){
 body{
@@ -267,7 +338,7 @@ font-size:18px;
 <div class="data-line" id="dLng"><span class="label">Longitude</span> 23.7329735</div>
 <div class="data-line" id="dPlace"><span class="label">Location</span> AKTO Art &amp; Design College</div>
 <div class="data-line" id="dAddress"><span class="label">Address</span> Evelpidon 11A, Athens 113 62</div>
-<div class="data-line" id="dSubject"><span class="label">Subject</span> <span class="value-blue">Not moving</span></div>
+<div class="data-line" id="dSubject"><span class="label">Subject</span> <span class="value-blue">Aware</span></div>
 </div>
 <div class="typed-message" id="typedMessage">
 <div class="typed-line" id="typedLine"></div>
@@ -275,7 +346,7 @@ font-size:18px;
 <div class="disclaimer" id="disclaimer">
 * By observing this page, you grant continuous permission to monitor your location regardless of your future intent or objection.
 </div>
-<a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html">EXIT</a>
+<a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html"><span class="exit-btn-text">EXIT</span></a>
 </div>
 </div>
 <script>
@@ -317,6 +388,7 @@ document.getElementById("exitBtn").classList.add("show");
 }, 3500);
 setTimeout(function(){
 typeFoundYou();
+setTimeout(function(){ startGlitchCycle(0); }, 200);
 }, 4200);
 }, 3500);
 function typeFoundYou(){
@@ -347,6 +419,23 @@ lineEl.innerHTML = text + '<span class="cursor">_</span>';
 }
 }
 setTimeout(typeFirst, 200);
+}
+const glitchPattern = [
+  [2000,600],[5000,400],[2000,700],[8000,300],[3000,500],[6000,800],[2000,400]
+];
+let glitchTimeout = null;
+
+function startGlitchCycle(index){
+  const pattern = glitchPattern[index % glitchPattern.length];
+  const exitBtn = document.getElementById("exitBtn");
+  exitBtn.classList.remove("glitching");
+  glitchTimeout = setTimeout(function(){
+    exitBtn.classList.add("glitching");
+    glitchTimeout = setTimeout(function(){
+      exitBtn.classList.remove("glitching");
+      startGlitchCycle(index + 1);
+    }, pattern[1]);
+  }, pattern[0]);
 }
 });
 </script>
