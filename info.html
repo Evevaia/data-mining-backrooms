@@ -226,13 +226,13 @@ html, body{
 /* X close */
 .gallery-close{
   position: absolute;
-  top: max(20px, env(safe-area-inset-top, 20px));
+  top: max(16px, env(safe-area-inset-top, 16px));
   right: 8px;
   background: none;
   border: none;
-  color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.7);
   cursor: pointer;
-  padding: 24px 18px;
+  padding: 16px;
   z-index: 10;
   touch-action: manipulation;
   transition: color 0.2s;
@@ -241,14 +241,14 @@ html, body{
   justify-content: center;
 }
 
-.gallery-close:active{ color: rgba(255,255,255,0.95); }
+.gallery-close:active{ color: #fff; }
 
 .gallery-close svg{
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   stroke: currentColor;
   fill: none;
-  stroke-width: 1;
+  stroke-width: 1.2;
   stroke-linecap: round;
 }
 
@@ -265,7 +265,7 @@ html, body{
 
 .gallery-poster-wrap{
   position: relative;
-  width: min(78vw, 300px);
+  width: min(62vw, 260px);
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -335,9 +335,9 @@ html, body{
   background: none;
   border: none;
   cursor: pointer;
-  padding: 24px 18px;
+  padding: 24px 16px;
   touch-action: manipulation;
-  color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.7);
   transition: color 0.2s;
   display: flex;
   align-items: center;
@@ -345,16 +345,16 @@ html, body{
   z-index: 10;
 }
 
-.gallery-arrow:active{ color: rgba(255,255,255,0.95); }
+.gallery-arrow:active{ color: #fff; }
 .gallery-arrow.left{ left: 0; }
 .gallery-arrow.right{ right: 0; }
 
 .gallery-arrow svg{
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   stroke: currentColor;
   fill: none;
-  stroke-width: 1;
+  stroke-width: 1.2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
