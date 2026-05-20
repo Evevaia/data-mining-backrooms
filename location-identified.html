@@ -128,7 +128,12 @@ animation:dotPulse 1.6s ease-out infinite;
 70%{ box-shadow:0 0 0 28px rgba(26,115,232,0); }
 100%{ box-shadow:0 0 0 0 rgba(26,115,232,0); }
 }
-.data-block{
+.below-map{
+display:none;
+}
+.below-map.show{
+display:block;
+}
 display:none;
 border:1px solid #2b2b30;
 background:#101013;
@@ -163,13 +168,9 @@ color:#6ea8ff;
 font-weight:600;
 }
 .typed-message{
-min-height:32px;
+min-height:36px;
 margin-bottom:18px;
-opacity:0;
-transition:opacity 0.35s ease;
-}
-.typed-message.show{
-opacity:1;
+margin-top:20px;
 }
 .typed-line{
 font-size:22px;
@@ -182,29 +183,20 @@ margin-left:2px;
 animation:blink 1s steps(1) infinite;
 }
 .disclaimer{
-display:none;
 font-size:13px;
 color:#4a4a52;
 font-style:italic;
 line-height:1.6;
 margin-top:4px;
+margin-bottom:14px;
 opacity:0;
 transition:opacity 0.5s ease;
 }
 .disclaimer.show{
-display:block;
 opacity:1;
 }
-@keyframes blink{
-50%{opacity:0;}
-}
-@keyframes breathe{
-0%{ box-shadow:0 0 0 rgba(26,115,232,0); border-color:#2b2b30; }
-50%{ box-shadow:0 0 18px rgba(26,115,232,0.08); border-color:#3a4d68; }
-100%{ box-shadow:0 0 0 rgba(26,115,232,0); border-color:#2b2b30; }
-}
 .exit-btn{
-display:none;
+display:block;
 margin-top:16px;
 padding:12px 18px;
 font-size:14px;
@@ -217,9 +209,11 @@ box-sizing:border-box;
 text-align:center;
 text-decoration:none;
 letter-spacing:0.05em;
+opacity:0;
+transition:opacity 0.5s ease;
 }
 .exit-btn.show{
-display:block;
+opacity:1;
 }
 @media(max-width:700px){
 body{
@@ -267,6 +261,7 @@ font-size:18px;
 <div class="location-dot" id="locationDot"></div>
 </div>
 </div>
+<div class="below-map" id="belowMap">
 <div class="data-block" id="dataBlock">
 <div class="data-line" id="dLat"><span class="label">Latitude</span> 37.9951914</div>
 <div class="data-line" id="dLng"><span class="label">Longitude</span> 23.7329735</div>
@@ -281,6 +276,7 @@ font-size:18px;
 * By observing this page, you grant continuous permission to monitor your location regardless of your future intent or objection.
 </div>
 <a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html">EXIT</a>
+</div>
 </div>
 <script>
 window.addEventListener("load", function(){
@@ -305,6 +301,7 @@ setTimeout(function(){
 document.getElementById("loadingScreen").style.display = "none";
 mapContent.classList.add("show");
 statusText.classList.add("show");
+document.getElementById("belowMap").classList.add("show");
 setTimeout(function(){ locationDot.classList.add("show"); }, 600);
 setTimeout(function(){ dataBlock.classList.add("show"); }, 1100);
 setTimeout(function(){ document.getElementById("dLat").classList.add("show"); }, 1300);
@@ -313,15 +310,14 @@ setTimeout(function(){ document.getElementById("dPlace").classList.add("show"); 
 setTimeout(function(){ document.getElementById("dAddress").classList.add("show"); }, 2300);
 setTimeout(function(){ document.getElementById("dSubject").classList.add("show"); }, 2750);
 setTimeout(function(){
-typedMessage.classList.add("show");
-typeFoundYou();
-}, 3800);
-setTimeout(function(){
-disclaimer.classList.add("show");
+document.getElementById("disclaimer").classList.add("show");
+}, 3200);
 setTimeout(function(){
 document.getElementById("exitBtn").classList.add("show");
-}, 600);
-}, 7200);
+}, 3500);
+setTimeout(function(){
+typeFoundYou();
+}, 4200);
 }, 3500);
 function typeFoundYou(){
 const lineEl = document.getElementById("typedLine");
