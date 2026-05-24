@@ -2,572 +2,357 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PROJECT DON'T SCAN</title>
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V90RVSJZCT"></script>
 <script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-V90RVSJZCT');
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-V90RVSJZCT');
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&display=swap');
 
-*{ box-sizing: border-box; margin: 0; padding: 0; }
+  *{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-html, body{
-  min-height: 100vh;
-  background: #000;
-  color: #f0f0f0;
-  font-family: 'Barlow', sans-serif;
-  overflow-x: hidden;
-  -webkit-tap-highlight-color: transparent;
-}
+  html, body{
+    min-height: 100vh;
+    background: #000000;
+    color: #f0f0f0;
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
 
-.bg{
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 100%, #0a1a3a 0%, #050d1f 45%, #000 100%);
-  z-index: 0;
-}
+  .bg{
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, #0a1a3a 0%, #050d1f 45%, #000000 100%);
+    z-index: 0;
+  }
 
-.page{
-  position: relative;
-  z-index: 1;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 56px 20px 80px;
-  text-align: center;
-}
+  .page{
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 56px 24px 60px 24px;
+    text-align: center;
+  }
 
-.header{
-  margin-bottom: 48px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.1s;
-}
+  /* header */
+  .header{
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.1s;
+  }
 
-.main-title{
-  font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(26px, 8vw, 40px);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #fff;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
+  .project-eyebrow{
+    display: none;
+  }
 
-.section-label{
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #3a6fd8;
-  margin-bottom: 14px;
-}
+  .main-title{
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(30px, 9vw, 40px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.05;
+    color: #ffffff;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-bottom: 10px;
+  }
 
-.reached{
-  font-size: 17px;
-  font-weight: 300;
-  color: #fff;
-  margin-bottom: 48px;
-  font-style: italic;
-  line-height: 1.5;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.25s;
-}
+  .tagline{
+    font-size: 12px;
+    font-weight: 300;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+  }
 
-.quote-attr{
-  display: block;
-  margin-top: 10px;
-  font-size: 10px;
-  font-weight: 400;
-  font-style: normal;
-  letter-spacing: 0.2em;
-  color: rgba(255,255,255,0.35);
-  text-transform: uppercase;
-}
+  /* reached end */
+  .reached{
+    font-size: 18px;
+    font-weight: 300;
+    color: #ffffff;
+    margin-bottom: 48px;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.25s;
+  }
 
-.hawthorne-title{
-  font-size: 17px;
-  font-weight: 300;
-  font-style: italic;
-  color: #fff;
-  margin-bottom: 10px;
-}
+  /* section label */
+  .section-label{
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #3a6fd8;
+    margin-bottom: 14px;
+  }
 
-.hawthorne-body{
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.8;
-  font-style: normal;
-  color: #fff;
-}
+  /* data mining section */
+  .data-section{
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.4s;
+  }
 
-.data-section{
-  margin-bottom: 48px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.4s;
-}
+  .body-text{
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #ffffff;
+  }
 
-.body-text{
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.8;
-  color: #fff;
-}
+  .product-line{
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    font-family: 'Barlow', sans-serif;
+    font-style: normal;
+  }
 
-.image-block{
-  margin-bottom: 48px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.55s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 0;
-}
 
-.glow-wrap{
-  position: relative;
-  width: min(90vw, 400px);
-  height: min(90vw, 400px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.glow-wrap::before{
-  content: '';
-  position: absolute;
-  inset: -20px;
-  background: radial-gradient(circle, rgba(0,180,255,0.5) 0%, rgba(0,100,255,0.25) 40%, rgba(0,50,180,0.08) 65%, transparent 85%);
-  border-radius: 50%;
-  animation: glowPulse 9s ease-in-out infinite;
-}
-
-@keyframes glowPulse{
-  0%,100%{ opacity: 0.35; transform: scale(0.8); }
-  45%    { opacity: 1;    transform: scale(1.2); }
-}
-
-.fetus-wrap{
-  position: relative;
-  width: 100%; height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fetus-img{
-  width: 100%; height: 100%;
-  object-fit: contain;
-  position: relative;
-  z-index: 2;
-  opacity: 0.8;
-}
-
-/* glitch slices — we stack two pseudo-copies via extra divs */
-.fetus-glitch-a,
-.fetus-glitch-b{
-  position: absolute;
-  inset: 0;
-  background-image: url('fetus.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.fetus-wrap.glitching .fetus-img{
-  animation: fetusBase 0.35s steps(1) forwards;
-}
-
-.fetus-wrap.glitching .fetus-glitch-a{
-  opacity: 0.8;
-  animation: fetusSliceA 0.35s steps(1) forwards;
-  mix-blend-mode: screen;
-}
-
-.fetus-wrap.glitching .fetus-glitch-b{
-  opacity: 0.8;
-  animation: fetusSliceB 0.35s steps(1) forwards;
-  mix-blend-mode: screen;
-}
-
-@keyframes fetusBase{
-  0%  { transform: translate(0,0); }
-  20% { transform: translate(2px,0); }
-  40% { transform: translate(-2px,0); }
-  60% { transform: translate(1px,0); }
-  80% { transform: translate(-1px,0); }
-  100%{ transform: translate(0,0); }
-}
-
-@keyframes fetusSliceA{
-  0%  { clip-path: inset(0 0 75% 0);   transform: translate(0,0);    filter: none; opacity:0; }
-  10% { clip-path: inset(5% 0 60% 0);  transform: translate(-8px,0); filter: drop-shadow(2px 0 0 cyan); opacity:0.85; }
-  20% { clip-path: inset(15% 0 55% 0); transform: translate(6px,0);  filter: drop-shadow(-3px 0 0 cyan); opacity:0.8; }
-  30% { clip-path: inset(10% 0 65% 0); transform: translate(-5px,0); filter: drop-shadow(4px 0 0 cyan); opacity:0.85; }
-  40% { clip-path: inset(20% 0 50% 0); transform: translate(7px,0);  filter: drop-shadow(-2px 0 0 cyan); opacity:0.7; }
-  50% { clip-path: inset(8% 0 58% 0);  transform: translate(-6px,0); filter: drop-shadow(3px 0 0 cyan); opacity:0.8; }
-  65% { clip-path: inset(12% 0 62% 0); transform: translate(4px,0);  filter: none; opacity:0.5; }
-  80% { clip-path: inset(5% 0 70% 0);  transform: translate(-2px,0); filter: none; opacity:0.3; }
-  100%{ clip-path: inset(0 0 75% 0);   transform: translate(0,0);    filter: none; opacity:0; }
-}
-
-@keyframes fetusSliceB{
-  0%  { clip-path: inset(40% 0 20% 0); transform: translate(0,0);    filter: none; opacity:0; }
-  10% { clip-path: inset(42% 0 18% 0); transform: translate(9px,0);  filter: drop-shadow(-4px 0 0 cyan); opacity:0.85; }
-  20% { clip-path: inset(38% 0 22% 0); transform: translate(-7px,0); filter: drop-shadow(3px 0 0 cyan); opacity:0.8; }
-  30% { clip-path: inset(45% 0 15% 0); transform: translate(6px,0);  filter: drop-shadow(-2px 0 0 cyan); opacity:0.9; }
-  40% { clip-path: inset(35% 0 25% 0); transform: translate(-8px,0); filter: drop-shadow(4px 0 0 cyan); opacity:0.75; }
-  50% { clip-path: inset(43% 0 19% 0); transform: translate(5px,0);  filter: drop-shadow(-3px 0 0 cyan); opacity:0.8; }
-  65% { clip-path: inset(40% 0 22% 0); transform: translate(-3px,0); filter: none; opacity:0.4; }
-  80% { clip-path: inset(42% 0 20% 0); transform: translate(1px,0);  filter: none; opacity:0.2; }
-  100%{ clip-path: inset(40% 0 20% 0); transform: translate(0,0);    filter: none; opacity:0; }
-}
-
-.question-block{
-  margin-bottom: 48px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.7s;
-}
-
-/* ── POSTER GRID ── */
-.gallery-section{
-  margin-bottom: 48px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 0.85s;
-}
-
-.poster-grid{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 20px;
-}
-
-.poster-thumb{
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-  border: 1px solid #1e2d4a;
-  aspect-ratio: 3/4;
-  transition: border-color 0.2s;
-  touch-action: manipulation;
-}
-
-.poster-thumb:active{
-  border-color: #3a6fd8;
-}
-
-.poster-thumb img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.poster-thumb:active img{
-  transform: scale(1.03);
-}
-
-.poster-thumb-label{
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 20px 8px 8px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.82));
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
-  text-align: center;
-}
-
-/* ── FULLSCREEN GALLERY OVERLAY ── */
-.gallery-overlay{
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: #000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.gallery-overlay.active{
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* X close */
-.gallery-close{
-  position: absolute;
-  top: max(16px, env(safe-area-inset-top, 16px));
-  right: 8px;
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.7);
-  cursor: pointer;
-  padding: 16px;
-  z-index: 10;
-  touch-action: manipulation;
-  transition: color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.gallery-close:active{ color: #fff; }
-
-.gallery-close svg{
-  width: 36px;
-  height: 36px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.2;
-  stroke-linecap: round;
-}
-
-/* poster display area */
-.gallery-poster-area{
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  flex: 1;
-  overflow: hidden;
-}
-
-.gallery-poster-wrap{
-  position: relative;
-  /* mobile: near full width */
-  width: min(88vw, 340px);
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.gallery-poster-wrap img{
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: opacity 0.2s ease;
-}
-
-.gallery-poster-wrap img.fading{
-  opacity: 0;
-}
-
-/* scan line — sweeps full poster */
-.scan-line{
-  position: absolute;
-  left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(58,111,216,0.4), #5b8fff, rgba(58,111,216,0.4), transparent);
-  box-shadow: 0 0 14px 5px rgba(58,111,216,0.6);
-  top: 0;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.scan-line.scanning{
-  animation: scanDown 1.6s cubic-bezier(0.25, 0, 0.75, 1) forwards;
-}
-
-@keyframes scanDown{
-  0%  { top: 0%;    opacity: 1; }
-  95% { top: 100%;  opacity: 0.8; }
-  100%{ top: 100%;  opacity: 0; }
-}
-
-/* scan overlay — tinted wash that follows the line */
-.scan-overlay{
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg,
-    rgba(58,111,216,0.12) 0%,
-    rgba(58,111,216,0.04) 60%,
-    transparent 100%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s;
-  z-index: 4;
-}
-
-.scan-overlay.active{ opacity: 1; }
-
-/* brackets */
-.bracket{ position: absolute; width: 12px; height: 12px; pointer-events: none; }
-.bracket-tl{ top: 4px; left: 4px; border-top: 1px solid rgba(58,111,216,0.4); border-left: 1px solid rgba(58,111,216,0.4); }
-.bracket-tr{ top: 4px; right: 4px; border-top: 1px solid rgba(58,111,216,0.4); border-right: 1px solid rgba(58,111,216,0.4); }
-.bracket-bl{ bottom: 4px; left: 4px; border-bottom: 1px solid rgba(58,111,216,0.4); border-left: 1px solid rgba(58,111,216,0.4); }
-.bracket-br{ bottom: 4px; right: 4px; border-bottom: 1px solid rgba(58,111,216,0.4); border-right: 1px solid rgba(58,111,216,0.4); }
-
-/* arrows — hidden on mobile, visible on desktop */
-.gallery-arrow{
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 24px 16px;
-  touch-action: manipulation;
-  color: rgba(255,255,255,0.4);
-  transition: color 0.2s;
-  display: none; /* hidden on mobile */
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.gallery-arrow:hover{ color: rgba(255,255,255,0.9); }
-.gallery-arrow.left{ left: 0; }
-.gallery-arrow.right{ right: 0; }
-
-.gallery-arrow svg{
-  width: 36px;
-  height: 36px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* dot indicators — bigger on mobile as navigation hint */
-.gallery-dots{
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-  margin-bottom: 32px;
-  justify-content: center;
-}
-
-.gallery-dot{
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  transition: background 0.2s;
-  cursor: pointer;
-}
-
-.gallery-dot.active{
-  background: rgba(255,255,255,0.7);
-}
-
-/* desktop: show arrows, smaller dots, narrower poster */
-@media(min-width: 600px){
-  .gallery-arrow{
+  /* fetus image block */
+  .image-block{
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.55s;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    padding: 20px 0;
   }
-  .gallery-poster-wrap{
-    width: min(55vw, 320px);
+
+  .glow-wrap{
+    position: relative;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
   }
-  .gallery-dot{
-    width: 5px;
-    height: 5px;
+
+  .glow-wrap::before{
+    content: '';
+    position: absolute;
+    inset: -80px;
+    background: radial-gradient(circle, rgba(0, 180, 255, 1) 0%, rgba(0, 100, 255, 0.7) 30%, rgba(0, 50, 180, 0.3) 55%, transparent 75%);
+    border-radius: 50%;
+    animation: glowPulse 6s ease-in-out infinite;
   }
-}
 
-/* bottom controls */
-.gallery-bottom{
-  width: 100%;
-  padding: 0 20px max(28px, env(safe-area-inset-bottom, 28px));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  flex-shrink: 0;
-}
+  .glow-wrap::after{
+    display: none;
+  }
 
-.gallery-label{
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  margin-top: 12px;
-  margin-bottom: 0;
-}
+  .fetus-img{
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    opacity: 0.8;
+  }
 
-.scan-btn{
-  width: min(88vw, 340px);
-  padding: 17px 0;
-  font-family: 'Barlow', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: #fff;
-  background: transparent;
-  border: 1px solid #3a6fd8;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  touch-action: manipulation;
-}
+  .glow-wrap{
+    position: relative;
+    width: 95vw;
+    height: 95vw;
+    max-width: 600px;
+    max-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+  }
 
-.scan-btn:active{
-  background: rgba(58,111,216,0.12);
-}
+  .glow-wrap::before{
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle, rgba(0, 180, 255, 0.5) 0%, rgba(0, 100, 255, 0.25) 40%, rgba(0, 50, 180, 0.08) 65%, transparent 85%);
+    border-radius: 50%;
+    animation: glowPulse 9s ease-in-out infinite;
+  }
 
-.scan-btn:disabled{
-  opacity: 0.4;
-  cursor: not-allowed;
-}
+  @keyframes glowPulse{
+    0%{
+      opacity: 0.35;
+      transform: scale(0.8);
+    }
+    /* inhale 1-2-3 slow */
+    45%{
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    /* exhale 1-2 slow */
+    78%{
+      opacity: 0.35;
+      transform: scale(0.8);
+    }
+    /* pause 1 */
+    100%{
+      opacity: 0.35;
+      transform: scale(0.8);
+    }
+  }
 
-/* divider */
-.divider{
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #1a2a4a, transparent);
-  margin-bottom: 40px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 1s;
-}
+  .fetus-placeholder{
+    width: 180px;
+    height: 180px;
+    border: 1px dashed #1a2a4a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
 
-.about-block{
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 1.1s;
-}
+  .placeholder-text{
+    font-size: 10px;
+    color: #1a2a4a;
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.6;
+  }
 
-.about-text{
-  font-size: 13px;
-  font-weight: 300;
-  line-height: 1.9;
-  color: #fff;
-}
+  /* question block */
+  .question-block{
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.7s;
+  }
 
-.bottom{
-  margin-top: 56px;
-  opacity: 0;
-  animation: fadeUp 0.7s ease forwards 1.25s;
-}
+  .question-text{
+    font-size: clamp(22px, 6vw, 28px);
+    font-weight: 300;
+    line-height: 1.35;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+    font-style: italic;
+  }
 
-.bottom-label{
-  font-size: 9px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #1a1a2a;
-  font-weight: 500;
-}
+  /* nav buttons */
+  .nav-block{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.85s;
+  }
 
-@keyframes fadeUp{
-  from{ opacity: 0; transform: translateY(12px); }
-  to{ opacity: 1; transform: translateY(0); }
-}
+  .nav-btn{
+    display: block;
+    padding: 12px 8px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: transparent;
+    border: 1px solid #1e2d4a;
+    text-decoration: none;
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .nav-btn:active{
+    border-color: #3a6fd8;
+    background: rgba(58, 111, 216, 0.08);
+  }
+
+  /* divider */
+  .divider{
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #1a2a4a, transparent);
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.85s;
+  }
+
+  /* about */
+  .about-block{
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 1s;
+  }
+
+  .about-text{
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.9;
+    color: #ffffff;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  /* bottom */
+  .bottom{
+    margin-top: 56px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 1.15s;
+  }
+
+  .bottom-label{
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #1a1a2a;
+    font-weight: 500;
+  }
+
+  @keyframes fadeUp{
+    from{
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to{
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media(max-width: 480px){
+    .page{
+      padding: 44px 20px 48px 20px;
+    }
+    .main-title{
+      font-size: 26px;
+    }
+    .glow-wrap{
+      width: 190px;
+      height: 190px;
+    }
+    .fetus-img,
+    .fetus-placeholder{
+      width: 150px;
+      height: 150px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -580,10 +365,7 @@ html, body{
     <div class="main-title">PROJECT DON'T SCAN</div>
   </div>
 
-  <div class="reached">
-    To be is to be perceived.
-    <div class="quote-attr">— George Berkeley</div>
-  </div>
+  <div class="reached">If a tree falls in a forest and no one is around to hear it, does it make a sound?</div>
 
   <div class="data-section">
     <div class="section-label">What is Data Mining?</div>
@@ -594,40 +376,21 @@ html, body{
 
   <div class="image-block">
     <div class="glow-wrap">
-      <div class="fetus-wrap" id="fetusWrap">
-        <img src="fetus.png" alt="fetus" class="fetus-img" id="fetusImg">
-        <div class="fetus-glitch-a"></div>
-        <div class="fetus-glitch-b"></div>
-      </div>
+      <img src="fetus.png" alt="fetus" class="fetus-img">
     </div>
   </div>
 
   <div class="question-block">
-    <p class="hawthorne-title">Hawthorne effect</p>
-    <p class="hawthorne-body">The tendency to alter behavior when aware of being observed. The effect persists long after observation has ceased.</p>
+    <p class="body-text" style="font-size: 18px; line-height: 1.7; font-style: italic; font-weight: 300;">
+      Hawthorne Effect: the tendency to alter behavior when aware of being observed. The effect persists long after observation has ceased.
+    </p>
   </div>
 
-  <!-- POSTER GRID -->
-  <div class="gallery-section">
-    <div class="section-label">The Posters</div>
-    <div class="poster-grid">
-      <div class="poster-thumb" onclick="openGallery(0)">
-        <img src="terms.jpg" alt="Terms & Conditions" loading="lazy">
-        <div class="poster-thumb-label">Terms &amp; Conditions</div>
-      </div>
-      <div class="poster-thumb" onclick="openGallery(1)">
-        <img src="location.jpg" alt="Location Identified" loading="lazy">
-        <div class="poster-thumb-label">Location Identified</div>
-      </div>
-      <div class="poster-thumb" onclick="openGallery(2)">
-        <img src="recording.jpg" alt="Recording Enabled" loading="lazy">
-        <div class="poster-thumb-label">Recording Enabled</div>
-      </div>
-      <div class="poster-thumb" onclick="openGallery(3)">
-        <img src="profiling.jpg" alt="Data Profiling" loading="lazy">
-        <div class="poster-thumb-label">Data Profiling</div>
-      </div>
-    </div>
+  <div class="nav-block">
+    <button class="nav-btn" onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/terms-and-conditions.html'">CONSENT</button>
+    <button class="nav-btn" onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/location-identified.html'">LOCATION</button>
+    <button class="nav-btn" onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/recording-started.html'">RECORDING</button>
+    <button class="nav-btn" onclick="window.location.href='https://evevaia.github.io/data-mining-backrooms/profile-generated.html'">PROFILE</button>
   </div>
 
   <div class="divider"></div>
@@ -635,7 +398,10 @@ html, body{
   <div class="about-block">
     <div class="section-label">About the Project</div>
     <p class="about-text">
-      <em>PROJECT DON'T SCAN</em> is a graphic design series that maps the silent architecture of data collection. Four posters. Four stages: consent, location, recording, profiling. Each one carries a QR code that demonstrates the very process it depicts. Created for <em>Design &amp; Visual Narrative</em> at AKTO Art &amp; Design College, under the supervision of Professor G. Theodorou, 2025–2026.
+      PROJECT DON'T SCAN is a graphic design series curated by Vasilina Magklara, exploring the invisible stages of data mining, and the quiet surrender of information.<br><br>
+      It started with a simple question: how much of yourself have you already given away without noticing?<br><br>
+      Every click, every search, every location. Collected, sorted, sold.<br><br>
+      Four posters. Four backrooms. Each QR code is a door.
     </p>
   </div>
 
@@ -645,195 +411,5 @@ html, body{
 
 </div>
 
-<!-- FULLSCREEN GALLERY OVERLAY -->
-<div class="gallery-overlay" id="galleryOverlay">
-
-  <button class="gallery-close" onclick="closeGallery()" aria-label="Close">
-    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-
-  <div class="gallery-poster-area">
-
-    <button class="gallery-arrow left" id="arrowLeft" onclick="navigate(-1)">
-      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-
-    <div class="gallery-poster-wrap" id="galleryPosterWrap">
-      <img id="galleryImg" src="" alt="">
-      <div class="scan-line" id="scanLine"></div>
-      <div class="scan-overlay" id="scanOverlay"></div>
-      <div class="bracket bracket-tl"></div>
-      <div class="bracket bracket-tr"></div>
-      <div class="bracket bracket-bl"></div>
-      <div class="bracket bracket-br"></div>
-    </div>
-
-    <button class="gallery-arrow right" id="arrowRight" onclick="navigate(1)">
-      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
-
-  </div>
-
-  <div class="gallery-bottom">
-    <div class="gallery-label" id="galleryLabel"></div>
-    <div class="gallery-dots" id="galleryDots"></div>
-    <button class="scan-btn" id="scanBtn" onclick="startScan()">SCAN</button>
-  </div>
-
-</div>
-
-<script>
-  const posters = [
-    { img: 'terms.jpg',     label: 'Terms & Conditions',  url: 'https://evevaia.github.io/data-mining-backrooms/terms-and-conditions.html' },
-    { img: 'location.jpg',  label: 'Location Identified', url: 'https://evevaia.github.io/data-mining-backrooms/location-identified.html' },
-    { img: 'recording.jpg', label: 'Recording Enabled',   url: 'https://evevaia.github.io/data-mining-backrooms/recording-started.html' },
-    { img: 'profiling.jpg', label: 'Data Profiling',      url: 'https://evevaia.github.io/data-mining-backrooms/profile-generated.html' },
-  ];
-
-  let current = 0;
-  let isScanning = false;
-
-  // build dots
-  const dotsEl = document.getElementById('galleryDots');
-  posters.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'gallery-dot' + (i === 0 ? ' active' : '');
-    d.onclick = () => goTo(i);
-    dotsEl.appendChild(d);
-  });
-
-  function updateDots() {
-    document.querySelectorAll('.gallery-dot').forEach((d, i) => {
-      d.classList.toggle('active', i === current);
-    });
-  }
-
-  function resetScan() {
-    const scanBtn = document.getElementById('scanBtn');
-    scanBtn.textContent = 'SCAN';
-    scanBtn.disabled = false;
-    document.getElementById('scanLine').classList.remove('scanning');
-    document.getElementById('scanOverlay').classList.remove('active');
-    isScanning = false;
-  }
-
-  function goTo(index, animate = true) {
-    const img = document.getElementById('galleryImg');
-    resetScan();
-
-    if (animate) {
-      img.classList.add('fading');
-      setTimeout(() => {
-        current = index;
-        img.src = posters[current].img;
-        img.alt = posters[current].label;
-        document.getElementById('galleryLabel').textContent = posters[current].label;
-        img.classList.remove('fading');
-        updateDots();
-      }, 180);
-    } else {
-      current = index;
-      img.src = posters[current].img;
-      img.alt = posters[current].label;
-      document.getElementById('galleryLabel').textContent = posters[current].label;
-      updateDots();
-    }
-  }
-
-  function navigate(dir) {
-    const next = (current + dir + posters.length) % posters.length;
-    goTo(next);
-  }
-
-  function openGallery(index) {
-    goTo(index, false);
-    document.getElementById('galleryOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeGallery() {
-    document.getElementById('galleryOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-    resetScan();
-  }
-
-  function startScan() {
-    if (isScanning) return;
-    isScanning = true;
-
-    const scanBtn = document.getElementById('scanBtn');
-    const scanLine = document.getElementById('scanLine');
-    const scanOverlay = document.getElementById('scanOverlay');
-
-    scanBtn.disabled = true;
-    scanBtn.textContent = 'SCANNING...';
-    scanOverlay.classList.add('active');
-
-    scanLine.classList.remove('scanning');
-    void scanLine.offsetWidth;
-    scanLine.classList.add('scanning');
-
-
-    setTimeout(() => {
-      scanBtn.textContent = 'IDENTIFIED';
-      setTimeout(() => {
-        window.location.href = posters[current].url;
-      }, 400);
-    }, 1600);
-  }
-
-  // swipe support
-  let touchStartX = 0;
-  const overlay = document.getElementById('galleryOverlay');
-  overlay.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-  overlay.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
-  }, { passive: true });
-
-  document.addEventListener('keydown', e => {
-    if (!document.getElementById('galleryOverlay').classList.contains('active')) return;
-    if (e.key === 'Escape') closeGallery();
-    if (e.key === 'ArrowLeft') navigate(-1);
-    if (e.key === 'ArrowRight') navigate(1);
-  });
-</script>
-
-<script>
-  (function(){
-    const wrap = document.getElementById('fetusWrap');
-    let isGlitching = false;
-    let gestureGlitched = false;
-
-    function triggerGlitch(){
-      if(isGlitching) return;
-      isGlitching = true;
-      wrap.classList.add('glitching');
-      setTimeout(() => {
-        wrap.classList.remove('glitching');
-        isGlitching = false;
-      }, 380);
-    }
-
-    // mobile: fire on first move of each gesture, reset on touchstart
-    window.addEventListener('touchstart', () => {
-      gestureGlitched = false;
-    }, { passive: true });
-
-    window.addEventListener('touchmove', () => {
-      if(!gestureGlitched){
-        gestureGlitched = true;
-        triggerGlitch();
-      }
-    }, { passive: true });
-
-    // desktop: fire when wheel stops
-    let wheelTimer = null;
-    window.addEventListener('wheel', () => {
-      clearTimeout(wheelTimer);
-      wheelTimer = setTimeout(triggerGlitch, 120);
-    }, { passive: true });
-  })();
-</script>
 </body>
 </html>
