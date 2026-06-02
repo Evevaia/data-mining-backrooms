@@ -119,7 +119,7 @@ button{
   display:flex;
   flex-direction:column;
   justify-content:center;
-  align-items:flex-start;
+  align-items:center;
 }
 
 .recording-screen::before{
@@ -138,11 +138,11 @@ button{
 
 .recording-wrap{
   width:min(620px, 90vw);
-  margin-left:48%;
-  transform:translateX(-50%);
+  margin:0 auto;
+  transform:none;
   display:flex;
   flex-direction:column;
-  align-items:flex-start;
+  align-items:center;
 }
 
 .recording-block{
@@ -265,10 +265,91 @@ button{
   text-align:center;
   text-decoration:none;
   letter-spacing:0.05em;
+  position:relative;
 }
 
 .exit-btn.show{
   display:block;
+}
+
+.exit-btn-text{
+  display:inline-block;
+  position:relative;
+}
+
+.exit-btn-text::after{
+  content:'EXIT';
+  position:absolute;
+  left:0;
+  top:0;
+  color:#ffffff;
+  opacity:0;
+  pointer-events:none;
+}
+
+.exit-btn.glitching .exit-btn-text{
+  animation:btnGlitch 0.35s steps(1) forwards;
+}
+
+.exit-btn.glitching .exit-btn-text::after{
+  animation:btnGhost 0.35s steps(1) forwards;
+}
+
+.exit-btn.glitching{
+  animation:btnShake 0.08s steps(1) forwards;
+}
+
+.exit-btn.glitching::before{
+  content:'EXIT';
+  position:absolute;
+  inset:0;
+  background:#c52828;
+  color:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  letter-spacing:0.05em;
+  font-size:14px;
+  animation:boxGhost 0.35s steps(1) forwards;
+  pointer-events:none;
+}
+
+@keyframes boxGhost{
+  0%{   opacity:0;   transform:translate(0,0); }
+  15%{  opacity:0.35; transform:translate(6px,0); }
+  30%{  opacity:0.25; transform:translate(-5px,0); }
+  50%{  opacity:0.4;  transform:translate(7px,0); }
+  70%{  opacity:0.2;  transform:translate(-4px,0); }
+  85%{  opacity:0.3;  transform:translate(5px,0); }
+  100%{ opacity:0;    transform:translate(0,0); }
+}
+
+@keyframes btnShake{
+  0%{   transform:translate(0,0); }
+  25%{  transform:translate(-2px,0); }
+  50%{  transform:translate(1px,0); }
+  75%{  transform:translate(-1px,0); }
+  100%{ transform:translate(0,0); }
+}
+
+@keyframes btnGlitch{
+  0%{   transform:translate(0,0); }
+  15%{  transform:translate(-3px,0); }
+  30%{  transform:translate(4px,0); }
+  50%{  transform:translate(-2px,0); }
+  70%{  transform:translate(3px,0); }
+  85%{  transform:translate(-1px,0); }
+  100%{ transform:translate(0,0); }
+}
+
+@keyframes btnGhost{
+  0%{   opacity:0;   transform:translate(0,0); }
+  15%{  opacity:0.7; transform:translate(6px,0); }
+  30%{  opacity:0.5; transform:translate(-5px,0); }
+  50%{  opacity:0.8; transform:translate(7px,0); }
+  70%{  opacity:0.4; transform:translate(-4px,0); }
+  85%{  opacity:0.6; transform:translate(5px,0); }
+  100%{ opacity:0;   transform:translate(0,0); }
 }
 
 @keyframes blink{
@@ -371,12 +452,28 @@ button{
       <div class="typed-line" id="typedLine"></div>
     </div>
 
-    <a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html">EXIT</a>
+    <a class="exit-btn" id="exitBtn" href="https://evevaia.github.io/data-mining-backrooms/info.html"><span class="exit-btn-text">EXIT</span></a>
 
   </div>
 </div>
 
 <script>
+const glitchPattern = [[2000,600],[5000,400],[2000,700],[8000,300],[3000,500],[6000,800],[2000,400]];
+let glitchTimeout = null;
+
+function startGlitchCycle(index){
+  const pattern = glitchPattern[index % glitchPattern.length];
+  const exitBtn = document.getElementById("exitBtn");
+  exitBtn.classList.remove("glitching");
+  glitchTimeout = setTimeout(function(){
+    exitBtn.classList.add("glitching");
+    glitchTimeout = setTimeout(function(){
+      exitBtn.classList.remove("glitching");
+      startGlitchCycle(index + 1);
+    }, pattern[1]);
+  }, pattern[0]);
+}
+
 let countdown = 10;
 let accepted = false;
 let timerStarted = false;
@@ -476,6 +573,7 @@ function typeMessage(){
         lineEl.innerHTML = text + '<span class="cursor">_</span>';
         setTimeout(function(){
           document.getElementById("exitBtn").classList.add("show");
+          setTimeout(function(){ startGlitchCycle(0); }, 200);
         }, 1000);
       }
     }
